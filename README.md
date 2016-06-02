@@ -7,7 +7,7 @@ Java & Spring Boot server for relaying information between devices for the game 
 | Purpose | Technology |
 | --- | --- |
 | Development Language | Java |
-| Web Framework | Spring Boot |
+| Web Framework | [Spring Boot](http://projects.spring.io/spring-boot/) |
 | Build System | Maven |
 | Database | MySQL |
 
