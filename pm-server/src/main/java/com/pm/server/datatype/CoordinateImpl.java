@@ -5,6 +5,11 @@ public class CoordinateImpl implements Coordinate {
 	double latitude;
 	double longitude;
 
+	public CoordinateImpl(double latitude, double longitude) {
+		this.latitude = latitude;
+		this.longitude = longitude;
+	}
+
 	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
