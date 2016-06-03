@@ -12,9 +12,9 @@ public class PmServerApplication extends SpringBootServletInitializer {
 		SpringApplication.run(PmServerApplication.class, args);
 	}
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(PmServerApplication.class);
-    }
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(PmServerApplication.class);
+	}
 
 }
