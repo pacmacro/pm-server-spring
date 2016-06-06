@@ -4,7 +4,7 @@ import com.pm.server.datatype.Coordinate;
 
 public interface Ghost {
 
-	void setId(int id);
+	void setId(Integer id);
 
 	int getId();
 

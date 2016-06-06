@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public interface GhostRepository {
 
 	// Returns null if the ghost with the corresponding id is not found
-	Ghost getGhostById(int id);
+	Ghost getGhostById(Integer id);
 
 	List<Ghost> getAllGhosts();
 

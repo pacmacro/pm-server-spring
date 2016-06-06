@@ -7,10 +7,10 @@ import com.pm.server.datatype.Coordinate;
 @Component
 public class GhostImpl implements Ghost {
 
-	int id = 0;
+	Integer id = 0;
 	Coordinate location;
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

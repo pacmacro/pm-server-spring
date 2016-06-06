@@ -9,7 +9,7 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	List<Ghost> ghosts;
 
-	public Ghost getGhostById(int id) {
+	public Ghost getGhostById(Integer id) {
 
 		for(Ghost ghost : ghosts) {
 			if(ghost.getId() == id) {
