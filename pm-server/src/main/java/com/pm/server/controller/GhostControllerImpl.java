@@ -33,7 +33,8 @@ public class GhostControllerImpl implements GhostController {
 	@Override
 	@RequestMapping(
 			value="/locations",
-			method=RequestMethod.GET
+			method=RequestMethod.GET,
+			produces={ "application/json" }
 	)
 	public Map<Integer, Coordinate> getAllLocations() {
 
@@ -42,8 +43,10 @@ public class GhostControllerImpl implements GhostController {
 		Map<Integer, Coordinate> ghostsLocations =
 				new HashMap<Integer, Coordinate>();
 
-		for(Ghost ghost : ghosts) {
-			ghostsLocations.put(ghost.getId(), ghost.getLocation());
+		if(ghosts != null) {
+			for(Ghost ghost : ghosts) {
+				ghostsLocations.put(ghost.getId(), ghost.getLocation());
+			}
 		}
 
 		return ghostsLocations;
