@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class GhostRepositoryImpl implements GhostRepository {
 
-	List<Ghost> ghosts;
+	private List<Ghost> ghosts;
 
 	public Ghost getGhostById(Integer id) {
 
