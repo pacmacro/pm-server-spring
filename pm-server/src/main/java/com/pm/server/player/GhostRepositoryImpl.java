@@ -1,5 +1,6 @@
 package com.pm.server.player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -8,6 +9,10 @@ import org.springframework.stereotype.Repository;
 public class GhostRepositoryImpl implements GhostRepository {
 
 	private List<Ghost> ghosts;
+
+	GhostRepositoryImpl() {
+		ghosts = new ArrayList<Ghost>();
+	}
 
 	public Ghost getGhostById(Integer id) {
 
