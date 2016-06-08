@@ -1,14 +1,11 @@
 package com.pm.server.controller;
 
-import java.util.Map;
-
-import com.pm.server.datatype.Coordinate;
+import com.pm.server.response.GhostsResponse;
 
 public interface GhostController extends Controller, PlayerController {
 
 	public int getInteger();
 
-	// Returns map of ghost id to location
-	public Map<Integer, Coordinate> getAllLocations();
+	public GhostsResponse getAllLocations();
 
 }
