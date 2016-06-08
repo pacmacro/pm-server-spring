@@ -19,16 +19,6 @@ public class GhostControllerImpl implements GhostController {
 	@Autowired
 	private GhostRepository ghostRepository;
 
-	@Override
-	@RequestMapping(
-			value="/integer",
-			method=RequestMethod.GET
-	)
-	public int getInteger() {
-		return 0;
-	}
-
-	@Override
 	@RequestMapping(
 			value="/locations",
 			method=RequestMethod.GET,
