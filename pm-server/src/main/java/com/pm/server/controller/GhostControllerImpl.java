@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostRepository;
 import com.pm.server.response.GhostResponse;
 import com.pm.server.response.GhostsResponse;
+import com.pm.server.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/ghost")
@@ -27,8 +27,6 @@ public class GhostControllerImpl implements GhostController {
 
 	private final static Logger log =
 			LogManager.getLogger(GhostControllerImpl.class.getName());
-
-	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	@RequestMapping(
 			value="/{id}/location",
@@ -57,14 +55,9 @@ public class GhostControllerImpl implements GhostController {
 		ghostResponse.setId(ghost.getId());
 		ghostResponse.setLocation(ghost.getLocation());
 
-		try {
-			log.debug(
-					"Returning ghostResponse: {}",
-					objectMapper.writeValueAsString(ghostResponse)
-			);
-		}
-		catch (Exception e) {
-			log.debug(e);
+		String objectString = JsonUtils.objectToJson(ghostResponse);
+		if(objectString != null) {
+			log.debug("Returning ghostResponse: {}", objectString);
 		}
 
 		return ghostResponse;
@@ -86,14 +79,9 @@ public class GhostControllerImpl implements GhostController {
 		if(ghosts != null) {
 			for(Ghost ghost : ghosts) {
 
-				try {
-					log.debug(
-							"Processing ghost: {}",
-							objectMapper.writeValueAsString(ghost)
-					);
-				}
-				catch (Exception e) {
-					log.debug(e);
+				String objectString = JsonUtils.objectToJson(ghost);
+				if(objectString != null) {
+					log.debug("Processing ghost: {}", objectString);
 				}
 
 				GhostResponse ghostResponse = new GhostResponse();
@@ -104,14 +92,9 @@ public class GhostControllerImpl implements GhostController {
 			}
 		}
 
-		try {
-			log.debug(
-					"Returning ghostsResponse: {}",
-					objectMapper.writeValueAsString(ghostsResponse)
-			);
-		}
-		catch (Exception e) {
-			log.debug(e);
+		String objectString = JsonUtils.objectToJson(ghostsResponse);
+		if(objectString != null) {
+			log.debug("Returning ghostsResponse: {}", objectString);
 		}
 
 		return ghostsResponse;
