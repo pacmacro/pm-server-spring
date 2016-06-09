@@ -1,9 +1,10 @@
 package com.pm.server.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletResponse;
 
 import com.pm.server.response.GhostResponse;
-import com.pm.server.response.GhostsResponse;
 
 public interface GhostController extends Controller, PlayerController {
 
@@ -12,6 +13,6 @@ public interface GhostController extends Controller, PlayerController {
 			HttpServletResponse response
 	);
 
-	public GhostsResponse getAllLocations();
+	public List<GhostResponse> getAllLocations();
 
 }

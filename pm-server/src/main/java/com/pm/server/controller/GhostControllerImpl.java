@@ -1,5 +1,6 @@
 package com.pm.server.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostRepository;
 import com.pm.server.response.GhostResponse;
-import com.pm.server.response.GhostsResponse;
 import com.pm.server.utils.JsonUtils;
 
 @RestController
@@ -68,11 +68,11 @@ public class GhostControllerImpl implements GhostController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public GhostsResponse getAllLocations() {
+	public List<GhostResponse> getAllLocations() {
 
 		log.debug("Mapped /ghosts/location");
 
-		GhostsResponse ghostsResponse = new GhostsResponse();
+		List<GhostResponse> ghostResponseList = new ArrayList<GhostResponse>();
 
 		List<Ghost> ghosts = ghostRepository.getAllGhosts();
 
@@ -88,16 +88,16 @@ public class GhostControllerImpl implements GhostController {
 				ghostResponse.setId(ghost.getId());
 				ghostResponse.setLocation(ghost.getLocation());
 
-				ghostsResponse.addGhostResponse(ghostResponse);
+				ghostResponseList.add(ghostResponse);
 			}
 		}
 
-		String objectString = JsonUtils.objectToJson(ghostsResponse);
+		String objectString = JsonUtils.objectToJson(ghostResponseList);
 		if(objectString != null) {
 			log.debug("Returning ghostsResponse: {}", objectString);
 		}
 
-		return ghostsResponse;
+		return ghostResponseList;
 	}
 
 }
