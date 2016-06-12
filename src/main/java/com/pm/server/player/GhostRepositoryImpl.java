@@ -38,7 +38,7 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	public void addGhost(Ghost ghost) throws Exception {
 
-		if(getGhostById(ghost.getId()) != null) {
+		if(getGhostById(ghost.getId()) == null) {
 
 			String ghostString = JsonUtils.objectToJson(ghost);
 			if(ghostString != null) {
