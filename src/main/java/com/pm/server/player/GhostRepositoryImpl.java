@@ -56,4 +56,8 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	}
 
+	public Integer numOfGhosts() {
+		return ghosts.size();
+	}
+
 }

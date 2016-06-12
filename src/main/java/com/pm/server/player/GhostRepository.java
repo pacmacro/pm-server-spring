@@ -14,4 +14,6 @@ public interface GhostRepository {
 
 	void addGhost(Ghost ghost) throws Exception;
 
+	Integer numOfGhosts();
+
 }
