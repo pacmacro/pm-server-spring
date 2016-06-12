@@ -2,6 +2,7 @@ package com.pm.server.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
+import com.pm.server.player.GhostImpl;
 import com.pm.server.player.GhostRepository;
 import com.pm.server.response.GhostResponse;
+import com.pm.server.response.IdResponse;
 import com.pm.server.utils.JsonUtils;
 
 @RestController
@@ -27,6 +31,55 @@ public class GhostController {
 
 	private final static Logger log =
 			LogManager.getLogger(GhostController.class.getName());
+
+	@RequestMapping(
+			value = "/create/{latitude}/{longitude}",
+			method=RequestMethod.POST,
+			produces={ "application/json" }
+	)
+	public IdResponse createGhost(
+			@PathVariable double latitude,
+			@PathVariable double longitude,
+			HttpServletResponse response) {
+
+		log.debug("Mapped /create/{}/{}", latitude, longitude);
+
+		Ghost ghost = new GhostImpl();
+		ghost.setLocation(new CoordinateImpl(latitude, longitude));
+
+		Random random = new Random();
+
+		Boolean createdGhost = false;
+		Integer idCreationRetries = 5;
+		for(Integer i = 0; i < idCreationRetries; i++) {
+
+			if(createdGhost) {
+				break;
+			}
+			createdGhost = true;
+
+			ghost.setId(random.nextInt());
+			try {
+				ghostRepository.addGhost(ghost);
+			}
+			catch (Exception e) {
+				createdGhost = false;
+				log.warn(e.getMessage());
+			}
+
+		}
+
+		if(!createdGhost) {
+			String objectString = JsonUtils.objectToJson(ghost);
+			log.error("Ghost {} could not be created", objectString);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+
+		IdResponse idResponse = new IdResponse();
+		idResponse.setId(ghost.getId());
+		return idResponse;
+	}
 
 	@RequestMapping(
 			value="/{id}/location",
