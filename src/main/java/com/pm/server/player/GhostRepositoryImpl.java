@@ -14,6 +14,8 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	private List<Ghost> ghosts;
 
+	private final static Integer MAX_GHOST_ID = 999;
+
 	private final static Logger log =
 			LogManager.getLogger(GhostRepositoryImpl.class.getName());
 
@@ -58,6 +60,10 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	public Integer numOfGhosts() {
 		return ghosts.size();
+	}
+
+	public Integer maxGhostId() {
+		return MAX_GHOST_ID;
 	}
 
 }

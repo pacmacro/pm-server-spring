@@ -16,4 +16,6 @@ public interface GhostRepository {
 
 	Integer numOfGhosts();
 
+	Integer maxGhostId();
+
 }
