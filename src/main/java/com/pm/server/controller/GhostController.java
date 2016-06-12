@@ -50,7 +50,8 @@ public class GhostController {
 		Random random = new Random();
 
 		Boolean createdGhost = false;
-		Integer idCreationRetries = 5;
+		final Integer maxGhostId = ghostRepository.maxGhostId();
+		final Integer idCreationRetries = maxGhostId / 2;
 		for(Integer i = 0; i < idCreationRetries; i++) {
 
 			if(createdGhost) {
@@ -58,7 +59,7 @@ public class GhostController {
 			}
 			createdGhost = true;
 
-			ghost.setId(random.nextInt());
+			ghost.setId(random.nextInt(maxGhostId));
 			try {
 				ghostRepository.addGhost(ghost);
 			}
