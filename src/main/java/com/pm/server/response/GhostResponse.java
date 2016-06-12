@@ -1,6 +1,10 @@
 package com.pm.server.response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.utils.JsonUtils;
 
 public class GhostResponse {
 
@@ -8,7 +12,13 @@ public class GhostResponse {
 
 	private Coordinate location;
 
+	private final static Logger log =
+			LogManager.getLogger(GhostResponse.class.getName());
+
 	public void setId(Integer id) {
+
+		log.debug("Setting id {}", id);
+
 		this.id = id;
 	}
 
@@ -17,6 +27,12 @@ public class GhostResponse {
 	}
 
 	public void setLocation(Coordinate location) {
+
+		String locationString = JsonUtils.objectToJson(location);
+		if(locationString != null) {
+			log.debug("Setting location to {}", locationString);
+		}
+
 		this.location = location;
 	}
 

@@ -3,12 +3,19 @@ package com.pm.server.player;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.springframework.stereotype.Repository;
+
+import com.pm.server.utils.JsonUtils;
 
 @Repository
 public class GhostRepositoryImpl implements GhostRepository {
 
 	private List<Ghost> ghosts;
+
+	private final static Logger log =
+			LogManager.getLogger(GhostRepositoryImpl.class.getName());
 
 	GhostRepositoryImpl() {
 		ghosts = new ArrayList<Ghost>();
@@ -32,6 +39,12 @@ public class GhostRepositoryImpl implements GhostRepository {
 	public void addGhost(Ghost ghost) throws Exception {
 
 		if(getGhostById(ghost.getId()) != null) {
+
+			String ghostString = JsonUtils.objectToJson(ghost);
+			if(ghostString != null) {
+				log.debug("Adding ghost {}", ghostString);
+			}
+
 			ghosts.add(ghost);
 		}
 		else {
