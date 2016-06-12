@@ -13,6 +13,7 @@ The newest stable version of the server is running at [Heroku](http://pacmacro.h
 | Testing Framework | [JUnit 4.12](http://junit.org/junit4/) |
 | Logging Utility | [Apache Log4j2](http://logging.apache.org/log4j/2.x/) |
 | Build System | [Apache Maven](https://maven.apache.org/) |
+| Deployment | [Heroku](http://heroku.com/) |
 
 ## API Documentation
 
