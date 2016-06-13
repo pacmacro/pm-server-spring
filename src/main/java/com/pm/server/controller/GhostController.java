@@ -83,6 +83,37 @@ public class GhostController {
 	}
 
 	@RequestMapping(
+			value="/delete/{id}",
+			method=RequestMethod.DELETE
+	)
+	public void deleteGhostById(
+			@PathVariable Integer id,
+			HttpServletResponse response) {
+
+		log.debug("Mapped /ghosts/delete/{}", Integer.toString(id));
+
+		Ghost ghost = ghostRepository.getGhostById(id);
+		if(ghost == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		try {
+			ghostRepository.deleteGhostById(id);
+		}
+		catch(Exception e) {
+			log.warn(
+					"Ghost with id {} was found but could not be deleted",
+					Integer.toString(id)
+			);
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return;
+		}
+
+		log.debug("Ghost with id {} was deleted", Integer.toString(id));
+	}
+
+	@RequestMapping(
 			value="/{id}/location",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
