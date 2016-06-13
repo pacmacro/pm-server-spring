@@ -33,7 +33,7 @@ public class GhostController {
 			LogManager.getLogger(GhostController.class.getName());
 
 	@RequestMapping(
-			value = "/create/{latitude}/{longitude}",
+			value = "/{latitude}/{longitude}",
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
@@ -42,7 +42,7 @@ public class GhostController {
 			@PathVariable double longitude,
 			HttpServletResponse response) {
 
-		log.debug("Mapped /create/{}/{}", latitude, longitude);
+		log.debug("Mapped /{}/{}", latitude, longitude);
 
 		Ghost ghost = new GhostImpl();
 		ghost.setLocation(new CoordinateImpl(latitude, longitude));
@@ -83,14 +83,14 @@ public class GhostController {
 	}
 
 	@RequestMapping(
-			value="/delete/{id}",
+			value="/{id}",
 			method=RequestMethod.DELETE
 	)
 	public void deleteGhostById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
-		log.debug("Mapped /ghosts/delete/{}", Integer.toString(id));
+		log.debug("Mapped /ghosts/{}", Integer.toString(id));
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
