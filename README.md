@@ -9,7 +9,7 @@ The newest stable version of the server is running at [Heroku](http://pacmacro.h
 | Purpose | Technology |
 | --- | --- |
 | Development Language | Java 1.8 |
-| Web Framework | [Spring Boot](http://projects.spring.io/spring-boot/) |
+| Web Framework | [Spring Boot 1.3.5](http://projects.spring.io/spring-boot/) |
 | Testing Framework | [JUnit 4.12](http://junit.org/junit4/) |
 | Logging Utility | [Apache Log4j2](http://logging.apache.org/log4j/2.x/) |
 | Build System | [Apache Maven](https://maven.apache.org/) |
