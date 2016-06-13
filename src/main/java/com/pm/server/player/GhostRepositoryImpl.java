@@ -58,6 +58,21 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	}
 
+	public void deleteGhostById(Integer id) throws Exception {
+
+		for(Ghost ghost : ghosts) {
+			if(ghost.getId() == id) {
+				String ghostString = JsonUtils.objectToJson(ghost);
+				log.debug("Removing ghost {}", ghostString);
+				ghosts.remove(ghost);
+				return;
+			}
+		}
+
+		throw new IllegalArgumentException(
+				"deleteGhostById() was given an id which does not exist.");
+	}
+
 	public Integer numOfGhosts() {
 		return ghosts.size();
 	}

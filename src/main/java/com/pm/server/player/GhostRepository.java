@@ -14,6 +14,8 @@ public interface GhostRepository {
 
 	void addGhost(Ghost ghost) throws Exception;
 
+	void deleteGhostById(Integer id) throws Exception;
+
 	Integer numOfGhosts();
 
 	Integer maxGhostId();
