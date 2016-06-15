@@ -16,4 +16,4 @@ RUN git clone https://github.com/pacmacro/pm-server.git
 
 RUN mvn -f pm-server/ clean package spring-boot:repackage
 
-CMD git -C pm-server/ pull && mvn -f pm-server/ spring-boot:run
+CMD ./pm-server/docker/docker_run_cmd.sh 
