@@ -2,7 +2,8 @@
 
 Java & Spring Boot server for relaying information between devices for the game PacMacro.
 
-The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).
+The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).  
+The Docker image is located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/).
 
 ## Setup (Manual/Development)
 
@@ -41,14 +42,14 @@ Nah, I'm just kidding, open an issue! I (or someone else working on the project)
 
 ## Setup (Docker)
 
-Very shortly, a Docker image will be available for a quick and minimal way to run the server on your local machine.
+A Docker image is available for a quick and minimal way to run the server on your local machine.
 
 First, install Docker using the installation instructions for your environment at the [official Docker website](https://www.docker.com/).
 
-Download and build the Docker image located at *[under-construction]*:
+Download and build the Docker image located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/):
 
 ```
-docker run -t [under-construction]
+docker run -t pacmacro/pm-server
 ```
 
 If all goes well, your server should be up and running in the terminal (after a long initialization period which will only happen the first time).
@@ -63,7 +64,7 @@ docker kill CONTAINER_ID
 This time, run the image while configuring port 8080 of the virtual machine (which the Spring Boot server runs on by default) to be mapped:
 
 ```
-docker run -t -p 8080 [under-construction]
+docker run -t -p 8080 pacmacro/pm-server
 ```
 
 Finally, `Ctrl + c` out of the process and find the mapped port:
@@ -74,7 +75,7 @@ docker ps
 
 The port mapping should look like `0.0.0.0:22222->8080/tcp`. This tells you that port 22222 of the host machine is mapped to port 8080 of the virtual machine. Now you can access the server from your local machine, with your URI looking something like `http://localhost:22222/`!
 
-From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 [under-construction]` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
+From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 pacmacro/pm-server` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
 
 ## Software Stack
 
