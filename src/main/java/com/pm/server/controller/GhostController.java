@@ -42,7 +42,7 @@ public class GhostController {
 			@PathVariable double longitude,
 			HttpServletResponse response) {
 
-		log.debug("Mapped /ghost/{}/{}", latitude, longitude);
+		log.debug("Mapped POST /ghost/{}/{}", latitude, longitude);
 
 		Ghost ghost = new GhostImpl();
 		ghost.setLocation(new CoordinateImpl(latitude, longitude));
@@ -90,7 +90,7 @@ public class GhostController {
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
-		log.debug("Mapped /ghost/{}", Integer.toString(id));
+		log.debug("Mapped DELETE /ghost/{}", Integer.toString(id));
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
@@ -127,7 +127,7 @@ public class GhostController {
 			return null;
 		}
 
-		log.debug("Mapped /ghost/{}/location", Integer.toString(id));
+		log.debug("Mapped GET /ghost/{}/location", Integer.toString(id));
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
@@ -155,7 +155,7 @@ public class GhostController {
 	)
 	public List<GhostResponse> getAllLocations() {
 
-		log.debug("Mapped /ghost/locations");
+		log.debug("Mapped GET /ghost/locations");
 
 		List<GhostResponse> ghostResponseList = new ArrayList<GhostResponse>();
 
