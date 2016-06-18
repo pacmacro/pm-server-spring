@@ -60,8 +60,7 @@ public class GhostRepositoryImpl implements GhostRepository {
 		String objectString = JsonUtils.objectToJson(location);
 		log.debug(
 				"Setting ghost with id {} to location {}",
-				Integer.toString(id),
-				objectString
+				id, objectString
 		);
 
 		ghost.setLocation(location);
@@ -99,7 +98,10 @@ public class GhostRepositoryImpl implements GhostRepository {
 		}
 
 		throw new IllegalArgumentException(
-				"deleteGhostById() was given an id which does not exist.");
+				"deleteGhostById() was given the id " +
+				Integer.toString(id) +
+				"which does not exist."
+		);
 	}
 
 	public Integer numOfGhosts() {

@@ -90,7 +90,7 @@ public class GhostController {
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
-		log.debug("Mapped DELETE /ghost/{}", Integer.toString(id));
+		log.debug("Mapped DELETE /ghost/{}", id);
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
@@ -104,13 +104,13 @@ public class GhostController {
 		catch(Exception e) {
 			log.warn(
 					"Ghost with id {} was found but could not be deleted",
-					Integer.toString(id)
+					id
 			);
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
 
-		log.debug("Ghost with id {} was deleted", Integer.toString(id));
+		log.debug("Ghost with id {} was deleted", id);
 	}
 
 	@RequestMapping(
@@ -125,13 +125,11 @@ public class GhostController {
 
 		log.debug(
 				"Mapped PUT /ghost/{}/{}/{}",
-				Integer.toString(id),
-				Double.toString(latitude),
-				Double.toString(longitude));
+				id, latitude, longitude);
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
-			log.debug("Ghost with id {} was not found", Integer.toString(id));
+			log.debug("Ghost with id {} was not found", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
@@ -160,11 +158,11 @@ public class GhostController {
 			return null;
 		}
 
-		log.debug("Mapped GET /ghost/{}/location", Integer.toString(id));
+		log.debug("Mapped GET /ghost/{}/location", id);
 
 		Ghost ghost = ghostRepository.getGhostById(id);
 		if(ghost == null) {
-			log.debug("No ghost with id {}", Integer.toString(id));
+			log.debug("No ghost with id {}", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		}
