@@ -114,6 +114,39 @@ public class GhostController {
 	}
 
 	@RequestMapping(
+			value="/{id}/{latitude}/{longitude}",
+			method=RequestMethod.PUT
+	)
+	public void setLocationById(
+			@PathVariable Integer id,
+			@PathVariable double latitude,
+			@PathVariable double longitude,
+			HttpServletResponse response) {
+
+		log.debug(
+				"Mapped PUT /ghost/{}/{}/{}",
+				Integer.toString(id),
+				Double.toString(latitude),
+				Double.toString(longitude));
+
+		Ghost ghost = ghostRepository.getGhostById(id);
+		if(ghost == null) {
+			log.debug("Ghost with id {} was not found", Integer.toString(id));
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		log.debug(
+				"Setting ghost with id {} to ({}, {})",
+				id, latitude, longitude
+		);
+		ghostRepository.setGhostLocationById(
+				id,
+				new CoordinateImpl(latitude, longitude)
+		);
+	}
+
+	@RequestMapping(
 			value="/{id}/location",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
