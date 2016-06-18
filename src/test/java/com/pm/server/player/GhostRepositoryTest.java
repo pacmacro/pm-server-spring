@@ -71,17 +71,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	public void unitTest_addGhost() {
 
 		// Given
-		Integer ghostId = 12345;
-		Double latitude = 246.802;
-		Double longitude = 135.791;
-
-		Ghost ghost = new GhostImpl();
-		ghost.setId(ghostId);
-		ghost.setLocation(new CoordinateImpl(latitude, longitude));
 
 		// When
 		try {
-			ghostRepository.addGhost(ghost);
+			ghostRepository.addGhost(ghost1);
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());
@@ -89,18 +82,18 @@ public class GhostRepositoryTest extends TestTemplate {
 		}
 
 		// Then
-		Ghost ghostFromRepository = ghostRepository.getGhostById(ghostId);
+		Ghost ghostFromRepository = ghostRepository.getGhostById(ghost1.getId());
 		assertTrue(ghostFromRepository != null);
 
-		assertEquals(ghost.getId(), ghostFromRepository.getId());
+		assertEquals(ghostFromRepository.getId(), ghost1.getId());
 		assertEquals(
-				ghost.getLocation().getLatitude(),
 				ghostFromRepository.getLocation().getLatitude(),
+				ghost1.getLocation().getLatitude(),
 				DELTA
 		);
 		assertEquals(
-				ghost.getLocation().getLongitude(),
 				ghostFromRepository.getLocation().getLongitude(),
+				ghost1.getLocation().getLongitude(),
 				DELTA
 		);
 
