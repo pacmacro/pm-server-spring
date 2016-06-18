@@ -18,7 +18,7 @@ public class HomeController implements Controller {
 			method=RequestMethod.GET)
 	public String home() {
 
-		log.debug("Mapped /");
+		log.debug("Mapped GET /");
 
 		return "Welcome to the Pac Macro server!";
 	}
