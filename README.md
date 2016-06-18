@@ -7,6 +7,12 @@ The Docker image is located at [pacmacro/pm-server](https://hub.docker.com/r/pac
 
 To set up the server on your local machine (for development or for prototyping other projects), see [CONTRIBUTING.md](https://github.com/pacmacro/pm-server/blob/master/CONTRIBUTING.md).
 
+## API Documentation
+
+For comprehensive and clear documentation, see [the wiki](https://github.com/pacmacro/pm-server/wiki/API-Documentation).
+
+For example calls using cURL, see the directory *api-calls/*.
+
 ## Software Stack
 
 | Purpose | Technology |
@@ -18,9 +24,3 @@ To set up the server on your local machine (for development or for prototyping o
 | Build System | [Apache Maven](https://maven.apache.org/) |
 | Deployment | [Heroku](http://heroku.com/) |
 | Application Container | [Docker](https://www.docker.com/) |
-
-## API Documentation
-
-For documentation, see [the wiki](https://github.com/pacmacro/pm-server/wiki/API-Documentation).
-
-For example calls using cURL, see the directory *api-calls/*.
