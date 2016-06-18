@@ -3,10 +3,11 @@ package com.pm.server.player;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.utils.JsonUtils;
 
 @Repository
@@ -36,6 +37,34 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	public List<Ghost> getAllGhosts() {
 		return ghosts;
+	}
+
+	public void setGhostLocationById(Integer id, Coordinate location) {
+
+		if(id == null) {
+			throw new NullPointerException("No id was given");
+		}
+		else if(location == null) {
+			throw new NullPointerException("No location was given");
+		}
+
+		Ghost ghost = getGhostById(id);
+		if(ghost == null) {
+			throw new IllegalArgumentException(
+					"No ghost with the id " +
+					Integer.toString(id) +
+					" was found"
+			);
+		}
+
+		String objectString = JsonUtils.objectToJson(location);
+		log.debug(
+				"Setting ghost with id {} to location {}",
+				Integer.toString(id),
+				objectString
+		);
+
+		ghost.setLocation(location);
 	}
 
 	public void addGhost(Ghost ghost) throws Exception {
