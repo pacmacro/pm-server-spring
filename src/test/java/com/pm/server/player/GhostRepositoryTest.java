@@ -8,16 +8,11 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.pm.server.PmServerApplicationTests;
+import com.pm.server.TestTemplate;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(PmServerApplicationTests.class)
-public class GhostRepositoryTest {
+public class GhostRepositoryTest extends TestTemplate {
 
 	@Autowired
 	private GhostRepository ghostRepository;
