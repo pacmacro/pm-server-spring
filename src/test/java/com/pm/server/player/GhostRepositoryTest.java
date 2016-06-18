@@ -77,19 +77,7 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		// Then
 		Ghost ghostFromRepository = ghostRepository.getGhostById(ghost1.getId());
-		assertTrue(ghostFromRepository != null);
-
-		assertEquals(ghostFromRepository.getId(), ghost1.getId());
-		assertEquals(
-				ghostFromRepository.getLocation().getLatitude(),
-				ghost1.getLocation().getLatitude(),
-				DELTA
-		);
-		assertEquals(
-				ghostFromRepository.getLocation().getLongitude(),
-				ghost1.getLocation().getLongitude(),
-				DELTA
-		);
+		assertEquals(ghost1, ghostFromRepository);
 
 	}
 
