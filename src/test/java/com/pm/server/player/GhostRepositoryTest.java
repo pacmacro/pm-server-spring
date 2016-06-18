@@ -73,13 +73,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 
 		// When
-		try {
-			ghostRepository.addGhost(ghost1);
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		addGhost_failUponException(ghost1);
 
 		// Then
 		Ghost ghostFromRepository = ghostRepository.getGhostById(ghost1.getId());
@@ -103,13 +97,7 @@ public class GhostRepositoryTest extends TestTemplate {
 	public void unitTest_addGhost_conflictId() throws Exception {
 
 		// Given
-		try {
-			ghostRepository.addGhost(ghost1);
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		addGhost_failUponException(ghost1);
 
 		// When
 		ghostRepository.addGhost(ghost1);
@@ -123,22 +111,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	public void unitTest_deleteGhostById() {
 
 		// Given
-		try {
-			ghostRepository.addGhost(ghost1);
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		addGhost_failUponException(ghost1);
 
 		// When
-		try {
-			ghostRepository.deleteGhostById(ghost1.getId());
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		deleteGhostById_failUponException(ghost1.getId());
 
 		// Then
 		assertTrue(ghostRepository.getGhostById(ghost1.getId()) == null);
@@ -153,30 +129,37 @@ public class GhostRepositoryTest extends TestTemplate {
 		assert(ghostRepository.getAllGhosts().isEmpty());
 
 		// When
-		try {
-			ghostRepository.addGhost(ghost1);
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		addGhost_failUponException(ghost1);
 
 		// Then
 		assertEquals(Integer.valueOf(1), ghostRepository.numOfGhosts());
 
 		// When
-		try {
-			ghostRepository.deleteGhostById(ghost1.getId());
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
+		deleteGhostById_failUponException(ghost1.getId());
 
 		// Then
 		assertEquals(Integer.valueOf(0), ghostRepository.numOfGhosts());
 
 	}
 
+	private void addGhost_failUponException(Ghost ghost) {
+		try {
+			ghostRepository.addGhost(ghost);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+	}
+
+	private void deleteGhostById_failUponException(Integer id) {
+		try {
+			ghostRepository.deleteGhostById(id);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+	}
 
 }
