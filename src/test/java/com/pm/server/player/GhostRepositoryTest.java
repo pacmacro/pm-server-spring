@@ -99,4 +99,30 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_deleteGhostById() {
+
+		// Given
+		try {
+			ghostRepository.addGhost(ghost1);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// When
+		try {
+			ghostRepository.deleteGhostById(ghost1.getId());
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// Then
+		assertTrue(ghostRepository.getGhostById(ghost1.getId()) == null);
+
+	}
+
 }
