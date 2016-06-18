@@ -54,9 +54,9 @@ public class GhostRepositoryTest extends TestTemplate {
 		ghost3.setLocation(ghost3_location);
 
 		List<Ghost> ghostList = ghostRepository.getAllGhosts();
-		for(Ghost ghost : ghostList) {
+		for(Integer i = 0; i < ghostList.size(); i++) {
 			try {
-				ghostRepository.deleteGhostById(ghost.getId());
+				ghostRepository.deleteGhostById(ghostList.get(i).getId());
 			}
 			catch(Exception e) {
 				log.error(e.getMessage());
