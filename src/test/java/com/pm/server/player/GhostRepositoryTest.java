@@ -99,6 +99,26 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_addGhost_conflictId() throws Exception {
+
+		// Given
+		try {
+			ghostRepository.addGhost(ghost1);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// When
+		ghostRepository.addGhost(ghost1);
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	@Test
 	public void unitTest_deleteGhostById() {
 
