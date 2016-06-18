@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.pm.server.datatype.Coordinate;
+
 @Repository
 public interface GhostRepository {
 
@@ -11,6 +13,8 @@ public interface GhostRepository {
 	Ghost getGhostById(Integer id);
 
 	List<Ghost> getAllGhosts();
+
+	void setGhostLocationById(Integer id, Coordinate location);
 
 	void addGhost(Ghost ghost) throws Exception;
 
