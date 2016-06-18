@@ -125,4 +125,38 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_numOfGhosts() {
+
+		// Given
+		assertEquals(Integer.valueOf(0), ghostRepository.numOfGhosts());
+		assert(ghostRepository.getAllGhosts().isEmpty());
+
+		// When
+		try {
+			ghostRepository.addGhost(ghost1);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// Then
+		assertEquals(Integer.valueOf(1), ghostRepository.numOfGhosts());
+
+		// When
+		try {
+			ghostRepository.deleteGhostById(ghost1.getId());
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// Then
+		assertEquals(Integer.valueOf(0), ghostRepository.numOfGhosts());
+
+	}
+
+
 }
