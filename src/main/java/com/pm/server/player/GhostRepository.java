@@ -20,6 +20,8 @@ public interface GhostRepository {
 
 	void deleteGhostById(Integer id) throws Exception;
 
+	void clearGhosts();
+
 	Integer numOfGhosts();
 
 	Integer maxGhostId();

@@ -104,6 +104,10 @@ public class GhostRepositoryImpl implements GhostRepository {
 		);
 	}
 
+	public void clearGhosts() {
+		ghosts = new ArrayList<Ghost>();
+	}
+
 	public Integer numOfGhosts() {
 		return ghosts.size();
 	}
