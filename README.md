@@ -14,7 +14,7 @@ To set up the server on your local machine (for development or for prototyping o
 
 For comprehensive and clear documentation, see [the wiki](https://github.com/pacmacro/pm-server/wiki/API-Documentation).
 
-For example calls using cURL, see the directory *api-calls/*.
+For example calls using cURL, see the directory [api-calls/](https://github.com/pacmacro/pm-server/tree/master/api-calls).
 
 ## Software Stack
 
