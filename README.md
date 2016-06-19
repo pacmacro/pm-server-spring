@@ -25,7 +25,7 @@ For example calls using cURL, see the directory [api-calls/](https://github.com/
 | Web Framework | [Spring Boot 1.3.5](http://projects.spring.io/spring-boot/) |
 | Testing Framework | [JUnit 4.12](http://junit.org/junit4/) |
 | Continous Integration (Testing) | [Travis CI](https://travis-ci.org/)
-| Logging Utility | [Apache Log4j2](http://logging.apache.org/log4j/2.x/) |
+| Logging Utility | [Apache Log4j 2](http://logging.apache.org/log4j/2.x/) |
 | Build System | [Apache Maven](https://maven.apache.org/) |
 | Deployment | [Heroku](http://heroku.com/) |
 | Application Container | [Docker](https://www.docker.com/) |
