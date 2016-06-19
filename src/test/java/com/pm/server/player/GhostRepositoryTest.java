@@ -81,6 +81,30 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_addGhost_multiple() {
+
+		// Given
+
+		// When
+		addGhost_failUponException(ghost1);
+		addGhost_failUponException(ghost2);
+		addGhost_failUponException(ghost3);
+
+		// Then
+		Ghost ghost_retrieved;
+
+		ghost_retrieved = ghostRepository.getGhostById(ghost1.getId());
+		assertEquals(ghost1, ghost_retrieved);
+
+		ghost_retrieved = ghostRepository.getGhostById(ghost2.getId());
+		assertEquals(ghost2, ghost_retrieved);
+
+		ghost_retrieved = ghostRepository.getGhostById(ghost3.getId());
+		assertEquals(ghost3, ghost_retrieved);
+
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void unitTest_addGhost_conflictId() throws Exception {
 
