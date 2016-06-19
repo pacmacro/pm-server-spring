@@ -1,6 +1,7 @@
 package com.pm.server.player;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.utils.JsonUtils;
 
 public class GhostRepositoryTest extends TestTemplate {
 
@@ -104,6 +106,25 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		// Then
 		assertTrue(ghostRepository.getGhostById(ghost1.getId()) == null);
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById() {
+
+		// Given
+		addGhost_failUponException(ghost1);
+		Coordinate oldGhostLocation = ghost1.getLocation();
+		Coordinate newGhostLocation = new CoordinateImpl(9.8, 7.6);
+
+		// When
+		ghostRepository.setGhostLocationById(ghost1.getId(), newGhostLocation);
+
+		// Then
+		Ghost ghost_newLocation = ghostRepository.getGhostById(ghost1.getId());
+
+		assertFalse(oldGhostLocation == ghost_newLocation.getLocation());
+		assertTrue(newGhostLocation == ghost_newLocation.getLocation());
 
 	}
 
