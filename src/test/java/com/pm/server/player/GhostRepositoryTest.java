@@ -109,6 +109,20 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
+	public void unitTest_getGhostById() {
+
+		// Given
+		addGhost_failUponException(ghost1);
+
+		// When
+		Ghost ghost = ghostRepository.getGhostById(ghost1.getId());
+
+		// Then
+		assertEquals(ghost1, ghost);
+
+	}
+
+	@Test
 	public void unitTest_setGhostLocationById() {
 
 		// Given
