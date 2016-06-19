@@ -1,6 +1,7 @@
 # Pac Macro Server
 
 [![Build Status](https://travis-ci.org/pacmacro/pm-server.svg?branch=master)](https://travis-ci.org/pacmacro/pm-server)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/pacmacro/pm-server/blob/master/LICENSE)
 
 Java & Spring Boot server for relaying information between devices for the game PacMacro.
 
