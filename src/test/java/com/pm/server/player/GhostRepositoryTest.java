@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
-import com.pm.server.utils.JsonUtils;
 
 public class GhostRepositoryTest extends TestTemplate {
 
@@ -125,6 +124,25 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		assertFalse(oldGhostLocation == ghost_newLocation.getLocation());
 		assertTrue(newGhostLocation == ghost_newLocation.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById_sameId() {
+
+		// Given
+		addGhost_failUponException(ghost1);
+
+		// When
+		ghostRepository.setGhostLocationById(
+				ghost1.getId(),
+				ghost1.getLocation()
+		);
+
+		// Then
+		Ghost updatedGhost = ghostRepository.getGhostById(ghost1.getId());
+
+		assertEquals(updatedGhost, ghost1);
 
 	}
 
