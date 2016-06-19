@@ -2,6 +2,7 @@ package com.pm.server.player;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -108,6 +109,19 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_deleteGhostById_noGhost() throws Exception {
+
+		// Given
+
+		// When
+		ghostRepository.deleteGhostById(ghost1.getId());
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	@Test
 	public void unitTest_getGhostById() {
 
@@ -119,6 +133,18 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		// Then
 		assertEquals(ghost1, ghost);
+
+	}
+
+	public void unitTest_getGhostById_noGhost() {
+
+		// Given
+
+		// When
+		Ghost ghost = ghostRepository.getGhostById(ghost1.getId());
+
+		// Then
+		assertNull(ghost);
 
 	}
 
@@ -157,6 +183,22 @@ public class GhostRepositoryTest extends TestTemplate {
 		Ghost updatedGhost = ghostRepository.getGhostById(ghost1.getId());
 
 		assertEquals(updatedGhost, ghost1);
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_setGhostLocationById_noGhost() {
+
+		// Given
+
+		// When
+		ghostRepository.setGhostLocationById(
+				ghost1.getId(),
+				ghost1.getLocation()
+		);
+
+		// Then
+		// Exception thrown above
 
 	}
 
