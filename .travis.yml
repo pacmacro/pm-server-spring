@@ -1,0 +1,6 @@
+# This YAML file configures Travis CI to test the Spring Boot application.
+
+language: java
+
+script:
+  - mvn install
