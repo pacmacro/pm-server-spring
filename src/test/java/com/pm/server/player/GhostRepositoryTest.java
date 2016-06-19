@@ -63,7 +63,7 @@ public class GhostRepositoryTest extends TestTemplate {
 				fail();
 			}
 		}
-		assertTrue(ghostRepository.getAllGhosts().isEmpty());
+		assert(ghostRepository.getAllGhosts().isEmpty());
 
 	}
 
@@ -160,6 +160,7 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
 	public void unitTest_getGhostById_noGhost() {
 
 		// Given
