@@ -27,8 +27,6 @@ public class GhostRepositoryTest extends TestTemplate {
 	@Autowired
 	private GhostRepository ghostRepository;
 
-	private static final double DELTA = 1e-15;
-
 	private static final Logger log =
 			LogManager.getLogger(GhostRepositoryTest.class.getName());
 
