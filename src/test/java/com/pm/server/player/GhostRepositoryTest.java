@@ -6,6 +6,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
@@ -159,6 +161,38 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		// Then
 		assertNull(ghost);
+
+	}
+
+	@Test
+	public void unitTest_getAllGhosts() {
+
+		// Given
+		addGhost_failUponException(ghost1);
+		addGhost_failUponException(ghost2);
+		addGhost_failUponException(ghost3);
+
+		// When
+		List<Ghost> ghostList = ghostRepository.getAllGhosts();
+
+		// Then
+		assertEquals(3, ghostList.size());
+		assertTrue(ghostList.contains(ghost1));
+		assertTrue(ghostList.contains(ghost2));
+		assertTrue(ghostList.contains(ghost3));
+
+	}
+
+	@Test
+	public void unitTest_getAllGhosts_noGhosts() {
+
+		// Given
+
+		// When
+		List<Ghost> ghostList = ghostRepository.getAllGhosts();
+
+		// Then
+		assertEquals(0, ghostList.size());
 
 	}
 
