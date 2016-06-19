@@ -1,5 +1,7 @@
 # Pac Macro Server
 
+[![Build Status](https://travis-ci.org/pacmacro/pm-server.svg?branch=master)](https://travis-ci.org/pacmacro/pm-server)
+
 Java & Spring Boot server for relaying information between devices for the game PacMacro.
 
 The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).  
