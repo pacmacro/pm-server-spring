@@ -24,7 +24,7 @@ import com.pm.server.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/ghost")
-public class GhostController {
+public class GhostController implements PlayerController {
 
 	@Autowired
 	private GhostRepository ghostRepository;
