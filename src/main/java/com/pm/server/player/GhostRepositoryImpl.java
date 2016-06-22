@@ -24,7 +24,8 @@ public class GhostRepositoryImpl implements GhostRepository {
 		ghosts = new ArrayList<Ghost>();
 	}
 
-	public Ghost getGhostById(Integer id) {
+	@Override
+	public Ghost getPlayerById(Integer id) {
 
 		for(Ghost ghost : ghosts) {
 			if(ghost.getId() == id) {
@@ -35,11 +36,13 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	}
 
-	public List<Ghost> getAllGhosts() {
+	@Override
+	public List<Ghost> getAllPlayers() {
 		return ghosts;
 	}
 
-	public void setGhostLocationById(Integer id, Coordinate location) {
+	@Override
+	public void setPlayerLocationById(Integer id, Coordinate location) {
 
 		if(id == null) {
 			throw new NullPointerException("No id was given");
@@ -48,7 +51,7 @@ public class GhostRepositoryImpl implements GhostRepository {
 			throw new NullPointerException("No location was given");
 		}
 
-		Ghost ghost = getGhostById(id);
+		Ghost ghost = getPlayerById(id);
 		if(ghost == null) {
 			throw new IllegalArgumentException(
 					"No ghost with the id " +
@@ -66,9 +69,10 @@ public class GhostRepositoryImpl implements GhostRepository {
 		ghost.setLocation(location);
 	}
 
-	public void addGhost(Ghost ghost) throws Exception {
+	@Override
+	public void addPlayer(Ghost ghost) throws Exception {
 
-		if(getGhostById(ghost.getId()) == null) {
+		if(getPlayerById(ghost.getId()) == null) {
 
 			String ghostString = JsonUtils.objectToJson(ghost);
 			if(ghostString != null) {
@@ -86,7 +90,8 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 	}
 
-	public void deleteGhostById(Integer id) throws Exception {
+	@Override
+	public void deletePlayerById(Integer id) throws Exception {
 
 		for(Ghost ghost : ghosts) {
 			if(ghost.getId() == id) {
@@ -104,11 +109,13 @@ public class GhostRepositoryImpl implements GhostRepository {
 		);
 	}
 
-	public void clearGhosts() {
+	@Override
+	public void clearPlayers() {
 		ghosts = new ArrayList<Ghost>();
 	}
 
-	public Integer numOfGhosts() {
+	@Override
+	public Integer numOfPlayers() {
 		return ghosts.size();
 	}
 

@@ -61,7 +61,7 @@ public class GhostController {
 
 			ghost.setId(random.nextInt(maxGhostId));
 			try {
-				ghostRepository.addGhost(ghost);
+				ghostRepository.addPlayer(ghost);
 			}
 			catch (Exception e) {
 				createdGhost = false;
@@ -92,14 +92,14 @@ public class GhostController {
 
 		log.debug("Mapped DELETE /ghost/{}", id);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		try {
-			ghostRepository.deleteGhostById(id);
+			ghostRepository.deletePlayerById(id);
 		}
 		catch(Exception e) {
 			log.warn(
@@ -127,7 +127,7 @@ public class GhostController {
 				"Mapped PUT /ghost/{}/{}/{}",
 				id, latitude, longitude);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			log.debug("Ghost with id {} was not found", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -138,7 +138,7 @@ public class GhostController {
 				"Setting ghost with id {} to ({}, {})",
 				id, latitude, longitude
 		);
-		ghostRepository.setGhostLocationById(
+		ghostRepository.setPlayerLocationById(
 				id,
 				new CoordinateImpl(latitude, longitude)
 		);
@@ -160,7 +160,7 @@ public class GhostController {
 
 		log.debug("Mapped GET /ghost/{}/location", id);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			log.debug("No ghost with id {}", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -190,7 +190,7 @@ public class GhostController {
 
 		List<GhostResponse> ghostResponseList = new ArrayList<GhostResponse>();
 
-		List<Ghost> ghosts = ghostRepository.getAllGhosts();
+		List<Ghost> ghosts = ghostRepository.getAllPlayers();
 
 		if(ghosts != null) {
 			for(Ghost ghost : ghosts) {
