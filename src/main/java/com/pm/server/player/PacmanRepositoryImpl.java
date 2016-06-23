@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.utils.JsonUtils;
 
+@Repository
 public class PacmanRepositoryImpl implements PacmanRepository {
 
 	private Pacman pacman;
