@@ -105,7 +105,7 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 
 	@Override
 	public Integer numOfPlayers() {
-		return 1;
+		return (pacman == null) ? 0 : 1;
 	}
 
 }
