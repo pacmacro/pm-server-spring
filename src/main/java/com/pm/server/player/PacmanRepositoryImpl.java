@@ -13,7 +13,8 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 
 	private Pacman pacman;
 
-	Logger log = LogManager.getLogger(PacmanRepositoryImpl.class.getClass());
+	private static final Logger log =
+			LogManager.getLogger(PacmanRepositoryImpl.class.getClass());
 
 	@Override
 	public Pacman getPlayerById(Integer id) {
