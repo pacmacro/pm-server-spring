@@ -6,14 +6,14 @@ import org.apache.logging.log4j.Logger;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.utils.JsonUtils;
 
-public class GhostResponse {
+public class PlayerResponse {
 
 	private Integer id;
 
 	private Coordinate location;
 
 	private final static Logger log =
-			LogManager.getLogger(GhostResponse.class.getName());
+			LogManager.getLogger(PlayerResponse.class.getName());
 
 	public void setId(Integer id) {
 

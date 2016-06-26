@@ -10,8 +10,8 @@ import com.pm.server.utils.JsonUtils;
 @Component
 public abstract class PlayerImpl implements Player {
 
-	private Integer id = 0;
-	private Coordinate location;
+	protected Integer id = 0;
+	protected Coordinate location;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerImpl.class.getName());

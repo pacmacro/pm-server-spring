@@ -53,8 +53,8 @@ public class GhostRepositoryTest extends TestTemplate {
 		ghost3.setId(ghost3_id);
 		ghost3.setLocation(ghost3_location);
 
-		ghostRepository.clearGhosts();
-		assert(ghostRepository.getAllGhosts().isEmpty());
+		ghostRepository.clearPlayers();
+		assert(ghostRepository.getAllPlayers().isEmpty());
 
 	}
 
@@ -67,7 +67,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		addGhost_failUponException(ghost1);
 
 		// Then
-		Ghost ghostFromRepository = ghostRepository.getGhostById(ghost1.getId());
+		Ghost ghostFromRepository = ghostRepository.getPlayerById(ghost1.getId());
 		assertEquals(ghost1, ghostFromRepository);
 
 	}
@@ -85,13 +85,13 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Then
 		Ghost ghost_retrieved;
 
-		ghost_retrieved = ghostRepository.getGhostById(ghost1.getId());
+		ghost_retrieved = ghostRepository.getPlayerById(ghost1.getId());
 		assertEquals(ghost1, ghost_retrieved);
 
-		ghost_retrieved = ghostRepository.getGhostById(ghost2.getId());
+		ghost_retrieved = ghostRepository.getPlayerById(ghost2.getId());
 		assertEquals(ghost2, ghost_retrieved);
 
-		ghost_retrieved = ghostRepository.getGhostById(ghost3.getId());
+		ghost_retrieved = ghostRepository.getPlayerById(ghost3.getId());
 		assertEquals(ghost3, ghost_retrieved);
 
 	}
@@ -103,7 +103,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		addGhost_failUponException(ghost1);
 
 		// When
-		ghostRepository.addGhost(ghost1);
+		ghostRepository.addPlayer(ghost1);
 
 		// Then
 		// Exception thrown above
@@ -120,7 +120,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		deleteGhostById_failUponException(ghost1.getId());
 
 		// Then
-		assertTrue(ghostRepository.getGhostById(ghost1.getId()) == null);
+		assertTrue(ghostRepository.getPlayerById(ghost1.getId()) == null);
 
 	}
 
@@ -130,7 +130,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 
 		// When
-		ghostRepository.deleteGhostById(ghost1.getId());
+		ghostRepository.deletePlayerById(ghost1.getId());
 
 		// Then
 		// Exception thrown above
@@ -144,7 +144,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		addGhost_failUponException(ghost1);
 
 		// When
-		Ghost ghost = ghostRepository.getGhostById(ghost1.getId());
+		Ghost ghost = ghostRepository.getPlayerById(ghost1.getId());
 
 		// Then
 		assertEquals(ghost1, ghost);
@@ -157,7 +157,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 
 		// When
-		Ghost ghost = ghostRepository.getGhostById(ghost1.getId());
+		Ghost ghost = ghostRepository.getPlayerById(ghost1.getId());
 
 		// Then
 		assertNull(ghost);
@@ -173,7 +173,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		addGhost_failUponException(ghost3);
 
 		// When
-		List<Ghost> ghostList = ghostRepository.getAllGhosts();
+		List<Ghost> ghostList = ghostRepository.getAllPlayers();
 
 		// Then
 		assertEquals(3, ghostList.size());
@@ -189,7 +189,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 
 		// When
-		List<Ghost> ghostList = ghostRepository.getAllGhosts();
+		List<Ghost> ghostList = ghostRepository.getAllPlayers();
 
 		// Then
 		assertEquals(0, ghostList.size());
@@ -205,10 +205,10 @@ public class GhostRepositoryTest extends TestTemplate {
 		Coordinate newGhostLocation = new CoordinateImpl(9.8, 7.6);
 
 		// When
-		ghostRepository.setGhostLocationById(ghost1.getId(), newGhostLocation);
+		ghostRepository.setPlayerLocationById(ghost1.getId(), newGhostLocation);
 
 		// Then
-		Ghost ghost_newLocation = ghostRepository.getGhostById(ghost1.getId());
+		Ghost ghost_newLocation = ghostRepository.getPlayerById(ghost1.getId());
 
 		assertFalse(oldGhostLocation == ghost_newLocation.getLocation());
 		assertTrue(newGhostLocation == ghost_newLocation.getLocation());
@@ -222,13 +222,13 @@ public class GhostRepositoryTest extends TestTemplate {
 		addGhost_failUponException(ghost1);
 
 		// When
-		ghostRepository.setGhostLocationById(
+		ghostRepository.setPlayerLocationById(
 				ghost1.getId(),
 				ghost1.getLocation()
 		);
 
 		// Then
-		Ghost updatedGhost = ghostRepository.getGhostById(ghost1.getId());
+		Ghost updatedGhost = ghostRepository.getPlayerById(ghost1.getId());
 
 		assertEquals(updatedGhost, ghost1);
 
@@ -240,7 +240,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 
 		// When
-		ghostRepository.setGhostLocationById(
+		ghostRepository.setPlayerLocationById(
 				ghost1.getId(),
 				ghost1.getLocation()
 		);
@@ -254,26 +254,26 @@ public class GhostRepositoryTest extends TestTemplate {
 	public void unitTest_numOfGhosts() {
 
 		// Given
-		assertEquals(Integer.valueOf(0), ghostRepository.numOfGhosts());
-		assert(ghostRepository.getAllGhosts().isEmpty());
+		assertEquals(Integer.valueOf(0), ghostRepository.numOfPlayers());
+		assert(ghostRepository.getAllPlayers().isEmpty());
 
 		// When
 		addGhost_failUponException(ghost1);
 
 		// Then
-		assertEquals(Integer.valueOf(1), ghostRepository.numOfGhosts());
+		assertEquals(Integer.valueOf(1), ghostRepository.numOfPlayers());
 
 		// When
 		deleteGhostById_failUponException(ghost1.getId());
 
 		// Then
-		assertEquals(Integer.valueOf(0), ghostRepository.numOfGhosts());
+		assertEquals(Integer.valueOf(0), ghostRepository.numOfPlayers());
 
 	}
 
 	private void addGhost_failUponException(Ghost ghost) {
 		try {
-			ghostRepository.addGhost(ghost);
+			ghostRepository.addPlayer(ghost);
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());
@@ -283,7 +283,7 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	private void deleteGhostById_failUponException(Integer id) {
 		try {
-			ghostRepository.deleteGhostById(id);
+			ghostRepository.deletePlayerById(id);
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());

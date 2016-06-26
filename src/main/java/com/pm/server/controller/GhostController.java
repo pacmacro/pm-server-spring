@@ -18,7 +18,7 @@ import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.player.GhostRepository;
-import com.pm.server.response.GhostResponse;
+import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.IdResponse;
 import com.pm.server.utils.JsonUtils;
 
@@ -61,7 +61,7 @@ public class GhostController implements PlayerController {
 
 			ghost.setId(random.nextInt(maxGhostId));
 			try {
-				ghostRepository.addGhost(ghost);
+				ghostRepository.addPlayer(ghost);
 			}
 			catch (Exception e) {
 				createdGhost = false;
@@ -92,14 +92,14 @@ public class GhostController implements PlayerController {
 
 		log.debug("Mapped DELETE /ghost/{}", id);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return;
 		}
 
 		try {
-			ghostRepository.deleteGhostById(id);
+			ghostRepository.deletePlayerById(id);
 		}
 		catch(Exception e) {
 			log.warn(
@@ -127,7 +127,7 @@ public class GhostController implements PlayerController {
 				"Mapped PUT /ghost/{}/location/{}/{}",
 				id, latitude, longitude);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			log.debug("Ghost with id {} was not found", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -138,7 +138,7 @@ public class GhostController implements PlayerController {
 				"Setting ghost with id {} to ({}, {})",
 				id, latitude, longitude
 		);
-		ghostRepository.setGhostLocationById(
+		ghostRepository.setPlayerLocationById(
 				id,
 				new CoordinateImpl(latitude, longitude)
 		);
@@ -149,7 +149,8 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public GhostResponse getGhostLocationById(
+
+	public PlayerResponse getGhostLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
@@ -160,14 +161,14 @@ public class GhostController implements PlayerController {
 
 		log.debug("Mapped GET /ghost/{}/location", id);
 
-		Ghost ghost = ghostRepository.getGhostById(id);
+		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
 			log.debug("No ghost with id {}", id);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			return null;
 		}
 
-		GhostResponse ghostResponse = new GhostResponse();
+		PlayerResponse ghostResponse = new PlayerResponse();
 		ghostResponse.setId(ghost.getId());
 		ghostResponse.setLocation(ghost.getLocation());
 
@@ -184,13 +185,13 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public List<GhostResponse> getAllGhostLocations() {
+	public List<PlayerResponse> getAllGhostLocations() {
 
 		log.debug("Mapped GET /ghost/locations");
 
-		List<GhostResponse> ghostResponseList = new ArrayList<GhostResponse>();
+		List<PlayerResponse> ghostResponseList = new ArrayList<PlayerResponse>();
 
-		List<Ghost> ghosts = ghostRepository.getAllGhosts();
+		List<Ghost> ghosts = ghostRepository.getAllPlayers();
 
 		if(ghosts != null) {
 			for(Ghost ghost : ghosts) {
@@ -200,7 +201,7 @@ public class GhostController implements PlayerController {
 					log.debug("Processing ghost: {}", objectString);
 				}
 
-				GhostResponse ghostResponse = new GhostResponse();
+				PlayerResponse ghostResponse = new PlayerResponse();
 				ghostResponse.setId(ghost.getId());
 				ghostResponse.setLocation(ghost.getLocation());
 
