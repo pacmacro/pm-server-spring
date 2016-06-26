@@ -73,7 +73,7 @@ public class GhostController implements PlayerController {
 		if(!createdGhost) {
 			String objectString = JsonUtils.objectToJson(ghost);
 			log.error("Ghost {} could not be created", objectString);
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.setStatus(HttpServletResponse.SC_CONFLICT);
 			return null;
 		}
 
