@@ -93,6 +93,37 @@ public class PacmanController implements PlayerController {
 	}
 
 	@RequestMapping(
+			value="/location/{latitude}/{longitude}",
+			method=RequestMethod.PUT
+	)
+	public void setPacmanLocation(
+			@PathVariable double latitude,
+			@PathVariable double longitude,
+			HttpServletResponse response) {
+
+		log.debug("Mapped PUT /pacman/location/{}/{}", latitude, longitude);
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			log.warn("No Pacman exists.");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		log.debug(
+				"Setting Pacman at location ({}, {}) to location ({}, {})",
+				pacman.getLocation().getLatitude(),
+				pacman.getLocation().getLongitude(),
+				latitude, longitude
+		);
+		pacman.setLocation(new CoordinateImpl(latitude, longitude));
+
+		response.setStatus(HttpServletResponse.SC_OK);
+		return;
+
+	}
+
+	@RequestMapping(
 			method=RequestMethod.DELETE
 	)
 	public void deletePacman(
