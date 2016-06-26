@@ -58,4 +58,23 @@ public class PacmanController implements PlayerController {
 
 	}
 
+	@RequestMapping(
+			method=RequestMethod.DELETE
+	)
+	public void deletePacman(
+			HttpServletResponse response) {
+
+		log.debug("Mapped DELETE /pacman");
+
+		if(pacmanRepository.getPlayer() == null) {
+			log.warn("No Pacman exists.");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		pacmanRepository.clearPlayers();
+		response.setStatus(HttpServletResponse.SC_OK);
+
+	}
+
 }
