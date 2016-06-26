@@ -34,7 +34,7 @@ public class PacmanController implements PlayerController {
 			@PathVariable double longitude,
 			HttpServletResponse response) {
 
-		log.debug("Mapped /pacman/{}/{}", latitude, longitude);
+		log.debug("Mapped POST /pacman/{}/{}", latitude, longitude);
 
 		if(pacmanRepository.getPlayer() != null) {
 			log.debug("A Pacman already exists.");
