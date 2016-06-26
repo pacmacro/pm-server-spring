@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.player.PacmanRepository;
+import com.pm.server.response.LocationResponse;
 
 @RestController
 @RequestMapping("/pacman")
@@ -55,6 +57,38 @@ public class PacmanController implements PlayerController {
 		}
 
 		response.setStatus(HttpServletResponse.SC_OK);
+
+	}
+
+	@RequestMapping(
+			value="/location",
+			method=RequestMethod.GET
+	)
+	public LocationResponse getPacmanLocation(
+			HttpServletResponse response) {
+
+		log.debug("Mapped GET /pacman/location");
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			log.warn("No Pacman exists");
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return null;
+		}
+
+		Coordinate coordinate = pacman.getLocation();
+		if(coordinate == null) {
+			log.error("The location of the Pacman could not be extracted.");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return null;
+		}
+
+		LocationResponse locationResponse = new LocationResponse();
+		locationResponse.setLatitude(coordinate.getLatitude());
+		locationResponse.setLongitude(coordinate.getLongitude());
+
+		response.setStatus(HttpServletResponse.SC_OK);
+		return locationResponse;
 
 	}
 
