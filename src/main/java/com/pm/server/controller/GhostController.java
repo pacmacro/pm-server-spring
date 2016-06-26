@@ -18,7 +18,7 @@ import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.player.GhostRepository;
-import com.pm.server.response.GhostResponse;
+import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.IdResponse;
 import com.pm.server.utils.JsonUtils;
 
@@ -149,7 +149,7 @@ public class GhostController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public GhostResponse getLocationById(
+	public PlayerResponse getLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
@@ -167,7 +167,7 @@ public class GhostController {
 			return null;
 		}
 
-		GhostResponse ghostResponse = new GhostResponse();
+		PlayerResponse ghostResponse = new PlayerResponse();
 		ghostResponse.setId(ghost.getId());
 		ghostResponse.setLocation(ghost.getLocation());
 
@@ -184,11 +184,11 @@ public class GhostController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public List<GhostResponse> getAllLocations() {
+	public List<PlayerResponse> getAllLocations() {
 
 		log.debug("Mapped GET /ghost/locations");
 
-		List<GhostResponse> ghostResponseList = new ArrayList<GhostResponse>();
+		List<PlayerResponse> ghostResponseList = new ArrayList<PlayerResponse>();
 
 		List<Ghost> ghosts = ghostRepository.getAllPlayers();
 
@@ -200,7 +200,7 @@ public class GhostController {
 					log.debug("Processing ghost: {}", objectString);
 				}
 
-				GhostResponse ghostResponse = new GhostResponse();
+				PlayerResponse ghostResponse = new PlayerResponse();
 				ghostResponse.setId(ghost.getId());
 				ghostResponse.setLocation(ghost.getLocation());
 
