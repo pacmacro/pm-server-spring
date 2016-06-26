@@ -117,7 +117,7 @@ public class GhostController implements PlayerController {
 			value="/{id}/location/{latitude}/{longitude}",
 			method=RequestMethod.PUT
 	)
-	public void setLocationById(
+	public void setGhostLocationById(
 			@PathVariable Integer id,
 			@PathVariable double latitude,
 			@PathVariable double longitude,
@@ -149,7 +149,7 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public GhostResponse getLocationById(
+	public GhostResponse getGhostLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
 
@@ -184,7 +184,7 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public List<GhostResponse> getAllLocations() {
+	public List<GhostResponse> getAllGhostLocations() {
 
 		log.debug("Mapped GET /ghost/locations");
 
