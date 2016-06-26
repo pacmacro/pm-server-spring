@@ -114,7 +114,7 @@ public class GhostController implements PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}/{latitude}/{longitude}",
+			value="/{id}/location/{latitude}/{longitude}",
 			method=RequestMethod.PUT
 	)
 	public void setLocationById(
@@ -124,7 +124,7 @@ public class GhostController implements PlayerController {
 			HttpServletResponse response) {
 
 		log.debug(
-				"Mapped PUT /ghost/{}/{}/{}",
+				"Mapped PUT /ghost/{}/location/{}/{}",
 				id, latitude, longitude);
 
 		Ghost ghost = ghostRepository.getGhostById(id);
