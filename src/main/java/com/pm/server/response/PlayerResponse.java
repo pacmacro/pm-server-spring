@@ -17,7 +17,7 @@ public class PlayerResponse {
 
 	public void setId(Integer id) {
 
-		log.debug("Setting id {}", id);
+		log.trace("Setting id {}", id);
 
 		this.id = id;
 	}
@@ -30,7 +30,7 @@ public class PlayerResponse {
 
 		String locationString = JsonUtils.objectToJson(location);
 		if(locationString != null) {
-			log.debug("Setting location to {}", locationString);
+			log.trace("Setting location to {}", locationString);
 		}
 
 		this.location = location;

@@ -13,7 +13,7 @@ public class CoordinateImpl implements Coordinate {
 
 	public CoordinateImpl(double latitude, double longitude) {
 
-		log.debug(
+		log.trace(
 				"Creating coordinate with latitude {} and longitude {}",
 				latitude, longitude
 		);
@@ -24,7 +24,7 @@ public class CoordinateImpl implements Coordinate {
 
 	public void setLatitude(double latitude) {
 
-		log.debug("Setting latitude to {}", latitude);
+		log.trace("Setting latitude to {}", latitude);
 
 		this.latitude = latitude;
 	}
@@ -35,7 +35,7 @@ public class CoordinateImpl implements Coordinate {
 
 	public void setLongitude(double longitude) {
 
-		log.debug("Setting longitude to {}", longitude);
+		log.trace("Setting longitude to {}", longitude);
 
 		this.longitude = longitude;
 	}

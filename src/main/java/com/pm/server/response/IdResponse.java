@@ -12,7 +12,7 @@ public class IdResponse {
 
 	public void setId(Integer id) {
 
-		log.debug("Setting id to {}", id);
+		log.trace("Setting id to {}", id);
 
 		this.id = id;
 	}

@@ -13,7 +13,7 @@ public class LocationResponse {
 
 	public void setLatitude(double latitude) {
 
-		log.debug("Setting latitude to {}", latitude);
+		log.trace("Setting latitude to {}", latitude);
 
 		this.latitude = latitude;
 	}
@@ -24,7 +24,7 @@ public class LocationResponse {
 
 	public void setLongitude(double longitude) {
 
-		log.debug("Setting longitude to {}", longitude);
+		log.trace("Setting longitude to {}", longitude);
 
 		this.longitude = longitude;
 	}

@@ -44,6 +44,8 @@ public class GhostController implements PlayerController {
 
 		log.debug("Mapped POST /ghost/{}/{}", latitude, longitude);
 
+		log.debug("Creating Ghost at ({}, {}).", latitude, longitude);
+
 		Ghost ghost = new GhostImpl();
 		ghost.setLocation(new CoordinateImpl(latitude, longitude));
 
@@ -76,6 +78,8 @@ public class GhostController implements PlayerController {
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 			return null;
 		}
+
+		log.debug("Ghost id set to {}.", ghost.getId());
 
 		IdResponse idResponse = new IdResponse();
 		idResponse.setId(ghost.getId());
@@ -198,7 +202,7 @@ public class GhostController implements PlayerController {
 
 				String objectString = JsonUtils.objectToJson(ghost);
 				if(objectString != null) {
-					log.debug("Processing ghost: {}", objectString);
+					log.trace("Processing ghost: {}", objectString);
 				}
 
 				PlayerResponse ghostResponse = new PlayerResponse();

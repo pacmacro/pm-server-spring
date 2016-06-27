@@ -20,7 +20,7 @@ public final class JsonUtils {
 			return objectMapper.writeValueAsString(object);
 		}
 		catch (Exception e) {
-			log.debug(e);
+			log.warn(e);
 			return null;
 		}
 	}

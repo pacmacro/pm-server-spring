@@ -18,7 +18,7 @@ public abstract class PlayerImpl implements Player {
 
 	public void setId(Integer id) {
 
-		log.debug("Setting id to {}", id);
+		log.trace("Setting id to {}", id);
 
 		this.id = id;
 	}
@@ -31,7 +31,7 @@ public abstract class PlayerImpl implements Player {
 
 		String locationString = JsonUtils.objectToJson(location);
 		if(locationString != null) {
-			log.debug("Setting location to {}", locationString);
+			log.trace("Setting location to {}", locationString);
 		}
 
 		this.location = location;
