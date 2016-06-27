@@ -39,7 +39,7 @@ public class PacmanController implements PlayerController {
 		log.debug("Mapped POST /pacman/{}/{}", latitude, longitude);
 
 		if(pacmanRepository.getPlayer() != null) {
-			log.debug("A Pacman already exists.");
+			log.warn("A Pacman already exists.");
 			response.setStatus(HttpServletResponse.SC_CONFLICT);
 			return;
 		}
@@ -51,7 +51,7 @@ public class PacmanController implements PlayerController {
 			pacmanRepository.addPlayer(pacman);
 		}
 		catch(Exception e) {
-			log.debug(e.getMessage());
+			log.error(e.getMessage());
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			return;
 		}
