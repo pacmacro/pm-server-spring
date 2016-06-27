@@ -1,4 +1,4 @@
-package com.pm.server.player;
+package com.pm.server.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.player.Ghost;
 import com.pm.server.utils.JsonUtils;
 
 @Repository

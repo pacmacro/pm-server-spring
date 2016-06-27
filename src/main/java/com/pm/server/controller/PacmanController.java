@@ -14,7 +14,7 @@ import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
-import com.pm.server.player.PacmanRepository;
+import com.pm.server.repository.PacmanRepository;
 import com.pm.server.response.LocationResponse;
 
 @RestController

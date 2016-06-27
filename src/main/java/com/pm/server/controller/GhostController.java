@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
-import com.pm.server.player.GhostRepository;
+import com.pm.server.repository.GhostRepository;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.IdResponse;
 import com.pm.server.utils.JsonUtils;

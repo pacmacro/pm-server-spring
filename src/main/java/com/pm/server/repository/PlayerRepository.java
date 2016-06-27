@@ -1,4 +1,4 @@
-package com.pm.server.player;
+package com.pm.server.repository;
 
 import java.util.List;
 

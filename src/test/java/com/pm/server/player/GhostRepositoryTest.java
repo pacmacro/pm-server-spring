@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.repository.GhostRepository;
 
 public class GhostRepositoryTest extends TestTemplate {
 
