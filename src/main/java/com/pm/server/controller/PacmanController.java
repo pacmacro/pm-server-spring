@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
@@ -34,14 +35,14 @@ public class PacmanController implements PlayerController {
 	public void createPacman(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws ConflictException {
 
 		log.debug("Mapped POST /pacman/{}/{}", latitude, longitude);
 
 		if(pacmanRepository.getPlayer() != null) {
-			log.warn("A Pacman already exists.");
-			response.setStatus(HttpServletResponse.SC_CONFLICT);
-			return;
+			String errorMessage = "A Pacman already exists.";
+			log.warn(errorMessage);
+			throw new ConflictException(errorMessage);
 		}
 
 		Pacman pacman = new PacmanImpl();
