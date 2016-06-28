@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.exceptionhttp.ConflictException;
+import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
@@ -35,7 +36,8 @@ public class PacmanController implements PlayerController {
 	public void createPacman(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
-			HttpServletResponse response) throws ConflictException {
+			HttpServletResponse response)
+			throws ConflictException, InternalServerErrorException {
 
 		log.debug("Mapped POST /pacman/{}/{}", latitude, longitude);
 
@@ -53,8 +55,7 @@ public class PacmanController implements PlayerController {
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return;
+			throw new InternalServerErrorException(e.getMessage());
 		}
 
 		response.setStatus(HttpServletResponse.SC_OK);
