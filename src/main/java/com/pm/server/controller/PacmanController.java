@@ -67,6 +67,7 @@ public class PacmanController implements PlayerController {
 			value="/location",
 			method=RequestMethod.GET
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public LocationResponse getPacmanLocation(
 			HttpServletResponse response)
 			throws NotFoundException, InternalServerErrorException {
@@ -92,7 +93,6 @@ public class PacmanController implements PlayerController {
 		locationResponse.setLatitude(coordinate.getLatitude());
 		locationResponse.setLongitude(coordinate.getLongitude());
 
-		response.setStatus(HttpServletResponse.SC_OK);
 		return locationResponse;
 
 	}
@@ -101,6 +101,7 @@ public class PacmanController implements PlayerController {
 			value="/location/{latitude}/{longitude}",
 			method=RequestMethod.PUT
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void setPacmanLocation(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
@@ -122,15 +123,12 @@ public class PacmanController implements PlayerController {
 				latitude, longitude
 		);
 		pacman.setLocation(new CoordinateImpl(latitude, longitude));
-
-		response.setStatus(HttpServletResponse.SC_OK);
-		return;
-
 	}
 
 	@RequestMapping(
 			method=RequestMethod.DELETE
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void deletePacman(
 			HttpServletResponse response) {
 
@@ -143,8 +141,6 @@ public class PacmanController implements PlayerController {
 		}
 
 		pacmanRepository.clearPlayers();
-		response.setStatus(HttpServletResponse.SC_OK);
-
 	}
 
 }
