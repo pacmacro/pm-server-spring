@@ -24,7 +24,7 @@ import com.pm.server.response.LocationResponse;
 
 @RestController
 @RequestMapping("/pacman")
-public class PacmanController implements PlayerController {
+public class PacmanController {
 
 	@Autowired
 	private PacmanRepository pacmanRepository;

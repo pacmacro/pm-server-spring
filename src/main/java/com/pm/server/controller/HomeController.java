@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/")
-public class HomeController implements Controller {
+public class HomeController {
 
 	private final static Logger log =
 			LogManager.getLogger(HomeController.class.getName());

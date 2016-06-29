@@ -29,7 +29,7 @@ import com.pm.server.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/ghost")
-public class GhostController implements PlayerController {
+public class GhostController {
 
 	@Autowired
 	private GhostRepository ghostRepository;
