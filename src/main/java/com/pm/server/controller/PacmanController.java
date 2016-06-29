@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
@@ -21,8 +22,9 @@ import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.response.LocationResponse;
 
+@RestController
 @RequestMapping("/pacman")
-public class PacmanController implements Controller {
+public class PacmanController implements PlayerController {
 
 	@Autowired
 	private PacmanRepository pacmanRepository;

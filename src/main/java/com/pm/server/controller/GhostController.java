@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.exceptionhttp.ConflictException;
@@ -26,8 +27,9 @@ import com.pm.server.response.IdResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.utils.JsonUtils;
 
+@RestController
 @RequestMapping("/ghost")
-public class GhostController implements Controller {
+public class GhostController implements PlayerController {
 
 	@Autowired
 	private GhostRepository ghostRepository;
