@@ -16,6 +16,7 @@ import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
+import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
@@ -67,15 +68,16 @@ public class PacmanController implements PlayerController {
 			method=RequestMethod.GET
 	)
 	public LocationResponse getPacmanLocation(
-			HttpServletResponse response) {
+			HttpServletResponse response)
+			throws NotFoundException {
 
 		log.debug("Mapped GET /pacman/location");
 
 		Pacman pacman = pacmanRepository.getPlayer();
 		if(pacman == null) {
-			log.warn("No Pacman exists");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return null;
+			String errorMessage = "No Pacman exists";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		Coordinate coordinate = pacman.getLocation();
