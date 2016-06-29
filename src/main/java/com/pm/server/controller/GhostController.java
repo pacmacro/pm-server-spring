@@ -183,20 +183,19 @@ public class GhostController implements PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public PlayerResponse getGhostLocationById(
 			@PathVariable Integer id,
-			HttpServletResponse response) {
-
-		if(id == null) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			return null;
-		}
+			HttpServletResponse response)
+			throws NotFoundException {
 
 		log.debug("Mapped GET /ghost/{}/location", id);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
-			log.debug("No ghost with id {}", id);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return null;
+			String errorMessage =
+					"No ghost with id " +
+					Integer.toString(id) +
+					".";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		PlayerResponse ghostResponse = new PlayerResponse();
