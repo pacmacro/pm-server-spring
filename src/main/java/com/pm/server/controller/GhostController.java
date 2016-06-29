@@ -148,7 +148,8 @@ public class GhostController implements PlayerController {
 			@PathVariable Integer id,
 			@PathVariable double latitude,
 			@PathVariable double longitude,
-			HttpServletResponse response) {
+			HttpServletResponse response)
+			throws NotFoundException {
 
 		log.debug(
 				"Mapped PUT /ghost/{}/location/{}/{}",
@@ -156,9 +157,12 @@ public class GhostController implements PlayerController {
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
-			log.debug("Ghost with id {} was not found", id);
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was not found.";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		log.debug(
