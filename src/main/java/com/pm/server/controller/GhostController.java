@@ -9,17 +9,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
-import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.IdResponse;
+import com.pm.server.response.PlayerResponse;
 import com.pm.server.utils.JsonUtils;
 
 @RestController
@@ -37,6 +39,7 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public IdResponse createGhost(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
@@ -90,6 +93,7 @@ public class GhostController implements PlayerController {
 			value="/{id}",
 			method=RequestMethod.DELETE
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteGhostById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
@@ -121,6 +125,7 @@ public class GhostController implements PlayerController {
 			value="/{id}/location/{latitude}/{longitude}",
 			method=RequestMethod.PUT
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public void setGhostLocationById(
 			@PathVariable Integer id,
 			@PathVariable double latitude,
@@ -153,7 +158,7 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-
+	@ResponseStatus(value = HttpStatus.OK)
 	public PlayerResponse getGhostLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response) {
@@ -189,6 +194,7 @@ public class GhostController implements PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
+	@ResponseStatus(value = HttpStatus.OK)
 	public List<PlayerResponse> getAllGhostLocations() {
 
 		log.debug("Mapped GET /ghost/locations");
