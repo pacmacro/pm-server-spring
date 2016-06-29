@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
@@ -43,7 +44,7 @@ public class GhostController implements PlayerController {
 	public IdResponse createGhost(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws ConflictException {
 
 		log.debug("Mapped POST /ghost/{}/{}", latitude, longitude);
 
@@ -76,10 +77,20 @@ public class GhostController implements PlayerController {
 		}
 
 		if(!createdGhost) {
+			String errorMessage;
 			String objectString = JsonUtils.objectToJson(ghost);
-			log.error("Ghost {} could not be created", objectString);
-			response.setStatus(HttpServletResponse.SC_CONFLICT);
-			return null;
+			if(objectString != null) {
+				errorMessage =
+						"Ghost " +
+						objectString +
+						"could not be created.";
+			}
+			else {
+				errorMessage = "Ghost could not be created.";
+			}
+
+			log.error(errorMessage);
+			throw new ConflictException(errorMessage);
 		}
 
 		log.debug("Ghost id set to {}.", ghost.getId());
