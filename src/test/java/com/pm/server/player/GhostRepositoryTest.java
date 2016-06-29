@@ -60,12 +60,12 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_addGhost() {
+	public void unitTest_addPlayer() {
 
 		// Given
 
 		// When
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// Then
 		Ghost ghostFromRepository = ghostRepository.getPlayerById(ghost1.getId());
@@ -74,14 +74,14 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_addGhost_multiple() {
+	public void unitTest_addPlayer_multiple() {
 
 		// Given
 
 		// When
-		addGhost_failUponException(ghost1);
-		addGhost_failUponException(ghost2);
-		addGhost_failUponException(ghost3);
+		addPlayer_failUponException(ghost1);
+		addPlayer_failUponException(ghost2);
+		addPlayer_failUponException(ghost3);
 
 		// Then
 		Ghost ghost_retrieved;
@@ -98,10 +98,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_addGhost_conflictId() throws Exception {
+	public void unitTest_addPlayer_conflictId() throws Exception {
 
 		// Given
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// When
 		ghostRepository.addPlayer(ghost1);
@@ -112,13 +112,13 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_deleteGhostById() {
+	public void unitTest_deletePlayerById() {
 
 		// Given
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// When
-		deleteGhostById_failUponException(ghost1.getId());
+		deletePlayerById_failUponException(ghost1.getId());
 
 		// Then
 		assertTrue(ghostRepository.getPlayerById(ghost1.getId()) == null);
@@ -126,7 +126,7 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_deleteGhostById_noGhost() throws Exception {
+	public void unitTest_deletePlayerById_noPlayer() throws Exception {
 
 		// Given
 
@@ -139,10 +139,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostById() {
+	public void unitTest_getPlayerById() {
 
 		// Given
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// When
 		Ghost ghost = ghostRepository.getPlayerById(ghost1.getId());
@@ -153,7 +153,7 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostById_noGhost() {
+	public void unitTest_getPlayerById_noPlayer() {
 
 		// Given
 
@@ -166,12 +166,12 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhosts() {
+	public void unitTest_getAllPlayers() {
 
 		// Given
-		addGhost_failUponException(ghost1);
-		addGhost_failUponException(ghost2);
-		addGhost_failUponException(ghost3);
+		addPlayer_failUponException(ghost1);
+		addPlayer_failUponException(ghost2);
+		addPlayer_failUponException(ghost3);
 
 		// When
 		List<Ghost> ghostList = ghostRepository.getAllPlayers();
@@ -185,7 +185,7 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhosts_noGhosts() {
+	public void unitTest_getAllPlayers_noPlayer() {
 
 		// Given
 
@@ -198,10 +198,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostLocationById() {
+	public void unitTest_setPlayerLocationById() {
 
 		// Given
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 		Coordinate oldGhostLocation = ghost1.getLocation();
 		Coordinate newGhostLocation = new CoordinateImpl(9.8, 7.6);
 
@@ -217,10 +217,10 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostLocationById_sameId() {
+	public void unitTest_setPlayerLocationById_sameId() {
 
 		// Given
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// When
 		ghostRepository.setPlayerLocationById(
@@ -236,7 +236,7 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_setGhostLocationById_noGhost() {
+	public void unitTest_setPlayerLocationById_noPlayer() {
 
 		// Given
 
@@ -252,27 +252,27 @@ public class GhostRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_numOfGhosts() {
+	public void unitTest_numOfPlayers() {
 
 		// Given
 		assertEquals(Integer.valueOf(0), ghostRepository.numOfPlayers());
 		assert(ghostRepository.getAllPlayers().isEmpty());
 
 		// When
-		addGhost_failUponException(ghost1);
+		addPlayer_failUponException(ghost1);
 
 		// Then
 		assertEquals(Integer.valueOf(1), ghostRepository.numOfPlayers());
 
 		// When
-		deleteGhostById_failUponException(ghost1.getId());
+		deletePlayerById_failUponException(ghost1.getId());
 
 		// Then
 		assertEquals(Integer.valueOf(0), ghostRepository.numOfPlayers());
 
 	}
 
-	private void addGhost_failUponException(Ghost ghost) {
+	private void addPlayer_failUponException(Ghost ghost) {
 		try {
 			ghostRepository.addPlayer(ghost);
 		}
@@ -282,7 +282,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		}
 	}
 
-	private void deleteGhostById_failUponException(Integer id) {
+	private void deletePlayerById_failUponException(Integer id) {
 		try {
 			ghostRepository.deletePlayerById(id);
 		}
