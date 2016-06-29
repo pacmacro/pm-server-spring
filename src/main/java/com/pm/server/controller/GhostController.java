@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.exceptionhttp.ConflictException;
+import com.pm.server.exceptionhttp.InternalServerErrorException;
+import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
@@ -107,26 +109,31 @@ public class GhostController implements PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deleteGhostById(
 			@PathVariable Integer id,
-			HttpServletResponse response) {
+			HttpServletResponse response)
+			throws NotFoundException, InternalServerErrorException {
 
 		log.debug("Mapped DELETE /ghost/{}", id);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was not found.";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		try {
 			ghostRepository.deletePlayerById(id);
 		}
 		catch(Exception e) {
-			log.warn(
-					"Ghost with id {} was found but could not be deleted",
-					id
-			);
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return;
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was found but could not be deleted.";
+			log.warn(errorMessage);
+			throw new InternalServerErrorException(errorMessage);
 		}
 
 		log.debug("Ghost with id {} was deleted", id);
