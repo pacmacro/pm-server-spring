@@ -105,15 +105,16 @@ public class PacmanController implements PlayerController {
 	public void setPacmanLocation(
 			@PathVariable double latitude,
 			@PathVariable double longitude,
-			HttpServletResponse response) {
+			HttpServletResponse response)
+			throws NotFoundException {
 
 		log.debug("Mapped PUT /pacman/location/{}/{}", latitude, longitude);
 
 		Pacman pacman = pacmanRepository.getPlayer();
 		if(pacman == null) {
-			log.warn("No Pacman exists.");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
+			String errorMessage = "No Pacman exists.";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		log.debug(
@@ -130,14 +131,15 @@ public class PacmanController implements PlayerController {
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void deletePacman(
-			HttpServletResponse response) {
+			HttpServletResponse response)
+			throws NotFoundException {
 
 		log.debug("Mapped DELETE /pacman");
 
 		if(pacmanRepository.getPlayer() == null) {
-			log.warn("No Pacman exists.");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			return;
+			String errorMessage = "No Pacman exists.";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		pacmanRepository.clearPlayers();
