@@ -69,7 +69,7 @@ public class PacmanController implements PlayerController {
 	)
 	public LocationResponse getPacmanLocation(
 			HttpServletResponse response)
-			throws NotFoundException {
+			throws NotFoundException, InternalServerErrorException {
 
 		log.debug("Mapped GET /pacman/location");
 
@@ -82,9 +82,10 @@ public class PacmanController implements PlayerController {
 
 		Coordinate coordinate = pacman.getLocation();
 		if(coordinate == null) {
-			log.error("The location of the Pacman could not be extracted.");
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			return null;
+			String errorMessage =
+					"The location of the Pacman could not be extracted.";
+			log.error(errorMessage);
+			throw new InternalServerErrorException(errorMessage);
 		}
 
 		LocationResponse locationResponse = new LocationResponse();
