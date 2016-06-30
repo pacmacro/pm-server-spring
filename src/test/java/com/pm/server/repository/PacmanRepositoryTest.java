@@ -1,5 +1,6 @@
 package com.pm.server.repository;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
@@ -61,6 +63,22 @@ public class PacmanRepositoryTest extends TestTemplate {
 		assert(pacmanList.size() == 0);
 
 	}
+
+	@Test
+	public void unitTest_addPlayer() {
+
+		// Given
+
+		// When
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// Then
+		Pacman pacman = pacmanRepository.getPlayer();
+		assertEquals(pacmanList.get(0).getId(), pacman.getId());
+		assertEquals(pacmanList.get(0).getLocation(), pacman.getLocation());
+
+	}
+
 
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
