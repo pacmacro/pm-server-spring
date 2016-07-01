@@ -1,6 +1,7 @@
 package com.pm.server.repository;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -108,6 +109,19 @@ public class PacmanRepositoryTest extends TestTemplate {
 		// Then
 		Pacman pacman_returned = pacmanRepository.getPlayer();
 		assertEquals(pacman.getId(), pacman_returned.getId());
+
+	}
+
+	@Test
+	public void unitTest_addPlayer_nullPlayer() {
+
+		// Given
+
+		// When
+		addPlayer_failUponException(null);
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
 
 	}
 
