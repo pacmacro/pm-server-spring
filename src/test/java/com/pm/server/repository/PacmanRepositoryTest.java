@@ -194,6 +194,33 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_numOfPlayers_0players() {
+
+		// Given
+
+		// When
+		Integer numOfPlayers = pacmanRepository.numOfPlayers();
+
+		// Then
+		assertEquals((Integer)0, numOfPlayers);
+
+	}
+
+	@Test
+	public void unitTest_numofPlayers_1player() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		Integer numOfPlayers = pacmanRepository.numOfPlayers();
+
+		// Then
+		assertEquals((Integer)1, numOfPlayers);
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
