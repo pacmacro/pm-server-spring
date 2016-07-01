@@ -139,6 +139,61 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_deletePlayerById() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+		Integer randomId = 12893;
+
+		// When
+		try {
+			pacmanRepository.deletePlayerById(randomId);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
+
+	}
+
+	@Test
+	public void unitTest_deletePlayerById_noId() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		try {
+			pacmanRepository.deletePlayerById(null);
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
+
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void unitTest_deletePlayerById_noPlayer() throws Exception {
+
+		// Given
+		Integer randomId = 94720;
+
+		// When
+		pacmanRepository.deletePlayerById(randomId);
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
