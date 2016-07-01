@@ -125,6 +125,20 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test(expected = IllegalStateException.class)
+	public void unitTest_addPlayer_pacmanAlreadyExists() throws Exception {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		pacmanRepository.addPlayer(pacmanList.get(1));
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
