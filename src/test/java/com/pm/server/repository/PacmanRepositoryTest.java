@@ -79,6 +79,21 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_addPlayer_noId() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		pacman.setId(null);
+
+		// When
+		addPlayer_failUponException(pacman);
+
+		// Then
+		Pacman pacman_returned = pacmanRepository.getPlayer();
+		assertEquals(pacman.getLocation(), pacman_returned.getLocation());
+
+	}
 
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
