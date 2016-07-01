@@ -195,6 +195,33 @@ public class PacmanRepositoryTest extends TestTemplate {
 	}
 
 	@Test
+	public void unitTest_clearPlayers() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		pacmanRepository.clearPlayers();
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
+
+	}
+
+	@Test
+	public void unitTest_clearPlayers_noPlayer() {
+
+		// Given
+
+		// When
+		pacmanRepository.clearPlayers();
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
+
+	}
+
+	@Test
 	public void unitTest_numOfPlayers_0players() {
 
 		// Given
