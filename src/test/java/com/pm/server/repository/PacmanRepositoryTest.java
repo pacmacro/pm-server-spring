@@ -2,6 +2,7 @@ package com.pm.server.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -245,6 +246,94 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 		// Then
 		assertEquals((Integer)1, numOfPlayers);
+
+	}
+
+	@Test
+	public void unitTest_getPlayerById() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+		Integer randomId = 12415;
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
+
+		// Then
+		assertSame(pacmanList.get(0).getLocation(), pacmanReturned.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_getPlayerById_nullAddedId() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		pacman.setId(null);
+		addPlayer_failUponException(pacman);
+
+		Integer randomId = 19482;
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
+
+		// Then
+		assertSame(pacman.getLocation(), pacmanReturned.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_getPlayerById_nullRequestedId() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayerById(null);
+
+		// Then
+		assertSame(pacmanList.get(0).getLocation(), pacmanReturned.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_getPlayerById_noPacman() {
+
+		// Given
+		Integer randomId = 83661;
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
+
+		// Then
+		assertNull(pacmanReturned);
+
+	}
+
+	@Test
+	public void unitTest_getPlayer() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+
+		// Then
+		assertEquals(pacmanList.get(0), pacmanReturned);
+
+	}
+
+	@Test
+	public void unitTest_getPlayer_noPacman() {
+
+		// Given
+
+		// When
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+
+		// Then
+		assertNull(pacmanReturned);
 
 	}
 
