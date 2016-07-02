@@ -6,6 +6,7 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -26,6 +27,18 @@ public class PacmanRepositoryTest extends TestTemplate {
 	private List<Pacman> pacmanList = new ArrayList<Pacman>();
 
 	private final static Integer numOfPacmans = 2;
+
+	private static final List<Integer> randomIdList = Arrays.asList(
+			95873,
+			30839,
+			34918
+	);
+
+	private static final List<Coordinate> randomCoordinateList = Arrays.asList(
+			new CoordinateImpl(45983.39872, 98347.39182),
+			new CoordinateImpl(39487.22889, 90893.32281),
+			new CoordinateImpl(49990.12929, 48982.39489)
+	);
 
 	@Autowired
 	private PacmanRepository pacmanRepository;
@@ -148,7 +161,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 		// Given
 		addPlayer_failUponException(pacmanList.get(0));
-		Integer randomId = 12893;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		try {
@@ -188,7 +201,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_deletePlayerById_noPlayer() throws Exception {
 
 		// Given
-		Integer randomId = 94720;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		pacmanRepository.deletePlayerById(randomId);
@@ -258,7 +271,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 		// Given
 		Pacman pacman = pacmanList.get(0);
 		addPlayer_failUponException(pacman);
-		Integer randomId = 12415;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
@@ -276,7 +289,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 		pacman.setId(null);
 		addPlayer_failUponException(pacman);
 
-		Integer randomId = 19482;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
@@ -305,7 +318,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_getPlayerById_noPacman() {
 
 		// Given
-		Integer randomId = 83661;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
@@ -377,7 +390,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 		// Given
 		Pacman pacman = pacmanList.get(0);
 		addPlayer_failUponException(pacman);
-		Coordinate newLocation = new CoordinateImpl(4321.1234, 1234.4321);
+		Coordinate newLocation = randomCoordinateList.get(0);
 
 		// When
 		pacmanRepository.setPlayerLocationById(pacman.getId(), newLocation);
@@ -395,8 +408,8 @@ public class PacmanRepositoryTest extends TestTemplate {
 		Pacman pacman = pacmanList.get(0);
 		addPlayer_failUponException(pacman);
 
-		Integer randomId = 94827;
-		Coordinate newLocation = new CoordinateImpl(1945.4918, 8490.3489);
+		Integer randomId = randomIdList.get(0);
+		Coordinate newLocation = randomCoordinateList.get(0);
 
 		// When
 		pacmanRepository.setPlayerLocationById(randomId, newLocation);
@@ -413,7 +426,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 		// Given
 		Pacman pacman = pacmanList.get(0);
 		addPlayer_failUponException(pacman);
-		Coordinate newLocation = new CoordinateImpl(4738.2945, 9773.9457);
+		Coordinate newLocation = randomCoordinateList.get(0);
 
 		// When
 		pacmanRepository.setPlayerLocationById(null, newLocation);
@@ -428,7 +441,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_setPlayerLocationById_nullLocation() {
 
 		// Given
-		Integer randomId = 97844;
+		Integer randomId = randomIdList.get(0);
 
 		// When
 		pacmanRepository.setPlayerLocationById(randomId, null);
@@ -443,8 +456,8 @@ public class PacmanRepositoryTest extends TestTemplate {
 			throws IllegalArgumentException {
 
 		// Given
-		Integer randomId = 39884;
-		Coordinate newLocation = new CoordinateImpl(2948.4938, 5938.1948);
+		Integer randomId = randomIdList.get(0);
+		Coordinate newLocation = randomCoordinateList.get(0);
 
 		// When
 		pacmanRepository.setPlayerLocationById(randomId, newLocation);
