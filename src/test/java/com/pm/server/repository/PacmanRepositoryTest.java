@@ -371,6 +371,89 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setPlayerLocationById() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		Coordinate newLocation = new CoordinateImpl(4321.1234, 1234.4321);
+
+		// When
+		pacmanRepository.setPlayerLocationById(pacman.getId(), newLocation);
+
+		// Then
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+		assertSame(newLocation, pacmanReturned.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerLocationById_randomId() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		Integer randomId = 94827;
+		Coordinate newLocation = new CoordinateImpl(1945.4918, 8490.3489);
+
+		// When
+		pacmanRepository.setPlayerLocationById(randomId, newLocation);
+
+		// Then
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+		assertSame(newLocation, pacmanReturned.getLocation());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerLocationById_nullId() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		Coordinate newLocation = new CoordinateImpl(4738.2945, 9773.9457);
+
+		// When
+		pacmanRepository.setPlayerLocationById(null, newLocation);
+
+		// Then
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+		assertSame(newLocation, pacmanReturned.getLocation());
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerLocationById_nullLocation() {
+
+		// Given
+		Integer randomId = 97844;
+
+		// When
+		pacmanRepository.setPlayerLocationById(randomId, null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_setPlayerLocationById_noPacman()
+			throws IllegalArgumentException {
+
+		// Given
+		Integer randomId = 39884;
+		Coordinate newLocation = new CoordinateImpl(2948.4938, 5938.1948);
+
+		// When
+		pacmanRepository.setPlayerLocationById(randomId, newLocation);
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
