@@ -1,4 +1,4 @@
-package com.pm.server.player;
+package com.pm.server.repository;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.player.Ghost;
+import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
 
 public class GhostRepositoryTest extends TestTemplate {
