@@ -343,6 +343,34 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getAllPlayers() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		// When
+		List<Pacman> pacmanReturnedList = pacmanRepository.getAllPlayers();
+
+		// Then
+		assertSame(pacman, pacmanReturnedList.get(0));
+
+	}
+
+	@Test
+	public void unitTest_getAllPlayers_noPacman() {
+
+		// Given
+
+		// When
+		List<Pacman> pacmanReturnedList = pacmanRepository.getAllPlayers();
+
+		// Then
+		assertNull(pacmanReturnedList);
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
