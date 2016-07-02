@@ -70,14 +70,15 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_addPlayer() {
 
 		// Given
+		Pacman pacman = pacmanList.get(0);
 
 		// When
-		addPlayer_failUponException(pacmanList.get(0));
+		addPlayer_failUponException(pacman);
 
 		// Then
-		Pacman pacman = pacmanRepository.getPlayer();
-		assertEquals(pacmanList.get(0).getId(), pacman.getId());
-		assertEquals(pacmanList.get(0).getLocation(), pacman.getLocation());
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+		assertEquals(pacman.getId(), pacmanReturned.getId());
+		assertEquals(pacman.getLocation(), pacmanReturned.getLocation());
 
 	}
 
@@ -130,10 +131,12 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_addPlayer_pacmanAlreadyExists() throws Exception {
 
 		// Given
-		addPlayer_failUponException(pacmanList.get(0));
+		Pacman pacman1 = pacmanList.get(0);
+		Pacman pacman2 = pacmanList.get(1);
+		addPlayer_failUponException(pacman1);
 
 		// When
-		pacmanRepository.addPlayer(pacmanList.get(1));
+		pacmanRepository.addPlayer(pacman2);
 
 		// Then
 		// Exception thrown above
@@ -253,14 +256,15 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_getPlayerById() {
 
 		// Given
-		addPlayer_failUponException(pacmanList.get(0));
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
 		Integer randomId = 12415;
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayerById(randomId);
 
 		// Then
-		assertSame(pacmanList.get(0).getLocation(), pacmanReturned.getLocation());
+		assertSame(pacman.getLocation(), pacmanReturned.getLocation());
 
 	}
 
@@ -286,13 +290,14 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_getPlayerById_nullRequestedId() {
 
 		// Given
-		addPlayer_failUponException(pacmanList.get(0));
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayerById(null);
 
 		// Then
-		assertSame(pacmanList.get(0).getLocation(), pacmanReturned.getLocation());
+		assertSame(pacman.getLocation(), pacmanReturned.getLocation());
 
 	}
 
@@ -314,13 +319,14 @@ public class PacmanRepositoryTest extends TestTemplate {
 	public void unitTest_getPlayer() {
 
 		// Given
-		addPlayer_failUponException(pacmanList.get(0));
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
 
 		// When
 		Pacman pacmanReturned = pacmanRepository.getPlayer();
 
 		// Then
-		assertEquals(pacmanList.get(0), pacmanReturned);
+		assertEquals(pacman, pacmanReturned);
 
 	}
 
