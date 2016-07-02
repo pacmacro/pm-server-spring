@@ -467,6 +467,51 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setPlayerLocation() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		Coordinate newLocation = randomCoordinateList.get(0);
+
+		// When
+		pacmanRepository.setPlayerLocation(newLocation);
+
+		// Then
+		Pacman pacmanReturned = pacmanRepository.getPlayer();
+		assertSame(newLocation, pacmanReturned.getLocation());
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerLocation_nullLocation() {
+
+		// Given
+
+		// When
+		pacmanRepository.setPlayerLocation(null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_setPlayerLocation_noPacman()
+			throws IllegalArgumentException {
+
+		// Given
+		Coordinate newLocation = randomCoordinateList.get(0);
+
+		// When
+		pacmanRepository.setPlayerLocation(newLocation);
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	private void addPlayer_failUponException(Pacman pacman) {
 		try {
 			pacmanRepository.addPlayer(pacman);
