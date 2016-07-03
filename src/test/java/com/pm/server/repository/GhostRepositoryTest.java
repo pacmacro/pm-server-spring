@@ -99,6 +99,34 @@ public class GhostRepositoryTest extends TestTemplate {
 
 	}
 
+	@Test(expected = NullPointerException.class)
+	public void unitTest_addPlayer_nullGhost() throws Exception {
+
+		// Given
+
+		// When
+		ghostRepository.addPlayer(null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void unitTest_addPlayer_nullGhostLocation() throws Exception {
+
+		// Given
+		Ghost ghost = ghost1;
+		ghost.setLocation(null);
+
+		// When
+		ghostRepository.addPlayer(ghost);
+
+		// Then
+		// Exception thrown above
+
+	}
+
 	@Test(expected = IllegalArgumentException.class)
 	public void unitTest_addPlayer_conflictId() throws Exception {
 

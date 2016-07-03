@@ -71,7 +71,19 @@ public class GhostRepositoryImpl implements GhostRepository {
 	}
 
 	@Override
-	public void addPlayer(Ghost ghost) throws Exception {
+	public void addPlayer(Ghost ghost)
+			throws NullPointerException, IllegalArgumentException {
+
+		if(ghost == null) {
+			throw new NullPointerException(
+					"addPlayer() was given a null ghost."
+			);
+		}
+		else if(ghost.getLocation() == null) {
+			throw new NullPointerException(
+					"addPlayer() was given a ghost with a null location."
+			);
+		}
 
 		if(getPlayerById(ghost.getId()) == null) {
 
