@@ -140,42 +140,6 @@ public class GhostController {
 	}
 
 	@RequestMapping(
-			value="/{id}/location/{latitude}/{longitude}",
-			method=RequestMethod.PUT
-	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void setGhostLocationById(
-			@PathVariable Integer id,
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response)
-			throws NotFoundException {
-
-		log.debug(
-				"Mapped PUT /ghost/{}/location/{}/{}",
-				id, latitude, longitude);
-
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
-			String errorMessage =
-					"Ghost with id " +
-					Integer.toString(id) +
-					" was not found.";
-			log.debug(errorMessage);
-			throw new NotFoundException(errorMessage);
-		}
-
-		log.debug(
-				"Setting ghost with id {} to ({}, {})",
-				id, latitude, longitude
-		);
-		ghostRepository.setPlayerLocationById(
-				id,
-				new CoordinateImpl(latitude, longitude)
-		);
-	}
-
-	@RequestMapping(
 			value="/{id}/location",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
@@ -246,6 +210,42 @@ public class GhostController {
 		}
 
 		return ghostResponseList;
+	}
+
+	@RequestMapping(
+			value="/{id}/location/{latitude}/{longitude}",
+			method=RequestMethod.PUT
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setGhostLocationById(
+			@PathVariable Integer id,
+			@PathVariable double latitude,
+			@PathVariable double longitude,
+			HttpServletResponse response)
+			throws NotFoundException {
+
+		log.debug(
+				"Mapped PUT /ghost/{}/location/{}/{}",
+				id, latitude, longitude);
+
+		Ghost ghost = ghostRepository.getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was not found.";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		log.debug(
+				"Setting ghost with id {} to ({}, {})",
+				id, latitude, longitude
+		);
+		ghostRepository.setPlayerLocationById(
+				id,
+				new CoordinateImpl(latitude, longitude)
+		);
 	}
 
 }

@@ -26,51 +26,6 @@ public class GhostRepositoryImpl implements GhostRepository {
 	}
 
 	@Override
-	public Ghost getPlayerById(Integer id) {
-
-		for(Ghost ghost : ghosts) {
-			if(ghost.getId() == id) {
-				return ghost;
-			}
-		}
-		return null;
-
-	}
-
-	@Override
-	public List<Ghost> getAllPlayers() {
-		return ghosts;
-	}
-
-	@Override
-	public void setPlayerLocationById(Integer id, Coordinate location) {
-
-		if(id == null) {
-			throw new NullPointerException("No id was given");
-		}
-		else if(location == null) {
-			throw new NullPointerException("No location was given");
-		}
-
-		Ghost ghost = getPlayerById(id);
-		if(ghost == null) {
-			throw new IllegalArgumentException(
-					"No ghost with the id " +
-					Integer.toString(id) +
-					" was found"
-			);
-		}
-
-		String objectString = JsonUtils.objectToJson(location);
-		log.debug(
-				"Setting ghost with id {} to location {}",
-				id, objectString
-		);
-
-		ghost.setLocation(location);
-	}
-
-	@Override
 	public void addPlayer(Ghost ghost)
 			throws NullPointerException, IllegalArgumentException {
 
@@ -125,6 +80,51 @@ public class GhostRepositoryImpl implements GhostRepository {
 	@Override
 	public void clearPlayers() {
 		ghosts = new ArrayList<Ghost>();
+	}
+
+	@Override
+	public Ghost getPlayerById(Integer id) {
+
+		for(Ghost ghost : ghosts) {
+			if(ghost.getId() == id) {
+				return ghost;
+			}
+		}
+		return null;
+
+	}
+
+	@Override
+	public List<Ghost> getAllPlayers() {
+		return ghosts;
+	}
+
+	@Override
+	public void setPlayerLocationById(Integer id, Coordinate location) {
+
+		if(id == null) {
+			throw new NullPointerException("No id was given");
+		}
+		else if(location == null) {
+			throw new NullPointerException("No location was given");
+		}
+
+		Ghost ghost = getPlayerById(id);
+		if(ghost == null) {
+			throw new IllegalArgumentException(
+					"No ghost with the id " +
+					Integer.toString(id) +
+					" was found"
+			);
+		}
+
+		String objectString = JsonUtils.objectToJson(location);
+		log.debug(
+				"Setting ghost with id {} to location {}",
+				id, objectString
+		);
+
+		ghost.setLocation(location);
 	}
 
 	@Override
