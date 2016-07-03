@@ -35,12 +35,13 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 	@Override
 	public List<Pacman> getAllPlayers() {
 
+		List<Pacman> pacmanList = new ArrayList<Pacman>();
+
 		if(pacman == null) {
 			log.debug("Retrieving Pacman: null");
-			return null;
+			return pacmanList;
 		}
 
-		List<Pacman> pacmanList = new ArrayList<Pacman>();
 		pacmanList.add(pacman);
 		return pacmanList;
 
