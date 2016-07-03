@@ -452,7 +452,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void unitTest_setPlayerLocationById_noPacman()
 			throws IllegalArgumentException {
 
@@ -498,7 +498,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test(expected = IllegalStateException.class)
 	public void unitTest_setPlayerLocation_noPacman()
 			throws IllegalArgumentException {
 

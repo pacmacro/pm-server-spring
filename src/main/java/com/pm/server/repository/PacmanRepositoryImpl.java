@@ -58,7 +58,7 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 			throw new NullPointerException("No location was given.");
 		}
 		else if(pacman == null) {
-			throw new IllegalArgumentException("No pacman exists yet.");
+			throw new IllegalStateException("No pacman exists yet.");
 		}
 
 		String objectString = JsonUtils.objectToJson(location);
