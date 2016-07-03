@@ -227,46 +227,6 @@ public class PacmanRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_clearPlayers_noPlayer() {
-
-		// Given
-
-		// When
-		pacmanRepository.clearPlayers();
-
-		// Then
-		assertNull(pacmanRepository.getPlayer());
-
-	}
-
-	@Test
-	public void unitTest_numOfPlayers_0players() {
-
-		// Given
-
-		// When
-		Integer numOfPlayers = pacmanRepository.numOfPlayers();
-
-		// Then
-		assertEquals((Integer)0, numOfPlayers);
-
-	}
-
-	@Test
-	public void unitTest_numofPlayers_1player() {
-
-		// Given
-		addPlayer_failUponException(pacmanList.get(0));
-
-		// When
-		Integer numOfPlayers = pacmanRepository.numOfPlayers();
-
-		// Then
-		assertEquals((Integer)1, numOfPlayers);
-
-	}
-
-	@Test
 	public void unitTest_getPlayerById() {
 
 		// Given
@@ -510,6 +470,46 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 		// Then
 		// Exception thrown above
+
+	}
+
+	@Test
+	public void unitTest_clearPlayers_noPlayer() {
+
+		// Given
+
+		// When
+		pacmanRepository.clearPlayers();
+
+		// Then
+		assertNull(pacmanRepository.getPlayer());
+
+	}
+
+	@Test
+	public void unitTest_numOfPlayers_0players() {
+
+		// Given
+
+		// When
+		Integer numOfPlayers = pacmanRepository.numOfPlayers();
+
+		// Then
+		assertEquals((Integer)0, numOfPlayers);
+
+	}
+
+	@Test
+	public void unitTest_numofPlayers_1player() {
+
+		// Given
+		addPlayer_failUponException(pacmanList.get(0));
+
+		// When
+		Integer numOfPlayers = pacmanRepository.numOfPlayers();
+
+		// Then
+		assertEquals((Integer)1, numOfPlayers);
 
 	}
 

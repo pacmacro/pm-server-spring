@@ -20,6 +20,32 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 			LogManager.getLogger(PacmanRepositoryImpl.class.getClass());
 
 	@Override
+	public void addPlayer(Pacman player) throws Exception {
+
+		String objectString = JsonUtils.objectToJson(player);
+		if(objectString != null) {
+			log.debug("Setting Pacman to {}", objectString);
+		}
+
+		if(pacman != null) {
+			throw new IllegalStateException("A Pacman already exists.");
+		}
+
+		pacman = player;
+
+	}
+
+	@Override
+	public void deletePlayerById(Integer id) throws Exception {
+
+		if(pacman == null) {
+			throw new IllegalStateException("No Pacman exists.");
+		}
+
+		clearPlayers();
+
+	}
+	@Override
 	public Pacman getPlayerById(Integer id) {
 		return getPlayer();
 	}
@@ -67,33 +93,6 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 		}
 
 		pacman.setLocation(location);
-
-	}
-
-	@Override
-	public void addPlayer(Pacman player) throws Exception {
-
-		String objectString = JsonUtils.objectToJson(player);
-		if(objectString != null) {
-			log.debug("Setting Pacman to {}", objectString);
-		}
-
-		if(pacman != null) {
-			throw new IllegalStateException("A Pacman already exists.");
-		}
-
-		pacman = player;
-
-	}
-
-	@Override
-	public void deletePlayerById(Integer id) throws Exception {
-
-		if(pacman == null) {
-			throw new IllegalStateException("No Pacman exists.");
-		}
-
-		clearPlayers();
 
 	}
 
