@@ -3,6 +3,7 @@ package com.pm.server.controller;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -44,6 +46,69 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		mockMvc = MockMvcBuilders
 				.webAppContextSetup(this.webApplicationContext)
 				.build();
+
+	}
+
+	@Test
+	public void unitTest_createGhost() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		String path =
+				BASE_MAPPING + "/" +
+				location.getLatitude() + "/" +
+				location.getLongitude();
+
+		// When
+		mockMvc
+				.perform(post(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").exists());
+
+	}
+
+	@Test
+	public void unitTest_createGhost_sameLocation() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		String path =
+				BASE_MAPPING + "/" +
+				location.getLatitude() + "/" +
+				location.getLongitude();
+
+		mockMvc
+				.perform(post(path))
+				.andExpect(status().isOk());
+
+		// When
+		mockMvc
+				.perform(post(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").exists());
+
+	}
+
+	@Test
+	public void unitTest_createGhost_notANumber() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		String path =
+				BASE_MAPPING + "/" +
+				location.getLatitude() + "/" +
+				"longitude";
+
+		// When
+		mockMvc
+				.perform(post(path))
+
+		// Then
+				.andExpect(status().isBadRequest());
 
 	}
 
