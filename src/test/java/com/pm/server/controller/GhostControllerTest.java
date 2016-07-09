@@ -6,11 +6,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,12 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.player.Ghost;
+import com.pm.server.repository.GhostRepository;
 public class GhostControllerTest extends ControllerTestTemplate {
+
+	@Autowired
+	private GhostRepository ghostRepository;
 
 	private static final List<Coordinate> randomCoordinateList = Arrays.asList(
 			new CoordinateImpl(12345.54321, 95837.39821),
@@ -49,9 +56,32 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@After
+	public void cleanUp() {
+
+		List<Ghost> ghostList = ghostRepository.getAllPlayers();
+
+		List<Integer> ghostIdList = new ArrayList<Integer>();
+		for(Ghost ghost : ghostList) {
+			ghostIdList.add(ghost.getId());
+		}
+
+		for(Integer id : ghostIdList) {
+			try {
+				ghostRepository.deletePlayerById(id);
+			}
+			catch(Exception e) {
+				log.error(e.getMessage());
+				fail();
+			}
+		}
+
+		assert(ghostRepository.numOfPlayers() == 0);
+
+	}
+
 	@Test
 	public void unitTest_createGhost() throws Exception {
-
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		String path =
