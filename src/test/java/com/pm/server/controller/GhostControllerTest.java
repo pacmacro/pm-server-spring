@@ -85,10 +85,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	public void unitTest_createGhost() throws Exception {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		String path =
-				BASE_MAPPING + "/" +
-				location.getLatitude() + "/" +
-				location.getLongitude();
+		String path = pathForCreateGhost(location);
 
 		// When
 		mockMvc
@@ -105,10 +102,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		String path =
-				BASE_MAPPING + "/" +
-				location.getLatitude() + "/" +
-				location.getLongitude();
+		String path = pathForCreateGhost(location);
 
 		mockMvc
 				.perform(post(path))
@@ -149,10 +143,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		Integer id = createGhost_failUponException(location);
-
-		String path =
-				BASE_MAPPING + "/" +
-				id;
+		String path = pathForDeleteGhostById(id);
 
 		// When
 		mockMvc
@@ -168,9 +159,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Integer id = 2481;
-		String path =
-				BASE_MAPPING + "/" +
-				id;
+		String path = pathForDeleteGhostById(id);
 
 		// When
 		mockMvc
@@ -187,10 +176,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		Integer id = createGhost_failUponException(location);
-
-		String path =
-				BASE_MAPPING + "/" +
-				id + 1;
+		String path = pathForDeleteGhostById(id + 1);
 
 		// When
 		mockMvc
@@ -201,13 +187,20 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	private String pathForCreateGhost(Coordinate location) {
+		return BASE_MAPPING + "/" +
+				location.getLatitude() + "/" +
+				location.getLongitude();
+	}
+
+	private String pathForDeleteGhostById(Integer id) {
+		return BASE_MAPPING + "/" + id;
+	}
+
 	// Returns the ID of the created ghost
 	private Integer createGhost_failUponException(Coordinate location) {
 
-		String path =
-				BASE_MAPPING + "/" +
-				location.getLatitude() + "/" +
-				location.getLongitude();
+		String path = pathForCreateGhost(location);
 		String jsonContent = null;
 
 		try {
