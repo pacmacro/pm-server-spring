@@ -3,6 +3,7 @@ package com.pm.server.controller;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -187,6 +188,62 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getGhostLocationById() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+		String path = pathForGetGhostLocationById(id);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.location.latitude")
+						.value(location.getLatitude())
+				)
+				.andExpect(jsonPath("$.location.longitude")
+						.value(location.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getGhostLocationById_wrongId() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+		String path = pathForGetGhostLocationById(id + 1);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_getGhostLocationById_noGhost() throws Exception {
+
+		// Given
+		Integer id = 39482;
+		String path = pathForGetGhostLocationById(id);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
 	private String pathForCreateGhost(Coordinate location) {
 		return BASE_MAPPING + "/" +
 				location.getLatitude() + "/" +
@@ -195,6 +252,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForDeleteGhostById(Integer id) {
 		return BASE_MAPPING + "/" + id;
+	}
+
+	private String pathForGetGhostLocationById(Integer id) {
+		return BASE_MAPPING + "/" + id + "/" + "location";
 	}
 
 	// Returns the ID of the created ghost
