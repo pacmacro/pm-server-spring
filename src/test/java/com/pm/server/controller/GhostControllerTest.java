@@ -2,6 +2,7 @@ package com.pm.server.controller;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -139,6 +140,64 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
+	public void unitTest_deleteGhostById() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path =
+				BASE_MAPPING + "/" +
+				id;
+
+		// When
+		mockMvc
+				.perform(delete(path))
+
+		// Then
+				.andExpect(status().isOk());
+
+	}
+
+	@Test
+	public void unitTest_deleteGhostById_noGhost() throws Exception {
+
+		// Given
+		Integer id = 2481;
+		String path =
+				BASE_MAPPING + "/" +
+				id;
+
+		// When
+		mockMvc
+				.perform(delete(path))
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_deleteGhostById_incorrectId() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path =
+				BASE_MAPPING + "/" +
+				id + 1;
+
+		// When
+		mockMvc
+				.perform(delete(path))
+
+		// Then
+				.andExpect(status().isNotFound());
 
 	}
 
