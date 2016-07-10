@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
@@ -246,6 +248,33 @@ public class GhostController {
 				id,
 				new CoordinateImpl(latitude, longitude)
 		);
+	}
+
+	private static void validateRequestBodyWithLocation(Coordinate location)
+			throws BadRequestException {
+
+		String errorMessage = null;
+
+		if(location == null) {
+			errorMessage = "Request body requires latitude and longitude.";
+		}
+		else if(
+				location.getLatitude() == null &&
+				location.getLongitude() == null) {
+			errorMessage = "Request body requires latitude and longitude.";
+		}
+		else if(location.getLatitude() == null) {
+			errorMessage = "Request body requires latitude.";
+		}
+		else if(location.getLongitude() == null) {
+			errorMessage = "Request body requires longitude.";
+		}
+
+		if(errorMessage != null) {
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
 	}
 
 }
