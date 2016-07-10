@@ -5,13 +5,19 @@ import org.apache.logging.log4j.Logger;
 
 public class CoordinateImpl implements Coordinate {
 
-	private double latitude;
-	private double longitude;
+	private Double latitude;
+	private Double longitude;
 
 	private final static Logger log =
 			LogManager.getLogger(CoordinateImpl.class.getName());
 
-	public CoordinateImpl(double latitude, double longitude) {
+	public CoordinateImpl() {
+		log.trace(
+				"Creating coordinate with null latitude and longitude."
+		);
+	}
+
+	public CoordinateImpl(Double latitude, Double longitude) {
 
 		log.trace(
 				"Creating coordinate with latitude {} and longitude {}",
@@ -22,25 +28,25 @@ public class CoordinateImpl implements Coordinate {
 		this.longitude = longitude;
 	}
 
-	public void setLatitude(double latitude) {
+	public void setLatitude(Double latitude) {
 
 		log.trace("Setting latitude to {}", latitude);
 
 		this.latitude = latitude;
 	}
 
-	public double getLatitude() {
+	public Double getLatitude() {
 		return latitude;
 	}
 
-	public void setLongitude(double longitude) {
+	public void setLongitude(Double longitude) {
 
 		log.trace("Setting longitude to {}", longitude);
 
 		this.longitude = longitude;
 	}
 
-	public double getLongitude() {
+	public Double getLongitude() {
 		return longitude;
 	}
 
