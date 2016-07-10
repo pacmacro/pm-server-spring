@@ -2,12 +2,12 @@ package com.pm.server.datatype;
 
 public interface Coordinate {
 
-	void setLatitude(double latitude);
+	void setLatitude(Double latitude);
 
-	double getLatitude();
+	Double getLatitude();
 
-	void setLongitude(double longitude);
+	void setLongitude(Double longitude);
 
-	double getLongitude();
+	Double getLongitude();
 
 }

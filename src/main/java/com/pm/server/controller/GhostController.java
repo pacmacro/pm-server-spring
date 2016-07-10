@@ -11,12 +11,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
@@ -38,22 +41,27 @@ public class GhostController {
 			LogManager.getLogger(GhostController.class.getName());
 
 	@RequestMapping(
-			value = "/{latitude}/{longitude}",
+			value = "",
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public IdResponse createGhost(
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response) throws ConflictException {
+			@RequestBody(required = false) CoordinateImpl location)
+			throws ConflictException, BadRequestException {
 
-		log.debug("Mapped POST /ghost/{}/{}", latitude, longitude);
+		log.debug("Mapped POST /ghost");
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		log.debug("Creating Ghost at ({}, {}).", latitude, longitude);
+		validateRequestBodyWithLocation(location);
+
+		log.debug("Creating Ghost at ({}, {}).",
+				location.getLatitude(),
+				location.getLongitude()
+		);
 
 		Ghost ghost = new GhostImpl();
-		ghost.setLocation(new CoordinateImpl(latitude, longitude));
+		ghost.setLocation(location);
 
 		Random random = new Random();
 
@@ -213,20 +221,19 @@ public class GhostController {
 	}
 
 	@RequestMapping(
-			value="/{id}/location/{latitude}/{longitude}",
+			value="/{id}/location",
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setGhostLocationById(
 			@PathVariable Integer id,
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response)
-			throws NotFoundException {
+			@RequestBody CoordinateImpl location)
+			throws BadRequestException, NotFoundException {
 
-		log.debug(
-				"Mapped PUT /ghost/{}/location/{}/{}",
-				id, latitude, longitude);
+		log.debug("Mapped PUT /ghost/{}/location", id);
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+
+		validateRequestBodyWithLocation(location);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
@@ -240,12 +247,36 @@ public class GhostController {
 
 		log.debug(
 				"Setting ghost with id {} to ({}, {})",
-				id, latitude, longitude
+				id, location.getLatitude(), location.getLongitude()
 		);
-		ghostRepository.setPlayerLocationById(
-				id,
-				new CoordinateImpl(latitude, longitude)
-		);
+		ghostRepository.setPlayerLocationById(id, location);
+	}
+
+	private static void validateRequestBodyWithLocation(Coordinate location)
+			throws BadRequestException {
+
+		String errorMessage = null;
+
+		if(location == null) {
+			errorMessage = "Request body requires latitude and longitude.";
+		}
+		else if(
+				location.getLatitude() == null &&
+				location.getLongitude() == null) {
+			errorMessage = "Request body requires latitude and longitude.";
+		}
+		else if(location.getLatitude() == null) {
+			errorMessage = "Request body requires latitude.";
+		}
+		else if(location.getLongitude() == null) {
+			errorMessage = "Request body requires longitude.";
+		}
+
+		if(errorMessage != null) {
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
 	}
 
 }
