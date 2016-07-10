@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -40,22 +41,27 @@ public class GhostController {
 			LogManager.getLogger(GhostController.class.getName());
 
 	@RequestMapping(
-			value = "/{latitude}/{longitude}",
+			value = "",
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public IdResponse createGhost(
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response) throws ConflictException {
+			@RequestBody(required = false) CoordinateImpl location)
+			throws ConflictException, BadRequestException {
 
-		log.debug("Mapped POST /ghost/{}/{}", latitude, longitude);
+		log.debug("Mapped POST /ghost");
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		log.debug("Creating Ghost at ({}, {}).", latitude, longitude);
+		validateRequestBodyWithLocation(location);
+
+		log.debug("Creating Ghost at ({}, {}).",
+				location.getLatitude(),
+				location.getLongitude()
+		);
 
 		Ghost ghost = new GhostImpl();
-		ghost.setLocation(new CoordinateImpl(latitude, longitude));
+		ghost.setLocation(location);
 
 		Random random = new Random();
 
