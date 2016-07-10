@@ -227,7 +227,7 @@ public class GhostController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setGhostLocationById(
 			@PathVariable Integer id,
-			@RequestBody Coordinate location)
+			@RequestBody CoordinateImpl location)
 			throws BadRequestException, NotFoundException {
 
 		log.debug("Mapped PUT /ghost/{}/location", id);
