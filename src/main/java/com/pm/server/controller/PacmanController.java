@@ -6,7 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -22,6 +22,7 @@ import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.response.LocationResponse;
+import com.pm.server.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/pacman")
@@ -34,16 +35,21 @@ public class PacmanController {
 			LogManager.getLogger(PacmanController.class.getName());
 
 	@RequestMapping(
-			value = "/{latitude}/{longitude}",
+			value = "",
 			method = RequestMethod.POST
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void createPacman(
-			@PathVariable double latitude,
-			@PathVariable double longitude)
-			throws ConflictException, InternalServerErrorException {
+			@RequestBody CoordinateImpl location)
+			throws
+				BadRequestException,
+				ConflictException,
+				InternalServerErrorException {
 
-		log.debug("Mapped POST /pacman/{}/{}", latitude, longitude);
+		log.debug("Mapped POST /pacman");
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+
+		validateRequestBodyWithLocation(location);
 
 		if(pacmanRepository.getPlayer() != null) {
 			String errorMessage = "A Pacman already exists.";
@@ -52,7 +58,7 @@ public class PacmanController {
 		}
 
 		Pacman pacman = new PacmanImpl();
-		pacman.setLocation(new CoordinateImpl(latitude, longitude));
+		pacman.setLocation(location);
 
 		try {
 			pacmanRepository.addPlayer(pacman);
@@ -99,17 +105,18 @@ public class PacmanController {
 	}
 
 	@RequestMapping(
-			value="/location/{latitude}/{longitude}",
+			value="/location",
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setPacmanLocation(
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response)
-			throws NotFoundException {
+			@RequestBody CoordinateImpl location)
+			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped PUT /pacman/location/{}/{}", latitude, longitude);
+		log.debug("Mapped PUT /pacman/location");
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+
+		validateRequestBodyWithLocation(location);
 
 		Pacman pacman = pacmanRepository.getPlayer();
 		if(pacman == null) {
@@ -122,9 +129,9 @@ public class PacmanController {
 				"Setting Pacman at location ({}, {}) to location ({}, {})",
 				pacman.getLocation().getLatitude(),
 				pacman.getLocation().getLongitude(),
-				latitude, longitude
+				location.getLatitude(), location.getLongitude()
 		);
-		pacman.setLocation(new CoordinateImpl(latitude, longitude));
+		pacman.setLocation(location);
 	}
 
 	@RequestMapping(

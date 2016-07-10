@@ -2,8 +2,11 @@
 
 if [ $# -ge 2 ] ; then
     curl \
-      --request PUT --include \
-      http://localhost:8080/pacman/location/"$1"/"$2"
+      --include \
+      --request PUT \
+      --header "Content-Type: application/json" \
+      --data '{"latitude":'$1',"longitude":'$2'}' \
+      http://localhost:8080/pacman/location
 else
     echo "Usage: ./put_pacman_location.sh latitude longitude"
 fi
