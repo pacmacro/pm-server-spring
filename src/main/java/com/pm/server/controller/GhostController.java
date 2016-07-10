@@ -221,20 +221,19 @@ public class GhostController {
 	}
 
 	@RequestMapping(
-			value="/{id}/location/{latitude}/{longitude}",
+			value="/{id}/location",
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setGhostLocationById(
 			@PathVariable Integer id,
-			@PathVariable double latitude,
-			@PathVariable double longitude,
-			HttpServletResponse response)
-			throws NotFoundException {
+			@RequestBody Coordinate location)
+			throws BadRequestException, NotFoundException {
 
-		log.debug(
-				"Mapped PUT /ghost/{}/location/{}/{}",
-				id, latitude, longitude);
+		log.debug("Mapped PUT /ghost/{}/location", id);
+		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+
+		validateRequestBodyWithLocation(location);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
@@ -248,12 +247,9 @@ public class GhostController {
 
 		log.debug(
 				"Setting ghost with id {} to ({}, {})",
-				id, latitude, longitude
+				id, location.getLatitude(), location.getLongitude()
 		);
-		ghostRepository.setPlayerLocationById(
-				id,
-				new CoordinateImpl(latitude, longitude)
-		);
+		ghostRepository.setPlayerLocationById(id, location);
 	}
 
 	private static void validateRequestBodyWithLocation(Coordinate location)
