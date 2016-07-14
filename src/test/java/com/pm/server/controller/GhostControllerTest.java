@@ -29,6 +29,7 @@ import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.player.Ghost;
 import com.pm.server.repository.GhostRepository;
+import com.pm.server.utils.JsonUtils;
 public class GhostControllerTest extends ControllerTestTemplate {
 
 	@Autowired
@@ -86,11 +87,16 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	public void unitTest_createGhost() throws Exception {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		String path = pathForCreateGhost(location);
+		String body = JsonUtils.objectToJson(location);
+
+		String path = pathForCreateGhost();
 
 		// When
 		mockMvc
-				.perform(post(path))
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
 
 		// Then
 				.andExpect(status().isOk())
@@ -103,15 +109,23 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		String path = pathForCreateGhost(location);
+		String body = JsonUtils.objectToJson(location);
+
+		String path = pathForCreateGhost();
 
 		mockMvc
-				.perform(post(path))
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
 				.andExpect(status().isOk());
 
 		// When
 		mockMvc
-				.perform(post(path))
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
 
 		// Then
 				.andExpect(status().isOk())
@@ -124,14 +138,20 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		String path =
-				BASE_MAPPING + "/" +
-				location.getLatitude() + "/" +
-				"longitude";
+		String body =
+				"{\"" +
+				location.getLatitude() + "\":\"" +
+				"longitude" +
+				"\"}";
+
+		String path = pathForCreateGhost();
 
 		// When
 		mockMvc
-				.perform(post(path))
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
 
 		// Then
 				.andExpect(status().isBadRequest());
@@ -244,10 +264,8 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForCreateGhost(Coordinate location) {
-		return BASE_MAPPING + "/" +
-				location.getLatitude() + "/" +
-				location.getLongitude();
+	private String pathForCreateGhost() {
+		return BASE_MAPPING;
 	}
 
 	private String pathForDeleteGhostById(Integer id) {
@@ -261,12 +279,16 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	// Returns the ID of the created ghost
 	private Integer createGhost_failUponException(Coordinate location) {
 
-		String path = pathForCreateGhost(location);
+		String path = pathForCreateGhost();
+		String body = JsonUtils.objectToJson(location);
 		String jsonContent = null;
 
 		try {
 			MvcResult result = mockMvc
-					.perform(post(path))
+					.perform(post(path)
+							.content(body)
+							.header("Content-Type", "application/json")
+					)
 					.andExpect(status().isOk())
 					.andReturn();
 			jsonContent = result.getResponse().getContentAsString();
