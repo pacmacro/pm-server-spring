@@ -1,6 +1,9 @@
 #!/bin/sh
 
+cd $(dirname $0)
+base_url=$(../base_url.sh)
+
 curl \
   --request GET --include \
   -H "Content-Type: application/json" \
-  http://localhost:8080/ghost/locations
+  $base_url/ghost/locations

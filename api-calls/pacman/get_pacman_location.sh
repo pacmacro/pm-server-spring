@@ -1,5 +1,8 @@
 #!/bin/sh
 
+cd $(dirname $0)
+base_url=$(../base_url.sh)
+
 curl \
   --request GET --include \
-  http://localhost:8080/pacman/location
+  $base_url/pacman/location

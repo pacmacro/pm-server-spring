@@ -1,5 +1,8 @@
 #!/bin/sh
 
+cd $(dirname $0)
+base_url=$(../base_url.sh)
+
 curl \
   --request DELETE --include \
-  http://localhost:8080/pacman
+  $base_url/pacman
