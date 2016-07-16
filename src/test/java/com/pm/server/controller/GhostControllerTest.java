@@ -389,4 +389,32 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	private Coordinate getGhostLocationById(Integer id) {
+
+		String path = pathForGetGhostLocationById(id);
+		String jsonContent = null;
+
+		try {
+			MvcResult result = mockMvc
+					.perform(get(path))
+					.andExpect(status().isOk())
+					.andReturn();
+			jsonContent = result.getResponse().getContentAsString();
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(jsonContent);
+
+		Double latitude = JsonPath.read(jsonContent, "$.latitude");
+		assertNotNull(latitude);
+		Double longitude = JsonPath.read(jsonContent, "$.longitude");
+		assertNotNull(longitude);
+
+		return new CoordinateImpl(latitude, longitude);
+
+	}
+
 }
