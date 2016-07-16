@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Ghost;
 import com.pm.server.utils.JsonUtils;
 
@@ -125,6 +126,29 @@ public class GhostRepositoryImpl implements GhostRepository {
 		);
 
 		ghost.setLocation(location);
+	}
+
+	@Override
+	public void setPlayerStateById(Integer id, PlayerState state) {
+
+		if(id == null) {
+			String errorMessage = "setPlayerStateById() was given a null id.";
+			log.error(errorMessage);
+			throw new NullPointerException(errorMessage);
+		}
+		Ghost ghost = getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"No ghost with the id " +
+					Integer.toString(id) +
+					" was found.";
+			log.warn(errorMessage);
+			throw new IllegalArgumentException(errorMessage);
+		}
+
+		log.debug("Setting ghost with id {} to state {}", id, state);
+		ghost.setState(state);
+
 	}
 
 	@Override

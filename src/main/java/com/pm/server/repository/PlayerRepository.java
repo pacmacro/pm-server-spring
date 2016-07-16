@@ -3,6 +3,7 @@ package com.pm.server.repository;
 import java.util.List;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerState;
 
 public interface PlayerRepository <PlayerType> {
 
@@ -16,6 +17,8 @@ public interface PlayerRepository <PlayerType> {
 	List<PlayerType> getAllPlayers();
 
 	void setPlayerLocationById(Integer id, Coordinate location);
+
+	void setPlayerStateById(Integer id, PlayerState state);
 
 	void clearPlayers();
 
