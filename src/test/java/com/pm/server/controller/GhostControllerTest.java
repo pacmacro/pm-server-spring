@@ -161,6 +161,23 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
+	public void unitTest_createGhost_noLocationGiven() throws Exception {
+
+		// Given
+		String path = pathForCreateGhost();
+
+		// When
+		mockMvc
+				.perform(post(path)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
 	public void unitTest_deleteGhostById() throws Exception {
 
 		// Given
@@ -395,6 +412,25 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById_noLocationGiven()
+			throws Exception {
+
+		// Given
+		Integer randomId = 29481;
+		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetLocation)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
 
 	}
 
