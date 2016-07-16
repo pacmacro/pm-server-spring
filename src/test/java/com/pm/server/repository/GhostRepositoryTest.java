@@ -17,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
-import com.pm.server.repository.GhostRepository;
 
 public class GhostRepositoryTest extends TestTemplate {
 
@@ -275,6 +275,88 @@ public class GhostRepositoryTest extends TestTemplate {
 				ghost1.getId(),
 				ghost1.getLocation()
 		);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test
+	public void unitTest_setPlayerStateById() {
+
+		// Given
+		Ghost ghost = ghost1;
+		addPlayer_failUponException(ghost);
+		PlayerState newState = PlayerState.ACTIVE;
+
+		// When
+		ghostRepository.setPlayerStateById(ghost1.getId(), newState);
+
+		// Then
+		Ghost ghostResult = ghostRepository.getPlayerById(ghost.getId());
+		assertEquals(newState, ghostResult.getState());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerStateById_sameState() {
+
+		// Given
+		Ghost ghost = ghost1;
+		addPlayer_failUponException(ghost);
+		PlayerState state = PlayerState.INCAPACITATED;
+		ghostRepository.setPlayerStateById(ghost.getId(), state);
+
+		// When
+		ghostRepository.setPlayerStateById(ghost.getId(), state);
+
+		// Then
+		Ghost ghostResult = ghostRepository.getPlayerById(ghost.getId());
+		assertEquals(state, ghostResult.getState());
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerStateById_nullId() {
+
+		// Given
+		Ghost ghost = ghost1;
+		addPlayer_failUponException(ghost);
+		PlayerState newState = PlayerState.ACTIVE;
+
+		// When
+		ghostRepository.setPlayerStateById(null, newState);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerStateById_nullState() {
+
+		// Given
+		Ghost ghost = ghost1;
+		addPlayer_failUponException(ghost);
+
+		// When
+		ghostRepository.setPlayerStateById(ghost.getId(), null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void unitTest_setPlayerStateById_powerUpState() {
+
+		// GIven
+		Ghost ghost = ghost1;
+		addPlayer_failUponException(ghost);
+		PlayerState illegalPlayerState = PlayerState.POWERUP;
+
+		// When
+		ghostRepository.setPlayerStateById(ghost.getId(), illegalPlayerState);
 
 		// Then
 		// Exception thrown above
