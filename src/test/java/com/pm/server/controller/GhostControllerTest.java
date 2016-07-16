@@ -1,5 +1,6 @@
 package com.pm.server.controller;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -353,31 +354,25 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		// Given
 		Coordinate location_original = randomCoordinateList.get(0);
 		Integer id = createGhost_failUponException(location_original);
-		assert(location_original == getGhostLocationById(id));
 
-		String pathForSetLocation = pathForSetGhostLocationById(id);
-		String pathForGetLocation = pathForGetGhostLocationById(id);
+		String path = pathForSetGhostLocationById(id);
 
 		Coordinate location_updated = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location_updated);
 
 		// When
 		mockMvc
-				.perform(put(pathForSetLocation)
+				.perform(put(path)
 						.content(body)
 						.header("Content-Type", "application/json")
 				)
 				.andExpect(status().isOk());
 
 		// Then
-		mockMvc
-				.perform(get(pathForGetLocation))
-				.andExpect(jsonPath("$.location.latitude")
-						.value(location_updated.getLatitude())
-				)
-				.andExpect(jsonPath("$.location.longitude")
-						.value(location_updated.getLongitude())
-				);
+		Coordinate location_result =
+				getGhostLocationById_failUponException(id);
+		assertEquals(location_updated.getLatitude(), location_result.getLatitude());
+		assertEquals(location_updated.getLongitude(), location_result.getLongitude());
 
 	}
 
@@ -450,7 +445,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private Coordinate getGhostLocationById(Integer id) {
+	private Coordinate getGhostLocationById_failUponException(Integer id) {
 
 		String path = pathForGetGhostLocationById(id);
 		String jsonContent = null;
