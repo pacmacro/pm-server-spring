@@ -1,10 +1,12 @@
 package com.pm.server.controller;
-
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -159,6 +161,23 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
+	public void unitTest_createGhost_noLocationGiven() throws Exception {
+
+		// Given
+		String path = pathForCreateGhost();
+
+		// When
+		mockMvc
+				.perform(post(path)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
 	public void unitTest_deleteGhostById() throws Exception {
 
 		// Given
@@ -264,6 +283,157 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getAllGhostLocations_singleGhost() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id")
+						.value(id)
+				)
+				.andExpect(jsonPath("$[0].location.latitude")
+						.value(location.getLatitude())
+				)
+				.andExpect(jsonPath("$[0].location.longitude")
+						.value(location.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostLocations_multipleGhosts() throws Exception {
+
+		// Given
+		Coordinate location0 = randomCoordinateList.get(0);
+		Integer id0 = createGhost_failUponException(location0);
+
+		Coordinate location1 = randomCoordinateList.get(1);
+		Integer id1 = createGhost_failUponException(location1);
+
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id")
+						.value(id0)
+				)
+				.andExpect(jsonPath("$[0].location.latitude")
+						.value(location0.getLatitude())
+				)
+				.andExpect(jsonPath("$[0].location.longitude")
+						.value(location0.getLongitude())
+				)
+				.andExpect(jsonPath("$[1].id")
+						.value(id1)
+				)
+				.andExpect(jsonPath("$[1].location.latitude")
+						.value(location1.getLatitude())
+				)
+				.andExpect(jsonPath("$[1].location.longitude")
+						.value(location1.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostLocations_noGhosts() throws Exception {
+
+		// Given
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(0)));
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById() throws Exception {
+
+		// Given
+		Coordinate location_original = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location_original);
+
+		String path = pathForSetGhostLocationById(id);
+
+		Coordinate location_updated = randomCoordinateList.get(0);
+		String body = JsonUtils.objectToJson(location_updated);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		Coordinate location_result =
+				getGhostLocationById_failUponException(id);
+		assertEquals(location_updated.getLatitude(), location_result.getLatitude());
+		assertEquals(location_updated.getLongitude(), location_result.getLongitude());
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById_noGhost() throws Exception {
+
+		// Given
+		Integer randomId = 29481;
+		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+
+		Coordinate location = randomCoordinateList.get(0);
+		String body = JsonUtils.objectToJson(location);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetLocation)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById_noLocationGiven()
+			throws Exception {
+
+		// Given
+		Integer randomId = 29481;
+		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetLocation)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
 	private String pathForCreateGhost() {
 		return BASE_MAPPING;
 	}
@@ -273,6 +443,14 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	private String pathForGetGhostLocationById(Integer id) {
+		return BASE_MAPPING + "/" + id + "/" + "location";
+	}
+
+	private String pathForGetAllGhostLocations() {
+		return BASE_MAPPING + "/" + "locations";
+	}
+
+	private String pathForSetGhostLocationById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "location";
 	}
 
@@ -300,6 +478,34 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		assertNotNull(jsonContent);
 		return JsonPath.read(jsonContent, "$.id");
+
+	}
+
+	private Coordinate getGhostLocationById_failUponException(Integer id) {
+
+		String path = pathForGetGhostLocationById(id);
+		String jsonContent = null;
+
+		try {
+			MvcResult result = mockMvc
+					.perform(get(path))
+					.andExpect(status().isOk())
+					.andReturn();
+			jsonContent = result.getResponse().getContentAsString();
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(jsonContent);
+
+		Double latitude = JsonPath.read(jsonContent, "$.location.latitude");
+		assertNotNull(latitude);
+		Double longitude = JsonPath.read(jsonContent, "$.location.longitude");
+		assertNotNull(longitude);
+
+		return new CoordinateImpl(latitude, longitude);
 
 	}
 
