@@ -5,6 +5,7 @@ import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -346,6 +347,62 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setGhostLocationById() throws Exception {
+
+		// Given
+		Coordinate location_original = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location_original);
+		assert(location_original == getGhostLocationById(id));
+
+		String pathForSetLocation = pathForSetGhostLocationById(id);
+		String pathForGetLocation = pathForGetGhostLocationById(id);
+
+		Coordinate location_updated = randomCoordinateList.get(0);
+		String body = JsonUtils.objectToJson(location_updated);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetLocation)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		mockMvc
+				.perform(get(pathForGetLocation))
+				.andExpect(jsonPath("$.location.latitude")
+						.value(location_updated.getLatitude())
+				)
+				.andExpect(jsonPath("$.location.longitude")
+						.value(location_updated.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_setGhostLocationById_noGhost() throws Exception {
+
+		// Given
+		Integer randomId = 29481;
+		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+
+		Coordinate location = randomCoordinateList.get(0);
+		String body = JsonUtils.objectToJson(location);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetLocation)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
 	private String pathForCreateGhost() {
 		return BASE_MAPPING;
 	}
@@ -360,6 +417,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForGetAllGhostLocations() {
 		return BASE_MAPPING + "/" + "locations";
+	}
+
+	private String pathForSetGhostLocationById(Integer id) {
+		return BASE_MAPPING + "/" + id + "/" + "location";
 	}
 
 	// Returns the ID of the created ghost
