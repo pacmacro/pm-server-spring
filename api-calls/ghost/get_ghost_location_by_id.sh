@@ -9,5 +9,5 @@ if [ $# -ge 1 ] ; then
       -H "Content-Type: application/json" \
       $base_url/ghost/"$1"/location
 else
-    echo "Usage: ./get_location_by_id.sh id"
+    echo "Usage: ./get_ghost_location_by_id.sh id"
 fi
