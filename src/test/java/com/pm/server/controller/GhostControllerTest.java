@@ -366,6 +366,60 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
+	public void unitTest_getGhostStateById() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForGetGhostStateById(id);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.state").exists());
+
+	}
+
+	@Test
+	public void unitTest_getGhostStateById_wrongId() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForGetGhostStateById(id + 1);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_getGhostStateById_noGhost() throws Exception {
+
+		// Given
+		Integer randomId = 12931;
+
+		String path = pathForGetGhostStateById(randomId);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
 	public void unitTest_setGhostLocationById() throws Exception {
 
 		// Given
@@ -448,6 +502,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForGetAllGhostLocations() {
 		return BASE_MAPPING + "/" + "locations";
+	}
+
+	private String pathForGetGhostStateById(Integer id) {
+		return BASE_MAPPING + "/" + id + "/" + "state";
 	}
 
 	private String pathForSetGhostLocationById(Integer id) {

@@ -28,6 +28,7 @@ import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.response.IdResponse;
 import com.pm.server.response.PlayerResponse;
+import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
 
 @RestController
@@ -218,6 +219,40 @@ public class GhostController {
 		}
 
 		return ghostResponseList;
+	}
+
+	@RequestMapping(
+			value="/{id}/state",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public PlayerStateResponse getGhostStateById(
+			@PathVariable Integer id,
+			HttpServletResponse response)
+			throws NotFoundException {
+
+		log.debug("Mapped GET /ghost/{}/state", id);
+
+		Ghost ghost = ghostRepository.getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"No ghost with id " +
+					Integer.toString(id) +
+					".";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
+		playerStateResponse.setState(ghost.getState());
+
+		String objectString = JsonUtils.objectToJson(playerStateResponse);
+		if(objectString != null) {
+			log.debug("Returning playerStateResponse: {}", objectString);
+		}
+
+		return playerStateResponse;
 	}
 
 	@RequestMapping(
