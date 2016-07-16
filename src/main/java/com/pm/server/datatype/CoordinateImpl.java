@@ -28,6 +28,28 @@ public class CoordinateImpl implements Coordinate {
 		this.longitude = longitude;
 	}
 
+	@Override
+	public boolean equals(Object object) {
+
+		if(object == null) {
+			return false;
+		}
+
+		if(!CoordinateImpl.class.isAssignableFrom(object.getClass())) {
+			return false;
+		}
+		final CoordinateImpl coordinateCompare = (CoordinateImpl) object;
+		if(this.latitude != coordinateCompare.latitude) {
+			return false;
+		}
+		else if(this.longitude != coordinateCompare.longitude) {
+			return false;
+		}
+
+		return true;
+
+	}
+
 	public void setLatitude(Double latitude) {
 
 		log.trace("Setting latitude to {}", latitude);
