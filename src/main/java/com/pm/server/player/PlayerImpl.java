@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
 
 @Component
@@ -12,6 +13,7 @@ public abstract class PlayerImpl implements Player {
 
 	protected Integer id = 0;
 	protected Coordinate location;
+	protected PlayerState state = PlayerState.UNINITIALIZED;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerImpl.class.getName());
@@ -39,6 +41,21 @@ public abstract class PlayerImpl implements Player {
 
 	public Coordinate getLocation() {
 		return location;
+	}
+
+	public void setState(PlayerState state) throws NullPointerException {
+
+		if(state == null) {
+			String errorMessage = "setState() was given a null state.";
+			log.warn(errorMessage);
+			throw new NullPointerException(errorMessage);
+		}
+		this.state = state;
+
+	}
+
+	public PlayerState getState() {
+		return state;
 	}
 
 }
