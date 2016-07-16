@@ -469,9 +469,9 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		assertNotNull(jsonContent);
 
-		Double latitude = JsonPath.read(jsonContent, "$.latitude");
+		Double latitude = JsonPath.read(jsonContent, "$.location.latitude");
 		assertNotNull(latitude);
-		Double longitude = JsonPath.read(jsonContent, "$.longitude");
+		Double longitude = JsonPath.read(jsonContent, "$.location.longitude");
 		assertNotNull(longitude);
 
 		return new CoordinateImpl(latitude, longitude);
