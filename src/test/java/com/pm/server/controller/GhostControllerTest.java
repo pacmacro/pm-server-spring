@@ -1,5 +1,5 @@
 package com.pm.server.controller;
-
+import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -264,6 +264,88 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getAllGhostLocations_singleGhost() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id")
+						.value(id)
+				)
+				.andExpect(jsonPath("$[0].location.latitude")
+						.value(location.getLatitude())
+				)
+				.andExpect(jsonPath("$[0].location.longitude")
+						.value(location.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostLocations_multipleGhosts() throws Exception {
+
+		// Given
+		Coordinate location0 = randomCoordinateList.get(0);
+		Integer id0 = createGhost_failUponException(location0);
+
+		Coordinate location1 = randomCoordinateList.get(1);
+		Integer id1 = createGhost_failUponException(location1);
+
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id")
+						.value(id0)
+				)
+				.andExpect(jsonPath("$[0].location.latitude")
+						.value(location0.getLatitude())
+				)
+				.andExpect(jsonPath("$[0].location.longitude")
+						.value(location0.getLongitude())
+				)
+				.andExpect(jsonPath("$[1].id")
+						.value(id1)
+				)
+				.andExpect(jsonPath("$[1].location.latitude")
+						.value(location1.getLatitude())
+				)
+				.andExpect(jsonPath("$[1].location.longitude")
+						.value(location1.getLongitude())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostLocations_noGhosts() throws Exception {
+
+		// Given
+		String path = pathForGetAllGhostLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(0)));
+
+	}
+
 	private String pathForCreateGhost() {
 		return BASE_MAPPING;
 	}
@@ -274,6 +356,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForGetGhostLocationById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "location";
+	}
+
+	private String pathForGetAllGhostLocations() {
+		return BASE_MAPPING + "/" + "locations";
 	}
 
 	// Returns the ID of the created ghost
