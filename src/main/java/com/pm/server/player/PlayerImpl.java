@@ -50,6 +50,8 @@ public abstract class PlayerImpl implements Player {
 			log.warn(errorMessage);
 			throw new NullPointerException(errorMessage);
 		}
+
+		log.trace("Setting location to {}", state);
 		this.state = state;
 
 	}
