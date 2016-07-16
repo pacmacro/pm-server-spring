@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 
@@ -467,6 +468,125 @@ public class PacmanRepositoryTest extends TestTemplate {
 
 		// When
 		pacmanRepository.setPlayerLocation(newLocation);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test
+	public void unitTest_setPlayerStateById() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		PlayerState newState = PlayerState.ACTIVE;
+
+		// When
+		pacmanRepository.setPlayerStateById(pacman.getId(), newState);
+
+		// Then
+		Pacman pacmanResult = pacmanRepository.getPlayer();
+		assertEquals(newState, pacmanResult.getState());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerStateById_sameState() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		PlayerState newState = PlayerState.ACTIVE;
+		pacmanRepository.setPlayerState(newState);
+
+		// When
+		pacmanRepository.setPlayerStateById(pacman.getId(), newState);
+
+		// Then
+		Pacman pacmanResult = pacmanRepository.getPlayer();
+		assertEquals(newState, pacmanResult.getState());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerStateById_nullId() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		PlayerState newState = PlayerState.ACTIVE;
+
+		// When
+		pacmanRepository.setPlayerStateById(null, newState);
+
+		// Then
+		Pacman pacmanResult = pacmanRepository.getPlayer();
+		assertEquals(newState, pacmanResult.getState());
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerStateById_nullState() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		// When
+		pacmanRepository.setPlayerStateById(pacman.getId(), null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test
+	public void unitTest_setPlayerState() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+		PlayerState newState = PlayerState.ACTIVE;
+
+		// When
+		pacmanRepository.setPlayerState(newState);
+
+		// Then
+		Pacman pacmanResult = pacmanRepository.getPlayer();
+		assertEquals(newState, pacmanResult.getState());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerState_sameState() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		PlayerState newState = PlayerState.ACTIVE;
+		pacmanRepository.setPlayerState(newState);
+
+		// When
+		pacmanRepository.setPlayerState(newState);
+
+		// Then
+		Pacman pacmanResult = pacmanRepository.getPlayer();
+		assertEquals(newState, pacmanResult.getState());
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_setPlayerState_nullState() {
+
+		// Given
+		Pacman pacman = pacmanList.get(0);
+		addPlayer_failUponException(pacman);
+
+		// When
+		pacmanRepository.setPlayerState(null);
 
 		// Then
 		// Exception thrown above
