@@ -87,6 +87,7 @@ public class GhostRepositoryImpl implements GhostRepository {
 
 		for(Ghost ghost : ghosts) {
 			if(ghost.getId() == id) {
+				log.trace("Found ghost {}", JsonUtils.objectToJson(ghost));
 				return ghost;
 			}
 		}
