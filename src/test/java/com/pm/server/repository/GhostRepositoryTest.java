@@ -304,7 +304,7 @@ public class GhostRepositoryTest extends TestTemplate {
 		// Given
 		Ghost ghost = ghost1;
 		addPlayer_failUponException(ghost);
-		PlayerState state = PlayerState.INCAPACITATED;
+		PlayerState state = PlayerState.CAPTURED;
 		ghostRepository.setPlayerStateById(ghost.getId(), state);
 
 		// When

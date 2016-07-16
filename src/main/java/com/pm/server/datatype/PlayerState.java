@@ -5,7 +5,7 @@ public enum PlayerState {
 	UNINITIALIZED,
 	READY,
 	ACTIVE,
-	INCAPACITATED,
+	CAPTURED,
 	POWERUP
 
 }
