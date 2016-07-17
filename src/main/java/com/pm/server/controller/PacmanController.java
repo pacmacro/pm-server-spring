@@ -23,6 +23,7 @@ import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.utils.JsonUtils;
+import com.pm.server.utils.ValidationUtils;
 
 @RestController
 @RequestMapping("/pacman")
@@ -49,7 +50,7 @@ public class PacmanController {
 		log.debug("Mapped POST /pacman");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		if(pacmanRepository.getPlayer() != null) {
 			String errorMessage = "A Pacman already exists.";
@@ -116,7 +117,7 @@ public class PacmanController {
 		log.debug("Mapped PUT /pacman/location");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		Pacman pacman = pacmanRepository.getPlayer();
 		if(pacman == null) {
@@ -151,33 +152,6 @@ public class PacmanController {
 		}
 
 		pacmanRepository.clearPlayers();
-	}
-
-	private static void validateRequestBodyWithLocation(Coordinate location)
-			throws BadRequestException {
-
-		String errorMessage = null;
-
-		if(location == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(
-				location.getLatitude() == null &&
-				location.getLongitude() == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(location.getLatitude() == null) {
-			errorMessage = "Request body requires latitude.";
-		}
-		else if(location.getLongitude() == null) {
-			errorMessage = "Request body requires longitude.";
-		}
-
-		if(errorMessage != null) {
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
 	}
 
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -32,6 +31,7 @@ import com.pm.server.response.IdResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
+import com.pm.server.utils.ValidationUtils;
 
 @RestController
 @RequestMapping("/ghost")
@@ -56,7 +56,7 @@ public class GhostController {
 		log.debug("Mapped POST /ghost");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		log.debug("Creating Ghost at ({}, {}).",
 				location.getLatitude(),
@@ -270,7 +270,7 @@ public class GhostController {
 		log.debug("Mapped PUT /ghost/{}/location", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
@@ -302,7 +302,9 @@ public class GhostController {
 		log.debug("Mapped PUT /ghost/{}/state", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
-		PlayerState state = validateRequestBodyWithState(stateRequest);
+		PlayerState state =
+				ValidationUtils.validateRequestBodyWithState(stateRequest);
+
 		if(state == PlayerState.POWERUP) {
 			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
@@ -324,59 +326,6 @@ public class GhostController {
 				id, ghost.getState(), state
 		);
 		ghostRepository.setPlayerStateById(id, state);
-
-	}
-
-	private static void validateRequestBodyWithLocation(Coordinate location)
-			throws BadRequestException {
-
-		String errorMessage = null;
-
-		if(location == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(
-				location.getLatitude() == null &&
-				location.getLongitude() == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(location.getLatitude() == null) {
-			errorMessage = "Request body requires latitude.";
-		}
-		else if(location.getLongitude() == null) {
-			errorMessage = "Request body requires longitude.";
-		}
-
-		if(errorMessage != null) {
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
-	}
-
-	private static PlayerState validateRequestBodyWithState(
-			PlayerStateRequest stateRequest)
-			throws BadRequestException {
-
-		if(stateRequest == null) {
-			String errorMessage = "Request body requires a state.";
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
-		PlayerState state = null;
-		try {
-			state = PlayerState.valueOf(stateRequest.state);
-		}
-		catch(IllegalArgumentException e) {
-			log.warn(e.getMessage());
-
-			String errorMessage = "Request body requires a valid state.";
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
-		return state;
 
 	}
 
