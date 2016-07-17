@@ -29,6 +29,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Ghost;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.utils.JsonUtils;
@@ -488,6 +489,178 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setGhostStateById() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id);
+
+		PlayerState updatedState = PlayerState.READY;
+		String body = JsonUtils.objectToJson(updatedState);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		PlayerState resultState = getGhostStateById_failUponException(id);
+		assertEquals(updatedState, resultState);
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_sameState() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id);
+
+		PlayerState updatedState = PlayerState.READY;
+		String body = JsonUtils.objectToJson(updatedState);
+
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		PlayerState resultState = getGhostStateById_failUponException(id);
+		assertEquals(updatedState, resultState);
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_illegalPowerupState() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id);
+
+		PlayerState updatedState = PlayerState.POWERUP;
+		String body = JsonUtils.objectToJson(updatedState);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_noStateGiven() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_invalidStateValue() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id);
+
+		String body = "{\"state\":\"invalidValue\"}";
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_wrongId() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForSetGhostStateById(id + 1);
+
+		PlayerState updatedState = PlayerState.READY;
+		String body = JsonUtils.objectToJson(updatedState);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
+	@Test
+	public void unitTest_setGhostStateById_noGhost() throws Exception {
+
+		// Given
+		Integer randomId = 19349;
+		String path = pathForSetGhostStateById(randomId);
+
+		PlayerState updatedState = PlayerState.READY;
+		String body = JsonUtils.objectToJson(updatedState);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isNotFound());
+
+	}
+
 	private String pathForCreateGhost() {
 		return BASE_MAPPING;
 	}
@@ -510,6 +683,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForSetGhostLocationById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "location";
+	}
+
+	private String pathForSetGhostStateById(Integer id) {
+		return BASE_MAPPING + "/" + id + "/" + "state";
 	}
 
 	// Returns the ID of the created ghost
@@ -564,6 +741,40 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		assertNotNull(longitude);
 
 		return new CoordinateImpl(latitude, longitude);
+
+	}
+
+	private PlayerState getGhostStateById_failUponException(Integer id) {
+
+		String path = pathForGetGhostStateById(id);
+		String jsonContent = null;
+
+		try {
+			MvcResult result = mockMvc
+					.perform(get(path))
+					.andExpect(status().isOk())
+					.andReturn();
+			jsonContent = result.getResponse().getContentAsString();
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(jsonContent);
+		String stateString = JsonPath.read(jsonContent, "$.state");
+
+		PlayerState state = null;
+		try {
+			state = PlayerState.valueOf(stateString);
+		}
+		catch(IllegalArgumentException e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(state);
+		return state;
 
 	}
 
