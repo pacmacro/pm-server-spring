@@ -49,6 +49,11 @@ public class ValidationUtils {
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
+		else if(stateRequest.state == null) {
+			String errorMessage = "Request body requires a state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
 
 		PlayerState state = null;
 		try {
