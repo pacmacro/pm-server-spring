@@ -3,7 +3,8 @@
 [![Build Status](https://travis-ci.org/pacmacro/pm-server.svg?branch=master)](https://travis-ci.org/pacmacro/pm-server)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/pacmacro/pm-server/blob/master/LICENSE)
 
-Java & Spring Boot RESTful server for relaying information between devices for the game PacMacro.
+Java & Spring Boot RESTful server for relaying information between devices for the game Pac Macro.  
+The official specification for the game can be found [here](https://github.com/pacmacro/pm-specification).
 
 The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).  
 The Travis CI service (continuous integration for tests) is located at [pacmacro/pm-server](https://travis-ci.org/pacmacro/pm-server).  
