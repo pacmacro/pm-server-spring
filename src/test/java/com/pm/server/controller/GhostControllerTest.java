@@ -422,6 +422,69 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
+	public void unitTest_getAllGhostStates_singleGhost() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		Integer id = createGhost_failUponException(location);
+
+		String path = pathForGetAllGhostStates();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id")
+						.value(id)
+				)
+				.andExpect(jsonPath("$[0].state").exists());
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostStates_multipleGhosts() throws Exception {
+
+		// Given
+		Coordinate location0 = randomCoordinateList.get(0);
+		Integer id0 = createGhost_failUponException(location0);
+
+		Coordinate location1 = randomCoordinateList.get(1);
+		Integer id1 = createGhost_failUponException(location1);
+
+		String path = pathForGetAllGhostStates();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].id").value(id0))
+				.andExpect(jsonPath("$[0].state").exists())
+				.andExpect(jsonPath("$[1].id").value(id1))
+				.andExpect(jsonPath("$[1].state").exists());
+
+	}
+
+	@Test
+	public void unitTest_getAllGhostStates_noGhosts() throws Exception {
+
+		// Given
+		String path = pathForGetAllGhostStates();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(0)));
+
+	}
+
+	@Test
 	public void unitTest_setGhostLocationById() throws Exception {
 
 		// Given
@@ -695,6 +758,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	private String pathForGetGhostStateById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "state";
+	}
+
+	private String pathForGetAllGhostStates() {
+		return BASE_MAPPING + "/" + "states";
 	}
 
 	private String pathForSetGhostLocationById(Integer id) {
