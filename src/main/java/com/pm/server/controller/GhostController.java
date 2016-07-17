@@ -302,8 +302,12 @@ public class GhostController {
 		log.debug("Mapped PUT /ghost/{}/state", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
-		validateRequestBodyWithState_ghost(stateRequest);
-		PlayerState state = PlayerState.valueOf(stateRequest.state);
+		PlayerState state = validateRequestBodyWithState(stateRequest);
+		if(state == PlayerState.POWERUP) {
+			String errorMessage = "The POWERUP state is not valid for a Ghost.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
@@ -350,7 +354,7 @@ public class GhostController {
 
 	}
 
-	private static void validateRequestBodyWithState_ghost(
+	private static PlayerState validateRequestBodyWithState(
 			PlayerStateRequest stateRequest)
 			throws BadRequestException {
 
@@ -372,11 +376,7 @@ public class GhostController {
 			throw new BadRequestException(errorMessage);
 		}
 
-		if(state == PlayerState.POWERUP) {
-			String errorMessage = "The POWERUP state is not valid for a Ghost.";
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
+		return state;
 
 	}
 
