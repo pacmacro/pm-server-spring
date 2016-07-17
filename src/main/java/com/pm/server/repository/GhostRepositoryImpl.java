@@ -119,10 +119,11 @@ public class GhostRepositoryImpl implements GhostRepository {
 			);
 		}
 
-		String objectString = JsonUtils.objectToJson(location);
+		String oldLocationString = JsonUtils.objectToJson(ghost.getLocation());
+		String newLocationString = JsonUtils.objectToJson(location);
 		log.debug(
-				"Setting ghost with id {} to location {}",
-				id, objectString
+				"Setting ghost with id {} from location {} to location {}",
+				id, oldLocationString, newLocationString
 		);
 
 		ghost.setLocation(location);
@@ -146,7 +147,10 @@ public class GhostRepositoryImpl implements GhostRepository {
 			throw new IllegalArgumentException(errorMessage);
 		}
 
-		log.debug("Setting ghost with id {} to state {}", id, state);
+		log.debug(
+				"Setting ghost with id {} from state {} to state {}",
+				id, ghost.getState(), state
+		);
 		ghost.setState(state);
 
 	}

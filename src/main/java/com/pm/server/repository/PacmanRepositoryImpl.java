@@ -110,7 +110,10 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 			throw new IllegalStateException(errorMessage);
 		}
 
-		log.debug("Setting pacman to state {}", state);
+		log.debug(
+				"Changing pacman from state {} to state {}",
+				pacman.getState(), state
+		);
 		pacman.setState(state);
 
 	}
