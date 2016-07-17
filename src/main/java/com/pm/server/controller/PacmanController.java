@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
@@ -21,6 +22,7 @@ import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
+import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
@@ -163,6 +165,36 @@ public class PacmanController {
 				location.getLatitude(), location.getLongitude()
 		);
 		pacman.setLocation(location);
+	}
+
+	@RequestMapping(
+			value="/state",
+			method=RequestMethod.PUT
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setPacmanState(
+			@RequestBody PlayerStateRequest stateRequest)
+			throws BadRequestException, NotFoundException {
+
+		log.debug("Mapped PUT /pacman/state");
+		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
+
+		PlayerState state =
+				ValidationUtils.validateRequestBodyWithState(stateRequest);
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			String errorMessage = "No Pacman exists.";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		log.debug(
+				"Changing Pacman from state {} to {}",
+				pacman.getState(), state
+		);
+		pacmanRepository.setPlayerState(state);
+
 	}
 
 	@RequestMapping(
