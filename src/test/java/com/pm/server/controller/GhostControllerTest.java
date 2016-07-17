@@ -30,6 +30,7 @@ import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerState;
+import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.player.Ghost;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.utils.JsonUtils;
@@ -499,7 +500,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		String path = pathForSetGhostStateById(id);
 
 		PlayerState updatedState = PlayerState.READY;
-		String body = JsonUtils.objectToJson(updatedState);
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
 		mockMvc
@@ -525,7 +529,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		String path = pathForSetGhostStateById(id);
 
 		PlayerState updatedState = PlayerState.READY;
-		String body = JsonUtils.objectToJson(updatedState);
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		mockMvc
 				.perform(put(path)
@@ -558,7 +565,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		String path = pathForSetGhostStateById(id);
 
 		PlayerState updatedState = PlayerState.POWERUP;
-		String body = JsonUtils.objectToJson(updatedState);
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
 		mockMvc
@@ -625,7 +635,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		String path = pathForSetGhostStateById(id + 1);
 
 		PlayerState updatedState = PlayerState.READY;
-		String body = JsonUtils.objectToJson(updatedState);
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
 		mockMvc
@@ -647,7 +660,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 		String path = pathForSetGhostStateById(randomId);
 
 		PlayerState updatedState = PlayerState.READY;
-		String body = JsonUtils.objectToJson(updatedState);
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
 		mockMvc

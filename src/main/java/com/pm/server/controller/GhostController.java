@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
@@ -26,6 +27,7 @@ import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
+import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.PlayerStateResponse;
@@ -287,6 +289,40 @@ public class GhostController {
 		ghostRepository.setPlayerLocationById(id, location);
 	}
 
+	@RequestMapping(
+			value="/{id}/state",
+			method=RequestMethod.PUT
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setGhostStateById(
+			@PathVariable Integer id,
+			@RequestBody PlayerStateRequest stateRequest)
+			throws BadRequestException, NotFoundException {
+
+		log.debug("Mapped PUT /ghost/{}/state", id);
+		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
+
+		validateRequestBodyWithState_ghost(stateRequest);
+		PlayerState state = PlayerState.valueOf(stateRequest.state);
+
+		Ghost ghost = ghostRepository.getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was not found.";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		log.debug(
+				"Changing ghost with id {} from state {} to {}",
+				id, ghost.getState(), state
+		);
+		ghostRepository.setPlayerStateById(id, state);
+
+	}
+
 	private static void validateRequestBodyWithLocation(Coordinate location)
 			throws BadRequestException {
 
@@ -308,6 +344,36 @@ public class GhostController {
 		}
 
 		if(errorMessage != null) {
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+	}
+
+	private static void validateRequestBodyWithState_ghost(
+			PlayerStateRequest stateRequest)
+			throws BadRequestException {
+
+		if(stateRequest == null) {
+			String errorMessage = "Request body requires a state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		PlayerState state = null;
+		try {
+			state = PlayerState.valueOf(stateRequest.state);
+		}
+		catch(IllegalArgumentException e) {
+			log.warn(e.getMessage());
+
+			String errorMessage = "Request body requires a valid state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		if(state == PlayerState.POWERUP) {
+			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
