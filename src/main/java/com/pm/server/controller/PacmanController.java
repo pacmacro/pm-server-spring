@@ -22,6 +22,7 @@ import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.response.LocationResponse;
+import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
 
@@ -103,6 +104,35 @@ public class PacmanController {
 
 		return locationResponse;
 
+	}
+
+	@RequestMapping(
+			value="/state",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public PlayerStateResponse getPacmanState(HttpServletResponse response)
+			throws NotFoundException {
+
+		log.debug("Mapped GET /pacman/state");
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			String errorMessage = "No Pacman exists";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
+		playerStateResponse.setState(pacman.getState());
+
+		String objectString = JsonUtils.objectToJson(playerStateResponse);
+		if(objectString != null) {
+			log.debug("Returning playerStateResponse: {}", objectString);
+		}
+
+		return playerStateResponse;
 	}
 
 	@RequestMapping(
