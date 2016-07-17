@@ -27,6 +27,7 @@ import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.request.PlayerStateRequest;
+import com.pm.server.response.IdAndPlayerStateResponse;
 import com.pm.server.response.IdResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.PlayerStateResponse;
@@ -255,6 +256,47 @@ public class GhostController {
 		}
 
 		return playerStateResponse;
+	}
+
+
+
+	@RequestMapping(
+			value="/states",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<IdAndPlayerStateResponse> getAllGhostStates() {
+
+		log.debug("Mapped GET /ghost/states");
+
+		List<IdAndPlayerStateResponse> ghostResponseList =
+				new ArrayList<IdAndPlayerStateResponse>();
+
+		List<Ghost> ghosts = ghostRepository.getAllPlayers();
+
+		if(ghosts != null) {
+			for(Ghost ghost : ghosts) {
+
+				String objectString = JsonUtils.objectToJson(ghost);
+				if(objectString != null) {
+					log.trace("Processing ghost: {}", objectString);
+				}
+
+				IdAndPlayerStateResponse ghostResponse = new IdAndPlayerStateResponse();
+				ghostResponse.id = ghost.getId();
+				ghostResponse.state = ghost.getState();
+
+				ghostResponseList.add(ghostResponse);
+			}
+		}
+
+		String objectString = JsonUtils.objectToJson(ghostResponseList);
+		if(objectString != null) {
+			log.debug("Returning ghostsResponse: {}", objectString);
+		}
+
+		return ghostResponseList;
 	}
 
 	@RequestMapping(
