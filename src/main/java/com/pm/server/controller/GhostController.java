@@ -27,6 +27,7 @@ import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.response.IdResponse;
+import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.utils.JsonUtils;
 
@@ -153,7 +154,7 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public PlayerResponse getGhostLocationById(
+	public LocationResponse getGhostLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response)
 			throws NotFoundException {
@@ -170,16 +171,16 @@ public class GhostController {
 			throw new NotFoundException(errorMessage);
 		}
 
-		PlayerResponse ghostResponse = new PlayerResponse();
-		ghostResponse.setId(ghost.getId());
-		ghostResponse.setLocation(ghost.getLocation());
+		LocationResponse locationResponse = new LocationResponse();
+		locationResponse.setLatitude(ghost.getLocation().getLatitude());
+		locationResponse.setLongitude(ghost.getLocation().getLongitude());
 
-		String objectString = JsonUtils.objectToJson(ghostResponse);
+		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {
-			log.debug("Returning ghostResponse: {}", objectString);
+			log.debug("Returning locationResponse: {}", objectString);
 		}
 
-		return ghostResponse;
+		return locationResponse;
 	}
 
 	@RequestMapping(

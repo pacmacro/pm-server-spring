@@ -241,10 +241,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.location.latitude")
+				.andExpect(jsonPath("$.latitude")
 						.value(location.getLatitude())
 				)
-				.andExpect(jsonPath("$.location.longitude")
+				.andExpect(jsonPath("$.longitude")
 						.value(location.getLongitude())
 				);
 
@@ -500,9 +500,9 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		assertNotNull(jsonContent);
 
-		Double latitude = JsonPath.read(jsonContent, "$.location.latitude");
+		Double latitude = JsonPath.read(jsonContent, "$.latitude");
 		assertNotNull(latitude);
-		Double longitude = JsonPath.read(jsonContent, "$.location.longitude");
+		Double longitude = JsonPath.read(jsonContent, "$.longitude");
 		assertNotNull(longitude);
 
 		return new CoordinateImpl(latitude, longitude);
