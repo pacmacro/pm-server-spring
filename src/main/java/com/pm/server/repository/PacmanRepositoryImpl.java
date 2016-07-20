@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Pacman;
 import com.pm.server.utils.JsonUtils;
 
@@ -93,6 +94,27 @@ public class PacmanRepositoryImpl implements PacmanRepository {
 		}
 
 		pacman.setLocation(location);
+
+	}
+
+	@Override
+	public void setPlayerStateById(Integer id, PlayerState state) {
+		setPlayerState(state);
+	}
+
+	public void setPlayerState(PlayerState state) {
+
+		if(pacman == null) {
+			String errorMessage = "No pacman exists yet.";
+			log.warn(errorMessage);
+			throw new IllegalStateException(errorMessage);
+		}
+
+		log.debug(
+				"Changing pacman from state {} to state {}",
+				pacman.getState(), state
+		);
+		pacman.setState(state);
 
 	}
 

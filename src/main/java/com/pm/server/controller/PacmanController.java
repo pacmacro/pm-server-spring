@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
@@ -21,8 +22,11 @@ import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
 import com.pm.server.repository.PacmanRepository;
+import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.LocationResponse;
+import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
+import com.pm.server.utils.ValidationUtils;
 
 @RestController
 @RequestMapping("/pacman")
@@ -49,7 +53,7 @@ public class PacmanController {
 		log.debug("Mapped POST /pacman");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		if(pacmanRepository.getPlayer() != null) {
 			String errorMessage = "A Pacman already exists.";
@@ -105,6 +109,35 @@ public class PacmanController {
 	}
 
 	@RequestMapping(
+			value="/state",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public PlayerStateResponse getPacmanState(HttpServletResponse response)
+			throws NotFoundException {
+
+		log.debug("Mapped GET /pacman/state");
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			String errorMessage = "No Pacman exists";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
+		playerStateResponse.setState(pacman.getState());
+
+		String objectString = JsonUtils.objectToJson(playerStateResponse);
+		if(objectString != null) {
+			log.debug("Returning playerStateResponse: {}", objectString);
+		}
+
+		return playerStateResponse;
+	}
+
+	@RequestMapping(
 			value="/location",
 			method=RequestMethod.PUT
 	)
@@ -116,7 +149,7 @@ public class PacmanController {
 		log.debug("Mapped PUT /pacman/location");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		Pacman pacman = pacmanRepository.getPlayer();
 		if(pacman == null) {
@@ -132,6 +165,36 @@ public class PacmanController {
 				location.getLatitude(), location.getLongitude()
 		);
 		pacman.setLocation(location);
+	}
+
+	@RequestMapping(
+			value="/state",
+			method=RequestMethod.PUT
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setPacmanState(
+			@RequestBody PlayerStateRequest stateRequest)
+			throws BadRequestException, NotFoundException {
+
+		log.debug("Mapped PUT /pacman/state");
+		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
+
+		PlayerState state =
+				ValidationUtils.validateRequestBodyWithState(stateRequest);
+
+		Pacman pacman = pacmanRepository.getPlayer();
+		if(pacman == null) {
+			String errorMessage = "No Pacman exists.";
+			log.warn(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		log.debug(
+				"Changing Pacman from state {} to {}",
+				pacman.getState(), state
+		);
+		pacmanRepository.setPlayerState(state);
+
 	}
 
 	@RequestMapping(
@@ -151,33 +214,6 @@ public class PacmanController {
 		}
 
 		pacmanRepository.clearPlayers();
-	}
-
-	private static void validateRequestBodyWithLocation(Coordinate location)
-			throws BadRequestException {
-
-		String errorMessage = null;
-
-		if(location == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(
-				location.getLatitude() == null &&
-				location.getLongitude() == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(location.getLatitude() == null) {
-			errorMessage = "Request body requires latitude.";
-		}
-		else if(location.getLongitude() == null) {
-			errorMessage = "Request body requires longitude.";
-		}
-
-		if(errorMessage != null) {
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
 	}
 
 }

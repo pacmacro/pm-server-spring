@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
@@ -26,10 +26,14 @@ import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
 import com.pm.server.repository.GhostRepository;
+import com.pm.server.request.PlayerStateRequest;
+import com.pm.server.response.IdAndPlayerStateResponse;
 import com.pm.server.response.IdResponse;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerResponse;
+import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
+import com.pm.server.utils.ValidationUtils;
 
 @RestController
 @RequestMapping("/ghost")
@@ -54,7 +58,7 @@ public class GhostController {
 		log.debug("Mapped POST /ghost");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		log.debug("Creating Ghost at ({}, {}).",
 				location.getLatitude(),
@@ -222,6 +226,81 @@ public class GhostController {
 	}
 
 	@RequestMapping(
+			value="/{id}/state",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public PlayerStateResponse getGhostStateById(
+			@PathVariable Integer id,
+			HttpServletResponse response)
+			throws NotFoundException {
+
+		log.debug("Mapped GET /ghost/{}/state", id);
+
+		Ghost ghost = ghostRepository.getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"No ghost with id " +
+					Integer.toString(id) +
+					".";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
+		playerStateResponse.setState(ghost.getState());
+
+		String objectString = JsonUtils.objectToJson(playerStateResponse);
+		if(objectString != null) {
+			log.debug("Returning playerStateResponse: {}", objectString);
+		}
+
+		return playerStateResponse;
+	}
+
+
+
+	@RequestMapping(
+			value="/states",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<IdAndPlayerStateResponse> getAllGhostStates() {
+
+		log.debug("Mapped GET /ghost/states");
+
+		List<IdAndPlayerStateResponse> ghostResponseList =
+				new ArrayList<IdAndPlayerStateResponse>();
+
+		List<Ghost> ghosts = ghostRepository.getAllPlayers();
+
+		if(ghosts != null) {
+			for(Ghost ghost : ghosts) {
+
+				String objectString = JsonUtils.objectToJson(ghost);
+				if(objectString != null) {
+					log.trace("Processing ghost: {}", objectString);
+				}
+
+				IdAndPlayerStateResponse ghostResponse = new IdAndPlayerStateResponse();
+				ghostResponse.id = ghost.getId();
+				ghostResponse.state = ghost.getState();
+
+				ghostResponseList.add(ghostResponse);
+			}
+		}
+
+		String objectString = JsonUtils.objectToJson(ghostResponseList);
+		if(objectString != null) {
+			log.debug("Returning ghostsResponse: {}", objectString);
+		}
+
+		return ghostResponseList;
+	}
+
+	@RequestMapping(
 			value="/{id}/location",
 			method=RequestMethod.PUT
 	)
@@ -234,7 +313,7 @@ public class GhostController {
 		log.debug("Mapped PUT /ghost/{}/location", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
-		validateRequestBodyWithLocation(location);
+		ValidationUtils.validateRequestBodyWithLocation(location);
 
 		Ghost ghost = ghostRepository.getPlayerById(id);
 		if(ghost == null) {
@@ -253,30 +332,43 @@ public class GhostController {
 		ghostRepository.setPlayerLocationById(id, location);
 	}
 
-	private static void validateRequestBodyWithLocation(Coordinate location)
-			throws BadRequestException {
+	@RequestMapping(
+			value="/{id}/state",
+			method=RequestMethod.PUT
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public void setGhostStateById(
+			@PathVariable Integer id,
+			@RequestBody PlayerStateRequest stateRequest)
+			throws BadRequestException, NotFoundException {
 
-		String errorMessage = null;
+		log.debug("Mapped PUT /ghost/{}/state", id);
+		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
-		if(location == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(
-				location.getLatitude() == null &&
-				location.getLongitude() == null) {
-			errorMessage = "Request body requires latitude and longitude.";
-		}
-		else if(location.getLatitude() == null) {
-			errorMessage = "Request body requires latitude.";
-		}
-		else if(location.getLongitude() == null) {
-			errorMessage = "Request body requires longitude.";
-		}
+		PlayerState state =
+				ValidationUtils.validateRequestBodyWithState(stateRequest);
 
-		if(errorMessage != null) {
+		if(state == PlayerState.POWERUP) {
+			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
+
+		Ghost ghost = ghostRepository.getPlayerById(id);
+		if(ghost == null) {
+			String errorMessage =
+					"Ghost with id " +
+					Integer.toString(id) +
+					" was not found.";
+			log.debug(errorMessage);
+			throw new NotFoundException(errorMessage);
+		}
+
+		log.debug(
+				"Changing ghost with id {} from state {} to {}",
+				id, ghost.getState(), state
+		);
+		ghostRepository.setPlayerStateById(id, state);
 
 	}
 
