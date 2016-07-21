@@ -28,6 +28,8 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerState;
+import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.utils.JsonUtils;
 
@@ -187,6 +189,35 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setPacmanState() throws Exception {
+
+		// Given
+		Coordinate location_original = randomCoordinateList.get(0);
+		createPacman_failUponException(location_original);
+
+		final String pathForSetPacmanState = pathForSetPacmanState();
+
+		PlayerState state_new = PlayerState.ACTIVE;
+		PlayerStateContainer stateContainer = new PlayerStateContainer();
+		stateContainer.state = state_new;
+		final String body = JsonUtils.objectToJson(stateContainer);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetPacmanState)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isOk());
+
+		PlayerState state_updated = getPacmanState_failUponException();
+		assertEquals(state_updated, state_new);
+
+	}
+
 	private static String pathForCreatePacman() {
 		return BASE_MAPPING;
 	}
@@ -205,6 +236,10 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	private static String pathForSetPacmanLocation() {
 		return BASE_MAPPING + "/location";
+	}
+
+	private static String pathForSetPacmanState() {
+		return BASE_MAPPING + "/state";
 	}
 
 	private void createPacman_failUponException(Coordinate location) {
@@ -252,6 +287,40 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 		assertNotNull(longitude);
 
 		return new CoordinateImpl(latitude, longitude);
+
+	}
+
+	private PlayerState getPacmanState_failUponException() {
+
+		String path = pathForGetPacmanState();
+		String jsonContent = null;
+
+		try {
+			MvcResult result = mockMvc
+					.perform(get(path))
+					.andExpect(status().isOk())
+					.andReturn();
+			jsonContent = result.getResponse().getContentAsString();
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(jsonContent);
+		String stateString = JsonPath.read(jsonContent, "$.state");
+
+		PlayerState state = null;
+		try {
+			state = PlayerState.valueOf(stateString);
+		}
+		catch(IllegalArgumentException e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(state);
+		return state;
 
 	}
 
