@@ -129,6 +129,25 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getPacmanState() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		createPacman_failUponException(location);
+
+		final String path = pathForGetPacmanState();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.state").exists());
+
+	}
+
 	private static String pathForCreatePacman() {
 		return BASE_MAPPING;
 	}
