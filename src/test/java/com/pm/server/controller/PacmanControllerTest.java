@@ -4,6 +4,7 @@ import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
@@ -106,12 +107,38 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_getPacmanLocation() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		createPacman_failUponException(location);
+
+		final String path = pathForGetPacmanLocation();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.latitude")
+						.value(location.getLatitude()))
+				.andExpect(jsonPath("$.longitude")
+						.value(location.getLongitude()));
+
+	}
+
 	private static String pathForCreatePacman() {
 		return BASE_MAPPING;
 	}
 
 	private static String pathForDeletePacman() {
 		return BASE_MAPPING;
+	}
+
+	private static String pathForGetPacmanLocation() {
+		return BASE_MAPPING + "/location";
 	}
 
 	private static String pathForGetPacmanState() {
