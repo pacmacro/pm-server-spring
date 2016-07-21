@@ -1,9 +1,12 @@
 package com.pm.server.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,9 +20,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
@@ -148,6 +153,40 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_setPacmanLocation() throws Exception {
+
+		// Given
+		Coordinate location_original = randomCoordinateList.get(0);
+		createPacman_failUponException(location_original);
+
+		final String pathForSetPacmanLocation = pathForSetPacmanLocation();
+
+		Coordinate location_new = randomCoordinateList.get(1);
+		final String body = JsonUtils.objectToJson(location_new);
+
+		// When
+		mockMvc
+				.perform(put(pathForSetPacmanLocation)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isOk());
+
+		Coordinate location_updated = getPacmanLocation_failUponException();
+		assertEquals(
+				location_new.getLatitude(),
+				location_updated.getLatitude()
+		);
+		assertEquals(
+				location_new.getLongitude(),
+				location_updated.getLongitude()
+		);
+
+	}
+
 	private static String pathForCreatePacman() {
 		return BASE_MAPPING;
 	}
@@ -162,6 +201,10 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	private static String pathForGetPacmanState() {
 		return BASE_MAPPING + "/state";
+	}
+
+	private static String pathForSetPacmanLocation() {
+		return BASE_MAPPING + "/location";
 	}
 
 	private void createPacman_failUponException(Coordinate location) {
@@ -181,6 +224,34 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 			log.error(e.getMessage());
 			fail();
 		}
+
+	}
+
+	private Coordinate getPacmanLocation_failUponException() {
+
+		String path = pathForGetPacmanLocation();
+		String jsonContent = null;
+
+		try {
+			MvcResult result = mockMvc
+					.perform(get(path))
+					.andExpect(status().isOk())
+					.andReturn();
+			jsonContent = result.getResponse().getContentAsString();
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+		assertNotNull(jsonContent);
+
+		Double latitude = JsonPath.read(jsonContent, "$.latitude");
+		assertNotNull(latitude);
+		Double longitude = JsonPath.read(jsonContent, "$.longitude");
+		assertNotNull(longitude);
+
+		return new CoordinateImpl(latitude, longitude);
 
 	}
 
