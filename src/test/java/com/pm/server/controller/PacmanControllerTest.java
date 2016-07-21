@@ -1,5 +1,8 @@
 package com.pm.server.controller;
 
+import static org.junit.Assert.fail;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -80,8 +83,59 @@ public class PacmanControllerTest extends ControllerTestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_deletePacman() throws Exception {
+
+		// Given
+		Coordinate location = randomCoordinateList.get(0);
+		createPacman_failUponException(location);
+
+		final String pathForDeletePacman = pathForDeletePacman();
+		final String pathForGetPacmanState = pathForGetPacmanState();
+
+		// When
+		mockMvc
+				.perform(delete(pathForDeletePacman))
+
+		// Then
+				.andExpect(status().isOk());
+
+		mockMvc
+				.perform(get(pathForGetPacmanState))
+				.andExpect(status().isNotFound());
+
+	}
+
 	private static String pathForCreatePacman() {
 		return BASE_MAPPING;
+	}
+
+	private static String pathForDeletePacman() {
+		return BASE_MAPPING;
+	}
+
+	private static String pathForGetPacmanState() {
+		return BASE_MAPPING + "/state";
+	}
+
+	private void createPacman_failUponException(Coordinate location) {
+
+		String path = pathForCreatePacman();
+		String body = JsonUtils.objectToJson(location);
+
+		try {
+			mockMvc
+					.perform(post(path)
+							.content(body)
+							.header("Content-Type", "application/json")
+					)
+					.andExpect(status().isOk());
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
 	}
 
 }
