@@ -25,6 +25,7 @@ import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
+import com.pm.server.player.PlayerName;
 import com.pm.server.repository.GhostRepository;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdAndPlayerStateResponse;
@@ -65,7 +66,7 @@ public class GhostController {
 				location.getLongitude()
 		);
 
-		Ghost ghost = new GhostImpl();
+		Ghost ghost = new GhostImpl(PlayerName.Inky);
 		ghost.setLocation(location);
 
 		Random random = new Random();

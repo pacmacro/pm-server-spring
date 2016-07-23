@@ -11,12 +11,24 @@ import com.pm.server.utils.JsonUtils;
 @Component
 public abstract class PlayerImpl implements Player {
 
+	protected PlayerName name;
 	protected Integer id = 0;
 	protected Coordinate location;
 	protected PlayerState state = PlayerState.UNINITIALIZED;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerImpl.class.getName());
+
+	PlayerImpl(PlayerName name) {
+		if(name == null) {
+			throw new NullPointerException("The Player must have a name.");
+		}
+		this.name = name;
+	}
+
+	public PlayerName getName() {
+		return name;
+	}
 
 	public void setId(Integer id) {
 

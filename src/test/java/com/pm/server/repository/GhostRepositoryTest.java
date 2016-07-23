@@ -20,6 +20,7 @@ import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
+import com.pm.server.player.PlayerName;
 
 public class GhostRepositoryTest extends TestTemplate {
 
@@ -40,19 +41,19 @@ public class GhostRepositoryTest extends TestTemplate {
 
 		Integer ghost1_id = 12345;
 		Coordinate ghost1_location = new CoordinateImpl(1.0, 0.1);
-		ghost1 = new GhostImpl();
+		ghost1 = new GhostImpl(PlayerName.Blinky);
 		ghost1.setId(ghost1_id);
 		ghost1.setLocation(ghost1_location);
 
 		Integer ghost2_id = 23456;
 		Coordinate ghost2_location = new CoordinateImpl(2.0, 0.2);
-		ghost2 = new GhostImpl();
+		ghost2 = new GhostImpl(PlayerName.Clyde);
 		ghost2.setId(ghost2_id);
 		ghost2.setLocation(ghost2_location);
 
 		Integer ghost3_id = 34567;
 		Coordinate ghost3_location = new CoordinateImpl(3.0, 0.3);
-		ghost3 = new GhostImpl();
+		ghost3 = new GhostImpl(PlayerName.Pinky);
 		ghost3.setId(ghost3_id);
 		ghost3.setLocation(ghost3_location);
 

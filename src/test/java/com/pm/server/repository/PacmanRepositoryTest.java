@@ -23,6 +23,7 @@ import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
+import com.pm.server.player.PlayerName;
 
 public class PacmanRepositoryTest extends TestTemplate {
 
@@ -59,7 +60,7 @@ public class PacmanRepositoryTest extends TestTemplate {
 					(i-9876.54321) / 100
 			);
 
-			Pacman pacman = new PacmanImpl();
+			Pacman pacman = new PacmanImpl(PlayerName.Inky);
 			pacman.setId(i);
 			pacman.setLocation(coordinate);
 

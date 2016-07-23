@@ -5,7 +5,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class PacmanImpl extends PlayerImpl implements Pacman {
 
-	public PacmanImpl() {
+	public PacmanImpl(PlayerName name) {
+		super(name);
 		this.id = 0;
 	}
 

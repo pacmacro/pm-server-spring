@@ -21,6 +21,7 @@ import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
+import com.pm.server.player.PlayerName;
 import com.pm.server.repository.PacmanRepository;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.LocationResponse;
@@ -61,7 +62,7 @@ public class PacmanController {
 			throw new ConflictException(errorMessage);
 		}
 
-		Pacman pacman = new PacmanImpl();
+		Pacman pacman = new PacmanImpl(PlayerName.Inky);
 		pacman.setLocation(location);
 
 		try {

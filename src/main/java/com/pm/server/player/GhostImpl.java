@@ -12,8 +12,8 @@ public class GhostImpl extends PlayerImpl implements Ghost {
 	private final static Logger log =
 			LogManager.getLogger(GhostImpl.class.getName());
 
-	public GhostImpl() {
-		super();
+	public GhostImpl(PlayerName name) {
+		super(name);
 	}
 
 	@Override
