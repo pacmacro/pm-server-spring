@@ -1,6 +1,7 @@
 package com.pm.server.player;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 
 public interface Player {

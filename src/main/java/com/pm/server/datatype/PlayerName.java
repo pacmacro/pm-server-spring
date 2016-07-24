@@ -1,4 +1,4 @@
-package com.pm.server.player;
+package com.pm.server.datatype;
 
 public enum PlayerName {
 

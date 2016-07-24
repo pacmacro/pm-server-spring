@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Ghost;
 import com.pm.server.player.GhostImpl;
-import com.pm.server.player.PlayerName;
 
 public class GhostRepositoryTest extends TestTemplate {
 

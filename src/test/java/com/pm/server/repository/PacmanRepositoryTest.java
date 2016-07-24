@@ -20,10 +20,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Pacman;
 import com.pm.server.player.PacmanImpl;
-import com.pm.server.player.PlayerName;
 
 public class PacmanRepositoryTest extends TestTemplate {
 
