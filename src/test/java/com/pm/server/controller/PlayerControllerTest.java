@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,16 +28,14 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
-import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
-import com.pm.server.player.Player;
-import com.pm.server.repository.PlayerRepository;
+import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.utils.JsonUtils;
 public class PlayerControllerTest extends ControllerTestTemplate {
 
 	@Autowired
-	private PlayerRepository playerRepository;
+	private PlayerRegistry playerRegistry;
 
 	private static final List<Coordinate> randomCoordinateList = Arrays.asList(
 			new CoordinateImpl(12345.54321, 95837.39821),
@@ -67,24 +64,13 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	@After
 	public void cleanUp() {
 
-		List<Player> playerList = playerRepository.getAllPlayers();
-
-		List<PlayerName> playerNameList = new ArrayList<PlayerName>();
-		for(Player player : playerList) {
-			playerNameList.add(player.getName());
+		try {
+			playerRegistry.reset();
 		}
-
-		for(PlayerName playerName : playerNameList) {
-			try {
-				playerRepository.deletePlayerByName(playerName);
-			}
-			catch(Exception e) {
-				log.error(e.getMessage());
-				fail();
-			}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
 		}
-
-		assert(playerRepository.numOfPlayers() == 0);
 
 	}
 
