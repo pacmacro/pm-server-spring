@@ -12,7 +12,7 @@ import com.pm.server.utils.JsonUtils;
 @Component
 public abstract class PlayerImpl implements Player {
 
-	protected PlayerName name;
+	protected final PlayerName name;
 	protected Integer id = 0;
 	protected Coordinate location;
 	protected PlayerState state = PlayerState.UNINITIALIZED;
