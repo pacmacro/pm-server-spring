@@ -292,13 +292,14 @@ public class PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setPlayerLocationById(
 			@PathVariable Integer id,
-			@RequestBody CoordinateImpl location)
+			@RequestBody LocationRequest locationRequest)
 			throws BadRequestException, NotFoundException {
 
 		log.debug("Mapped PUT /player/{}/location", id);
-		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+		log.debug("Request body: {}", JsonUtils.objectToJson(locationRequest));
 
-		ValidationUtils.validateRequestBodyWithLocation(location);
+		Coordinate location = ValidationUtils
+				.validateRequestBodyWithLocation(locationRequest);
 
 		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
