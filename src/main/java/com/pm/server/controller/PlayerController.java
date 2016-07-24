@@ -24,9 +24,9 @@ import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
-import com.pm.server.player.Ghost;
-import com.pm.server.player.GhostImpl;
-import com.pm.server.repository.GhostRepository;
+import com.pm.server.player.Player;
+import com.pm.server.player.PlayerImpl;
+import com.pm.server.repository.PlayerRepository;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdAndPlayerStateResponse;
 import com.pm.server.response.IdResponse;
@@ -37,14 +37,14 @@ import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
 
 @RestController
-@RequestMapping("/ghost")
-public class GhostController {
+@RequestMapping("/player")
+public class PlayerController {
 
 	@Autowired
-	private GhostRepository ghostRepository;
+	private PlayerRepository playerRepository;
 
 	private final static Logger log =
-			LogManager.getLogger(GhostController.class.getName());
+			LogManager.getLogger(PlayerController.class.getName());
 
 	@RequestMapping(
 			value = "",
@@ -52,67 +52,67 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public IdResponse createGhost(
+	public IdResponse createPlayer(
 			@RequestBody(required = false) CoordinateImpl location)
 			throws ConflictException, BadRequestException {
 
-		log.debug("Mapped POST /ghost");
+		log.debug("Mapped POST /player");
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
 		ValidationUtils.validateRequestBodyWithLocation(location);
 
-		log.debug("Creating Ghost at ({}, {}).",
+		log.debug("Creating Player at ({}, {}).",
 				location.getLatitude(),
 				location.getLongitude()
 		);
 
-		Ghost ghost = new GhostImpl(PlayerName.Inky);
-		ghost.setLocation(location);
+		Player player = new PlayerImpl(PlayerName.Inky);
+		player.setLocation(location);
 
 		Random random = new Random();
 
-		Boolean createdGhost = false;
-		final Integer maxGhostId = ghostRepository.maxGhostId();
-		final Integer idCreationRetries = maxGhostId / 2;
+		Boolean createdPlayer = false;
+		final Integer maxPlayerId = playerRepository.maxPlayerId();
+		final Integer idCreationRetries = maxPlayerId / 2;
 		for(Integer i = 0; i < idCreationRetries; i++) {
 
-			if(createdGhost) {
+			if(createdPlayer) {
 				break;
 			}
-			createdGhost = true;
+			createdPlayer = true;
 
-			ghost.setId(random.nextInt(maxGhostId));
+			player.setId(random.nextInt(maxPlayerId));
 			try {
-				ghostRepository.addPlayer(ghost);
+				playerRepository.addPlayer(player);
 			}
 			catch (Exception e) {
-				createdGhost = false;
+				createdPlayer = false;
 				log.warn(e.getMessage());
 			}
 
 		}
 
-		if(!createdGhost) {
+		if(!createdPlayer) {
 			String errorMessage;
-			String objectString = JsonUtils.objectToJson(ghost);
+			String objectString = JsonUtils.objectToJson(player);
 			if(objectString != null) {
 				errorMessage =
-						"Ghost " +
+						"Player " +
 						objectString +
 						"could not be created.";
 			}
 			else {
-				errorMessage = "Ghost could not be created.";
+				errorMessage = "Player could not be created.";
 			}
 
 			log.error(errorMessage);
 			throw new ConflictException(errorMessage);
 		}
 
-		log.debug("Ghost id set to {}.", ghost.getId());
+		log.debug("Player id set to {}.", player.getId());
 
 		IdResponse idResponse = new IdResponse();
-		idResponse.setId(ghost.getId());
+		idResponse.setId(player.getId());
 		return idResponse;
 	}
 
@@ -121,17 +121,17 @@ public class GhostController {
 			method=RequestMethod.DELETE
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void deleteGhostById(
+	public void deletePlayerById(
 			@PathVariable Integer id,
 			HttpServletResponse response)
 			throws NotFoundException, InternalServerErrorException {
 
-		log.debug("Mapped DELETE /ghost/{}", id);
+		log.debug("Mapped DELETE /player/{}", id);
 
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
+		Player player = playerRepository.getPlayerById(id);
+		if(player == null) {
 			String errorMessage =
-					"Ghost with id " +
+					"Player with id " +
 					Integer.toString(id) +
 					" was not found.";
 			log.warn(errorMessage);
@@ -139,18 +139,18 @@ public class GhostController {
 		}
 
 		try {
-			ghostRepository.deletePlayerById(id);
+			playerRepository.deletePlayerById(id);
 		}
 		catch(Exception e) {
 			String errorMessage =
-					"Ghost with id " +
+					"Player with id " +
 					Integer.toString(id) +
 					" was found but could not be deleted.";
 			log.warn(errorMessage);
 			throw new InternalServerErrorException(errorMessage);
 		}
 
-		log.debug("Ghost with id {} was deleted", id);
+		log.debug("Player with id {} was deleted", id);
 	}
 
 	@RequestMapping(
@@ -159,17 +159,17 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public LocationResponse getGhostLocationById(
+	public LocationResponse getPlayerLocationById(
 			@PathVariable Integer id,
 			HttpServletResponse response)
 			throws NotFoundException {
 
-		log.debug("Mapped GET /ghost/{}/location", id);
+		log.debug("Mapped GET /player/{}/location", id);
 
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
+		Player player = playerRepository.getPlayerById(id);
+		if(player == null) {
 			String errorMessage =
-					"No ghost with id " +
+					"No Player with id " +
 					Integer.toString(id) +
 					".";
 			log.debug(errorMessage);
@@ -177,8 +177,8 @@ public class GhostController {
 		}
 
 		LocationResponse locationResponse = new LocationResponse();
-		locationResponse.setLatitude(ghost.getLocation().getLatitude());
-		locationResponse.setLongitude(ghost.getLocation().getLongitude());
+		locationResponse.setLatitude(player.getLocation().getLatitude());
+		locationResponse.setLongitude(player.getLocation().getLongitude());
 
 		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {
@@ -194,36 +194,36 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<PlayerResponse> getAllGhostLocations() {
+	public List<PlayerResponse> getAllPlayerLocations() {
 
-		log.debug("Mapped GET /ghost/locations");
+		log.debug("Mapped GET /player/locations");
 
-		List<PlayerResponse> ghostResponseList = new ArrayList<PlayerResponse>();
+		List<PlayerResponse> playerResponseList = new ArrayList<PlayerResponse>();
 
-		List<Ghost> ghosts = ghostRepository.getAllPlayers();
+		List<Player> playerList = playerRepository.getAllPlayers();
 
-		if(ghosts != null) {
-			for(Ghost ghost : ghosts) {
+		if(playerList != null) {
+			for(Player player : playerList) {
 
-				String objectString = JsonUtils.objectToJson(ghost);
+				String objectString = JsonUtils.objectToJson(player);
 				if(objectString != null) {
-					log.trace("Processing ghost: {}", objectString);
+					log.trace("Processing Player: {}", objectString);
 				}
 
-				PlayerResponse ghostResponse = new PlayerResponse();
-				ghostResponse.setId(ghost.getId());
-				ghostResponse.setLocation(ghost.getLocation());
+				PlayerResponse playerResponse = new PlayerResponse();
+				playerResponse.setId(player.getId());
+				playerResponse.setLocation(player.getLocation());
 
-				ghostResponseList.add(ghostResponse);
+				playerResponseList.add(playerResponse);
 			}
 		}
 
-		String objectString = JsonUtils.objectToJson(ghostResponseList);
+		String objectString = JsonUtils.objectToJson(playerResponseList);
 		if(objectString != null) {
-			log.debug("Returning ghostsResponse: {}", objectString);
+			log.debug("Returning PlayersResponse: {}", objectString);
 		}
 
-		return ghostResponseList;
+		return playerResponseList;
 	}
 
 	@RequestMapping(
@@ -232,17 +232,17 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public PlayerStateResponse getGhostStateById(
+	public PlayerStateResponse getPlayerStateById(
 			@PathVariable Integer id,
 			HttpServletResponse response)
 			throws NotFoundException {
 
-		log.debug("Mapped GET /ghost/{}/state", id);
+		log.debug("Mapped GET /player/{}/state", id);
 
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
+		Player player = playerRepository.getPlayerById(id);
+		if(player == null) {
 			String errorMessage =
-					"No ghost with id " +
+					"No Player with id " +
 					Integer.toString(id) +
 					".";
 			log.debug(errorMessage);
@@ -250,7 +250,7 @@ public class GhostController {
 		}
 
 		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
-		playerStateResponse.setState(ghost.getState());
+		playerStateResponse.setState(player.getState());
 
 		String objectString = JsonUtils.objectToJson(playerStateResponse);
 		if(objectString != null) {
@@ -268,37 +268,37 @@ public class GhostController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<IdAndPlayerStateResponse> getAllGhostStates() {
+	public List<IdAndPlayerStateResponse> getAllPlayerStates() {
 
-		log.debug("Mapped GET /ghost/states");
+		log.debug("Mapped GET /player/states");
 
-		List<IdAndPlayerStateResponse> ghostResponseList =
+		List<IdAndPlayerStateResponse> playerResponseList =
 				new ArrayList<IdAndPlayerStateResponse>();
 
-		List<Ghost> ghosts = ghostRepository.getAllPlayers();
+		List<Player> players = playerRepository.getAllPlayers();
 
-		if(ghosts != null) {
-			for(Ghost ghost : ghosts) {
+		if(players != null) {
+			for(Player player : players) {
 
-				String objectString = JsonUtils.objectToJson(ghost);
+				String objectString = JsonUtils.objectToJson(player);
 				if(objectString != null) {
-					log.trace("Processing ghost: {}", objectString);
+					log.trace("Processing Player: {}", objectString);
 				}
 
-				IdAndPlayerStateResponse ghostResponse = new IdAndPlayerStateResponse();
-				ghostResponse.id = ghost.getId();
-				ghostResponse.state = ghost.getState();
+				IdAndPlayerStateResponse PlayerResponse = new IdAndPlayerStateResponse();
+				PlayerResponse.id = player.getId();
+				PlayerResponse.state = player.getState();
 
-				ghostResponseList.add(ghostResponse);
+				playerResponseList.add(PlayerResponse);
 			}
 		}
 
-		String objectString = JsonUtils.objectToJson(ghostResponseList);
+		String objectString = JsonUtils.objectToJson(playerResponseList);
 		if(objectString != null) {
-			log.debug("Returning ghostsResponse: {}", objectString);
+			log.debug("Returning playerResponse: {}", objectString);
 		}
 
-		return ghostResponseList;
+		return playerResponseList;
 	}
 
 	@RequestMapping(
@@ -306,20 +306,20 @@ public class GhostController {
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setGhostLocationById(
+	public void setPlayerLocationById(
 			@PathVariable Integer id,
 			@RequestBody CoordinateImpl location)
 			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped PUT /ghost/{}/location", id);
+		log.debug("Mapped PUT /player/{}/location", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(location));
 
 		ValidationUtils.validateRequestBodyWithLocation(location);
 
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
+		Player player = playerRepository.getPlayerById(id);
+		if(player == null) {
 			String errorMessage =
-					"Ghost with id " +
+					"Player with id " +
 					Integer.toString(id) +
 					" was not found.";
 			log.debug(errorMessage);
@@ -327,10 +327,10 @@ public class GhostController {
 		}
 
 		log.debug(
-				"Setting ghost with id {} to ({}, {})",
+				"Setting Player with id {} to ({}, {})",
 				id, location.getLatitude(), location.getLongitude()
 		);
-		ghostRepository.setPlayerLocationById(id, location);
+		playerRepository.setPlayerLocationById(id, location);
 	}
 
 	@RequestMapping(
@@ -338,27 +338,27 @@ public class GhostController {
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setGhostStateById(
+	public void setPlayerStateById(
 			@PathVariable Integer id,
 			@RequestBody PlayerStateRequest stateRequest)
 			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped PUT /ghost/{}/state", id);
+		log.debug("Mapped PUT /player/{}/state", id);
 		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
 		PlayerState state =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);
 
 		if(state == PlayerState.POWERUP) {
-			String errorMessage = "The POWERUP state is not valid for a Ghost.";
+			String errorMessage = "The POWERUP state is not valid for a Player.";
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
 
-		Ghost ghost = ghostRepository.getPlayerById(id);
-		if(ghost == null) {
+		Player player = playerRepository.getPlayerById(id);
+		if(player == null) {
 			String errorMessage =
-					"Ghost with id " +
+					"Player with id " +
 					Integer.toString(id) +
 					" was not found.";
 			log.debug(errorMessage);
@@ -366,10 +366,10 @@ public class GhostController {
 		}
 
 		log.debug(
-				"Changing ghost with id {} from state {} to {}",
-				id, ghost.getState(), state
+				"Changing Player with id {} from state {} to {}",
+				id, player.getState(), state
 		);
-		ghostRepository.setPlayerStateById(id, state);
+		playerRepository.setPlayerStateById(id, state);
 
 	}
 

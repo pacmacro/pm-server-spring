@@ -31,23 +31,23 @@ import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
-import com.pm.server.player.Ghost;
-import com.pm.server.repository.GhostRepository;
+import com.pm.server.player.Player;
+import com.pm.server.repository.PlayerRepository;
 import com.pm.server.utils.JsonUtils;
-public class GhostControllerTest extends ControllerTestTemplate {
+public class PlayerControllerTest extends ControllerTestTemplate {
 
 	@Autowired
-	private GhostRepository ghostRepository;
+	private PlayerRepository playerRepository;
 
 	private static final List<Coordinate> randomCoordinateList = Arrays.asList(
 			new CoordinateImpl(12345.54321, 95837.39821),
 			new CoordinateImpl(49381.30982, 39399.49932)
 	);
 
-	private static final String BASE_MAPPING = "/ghost";
+	private static final String BASE_MAPPING = "/player";
 
 	private static final Logger log =
-			LogManager.getLogger(GhostControllerTest.class.getName());
+			LogManager.getLogger(PlayerControllerTest.class.getName());
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -66,16 +66,16 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	@After
 	public void cleanUp() {
 
-		List<Ghost> ghostList = ghostRepository.getAllPlayers();
+		List<Player> playerList = playerRepository.getAllPlayers();
 
-		List<Integer> ghostIdList = new ArrayList<Integer>();
-		for(Ghost ghost : ghostList) {
-			ghostIdList.add(ghost.getId());
+		List<Integer> playerIdList = new ArrayList<Integer>();
+		for(Player player : playerList) {
+			playerIdList.add(player.getId());
 		}
 
-		for(Integer id : ghostIdList) {
+		for(Integer id : playerIdList) {
 			try {
-				ghostRepository.deletePlayerById(id);
+				playerRepository.deletePlayerById(id);
 			}
 			catch(Exception e) {
 				log.error(e.getMessage());
@@ -83,17 +83,17 @@ public class GhostControllerTest extends ControllerTestTemplate {
 			}
 		}
 
-		assert(ghostRepository.numOfPlayers() == 0);
+		assert(playerRepository.numOfPlayers() == 0);
 
 	}
 
 	@Test
-	public void unitTest_createGhost() throws Exception {
+	public void unitTest_createPlayer() throws Exception {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
 
-		String path = pathForCreateGhost();
+		String path = pathForCreatePlayer();
 
 		// When
 		mockMvc
@@ -109,13 +109,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createGhost_sameLocation() throws Exception {
+	public void unitTest_createPlayer_sameLocation() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
 
-		String path = pathForCreateGhost();
+		String path = pathForCreatePlayer();
 
 		mockMvc
 				.perform(post(path)
@@ -138,7 +138,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createGhost_notANumber() throws Exception {
+	public void unitTest_createPlayer_notANumber() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
@@ -148,7 +148,7 @@ public class GhostControllerTest extends ControllerTestTemplate {
 				"longitude" +
 				"\"}";
 
-		String path = pathForCreateGhost();
+		String path = pathForCreatePlayer();
 
 		// When
 		mockMvc
@@ -163,10 +163,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createGhost_noLocationGiven() throws Exception {
+	public void unitTest_createPlayer_noLocationGiven() throws Exception {
 
 		// Given
-		String path = pathForCreateGhost();
+		String path = pathForCreatePlayer();
 
 		// When
 		mockMvc
@@ -180,12 +180,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_deleteGhostById() throws Exception {
+	public void unitTest_deletePlayerById() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
-		String path = pathForDeleteGhostById(id);
+		Integer id = createPlayer_failUponException(location);
+		String path = pathForDeletePlayerById(id);
 
 		// When
 		mockMvc
@@ -197,11 +197,11 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_deleteGhostById_noGhost() throws Exception {
+	public void unitTest_deletePlayerById_noPlayer() throws Exception {
 
 		// Given
 		Integer id = 2481;
-		String path = pathForDeleteGhostById(id);
+		String path = pathForDeletePlayerById(id);
 
 		// When
 		mockMvc
@@ -213,12 +213,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_deleteGhostById_incorrectId() throws Exception {
+	public void unitTest_deletePlayerById_incorrectId() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
-		String path = pathForDeleteGhostById(id + 1);
+		Integer id = createPlayer_failUponException(location);
+		String path = pathForDeletePlayerById(id + 1);
 
 		// When
 		mockMvc
@@ -230,12 +230,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostLocationById() throws Exception {
+	public void unitTest_getPlayerLocationById() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
-		String path = pathForGetGhostLocationById(id);
+		Integer id = createPlayer_failUponException(location);
+		String path = pathForGetPlayerLocationById(id);
 
 		// When
 		mockMvc
@@ -253,12 +253,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostLocationById_wrongId() throws Exception {
+	public void unitTest_getPlayerLocationById_wrongId() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
-		String path = pathForGetGhostLocationById(id + 1);
+		Integer id = createPlayer_failUponException(location);
+		String path = pathForGetPlayerLocationById(id + 1);
 
 		// When
 		mockMvc
@@ -270,11 +270,11 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostLocationById_noGhost() throws Exception {
+	public void unitTest_getPlayerLocationById_noPlayer() throws Exception {
 
 		// Given
 		Integer id = 39482;
-		String path = pathForGetGhostLocationById(id);
+		String path = pathForGetPlayerLocationById(id);
 
 		// When
 		mockMvc
@@ -286,13 +286,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostLocations_singleGhost() throws Exception {
+	public void unitTest_getAllPlayerLocations_singlePlayer() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForGetAllGhostLocations();
+		String path = pathForGetAllPlayerLocations();
 
 		// When
 		mockMvc
@@ -313,16 +313,16 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostLocations_multipleGhosts() throws Exception {
+	public void unitTest_getAllPlayerLocations_multiplePlayers() throws Exception {
 
 		// Given
 		Coordinate location0 = randomCoordinateList.get(0);
-		Integer id0 = createGhost_failUponException(location0);
+		Integer id0 = createPlayer_failUponException(location0);
 
 		Coordinate location1 = randomCoordinateList.get(1);
-		Integer id1 = createGhost_failUponException(location1);
+		Integer id1 = createPlayer_failUponException(location1);
 
-		String path = pathForGetAllGhostLocations();
+		String path = pathForGetAllPlayerLocations();
 
 		// When
 		mockMvc
@@ -352,10 +352,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostLocations_noGhosts() throws Exception {
+	public void unitTest_getAllPlayerLocations_noPlayers() throws Exception {
 
 		// Given
-		String path = pathForGetAllGhostLocations();
+		String path = pathForGetAllPlayerLocations();
 
 		// When
 		mockMvc
@@ -368,13 +368,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostStateById() throws Exception {
+	public void unitTest_getPlayerStateById() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForGetGhostStateById(id);
+		String path = pathForGetPlayerStateById(id);
 
 		// When
 		mockMvc
@@ -387,13 +387,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostStateById_wrongId() throws Exception {
+	public void unitTest_getPlayerStateById_wrongId() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForGetGhostStateById(id + 1);
+		String path = pathForGetPlayerStateById(id + 1);
 
 		// When
 		mockMvc
@@ -405,12 +405,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getGhostStateById_noGhost() throws Exception {
+	public void unitTest_getPlayerStateById_noPlayer() throws Exception {
 
 		// Given
 		Integer randomId = 12931;
 
-		String path = pathForGetGhostStateById(randomId);
+		String path = pathForGetPlayerStateById(randomId);
 
 		// When
 		mockMvc
@@ -422,13 +422,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostStates_singleGhost() throws Exception {
+	public void unitTest_getAllPlayerStates_singlePlayer() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForGetAllGhostStates();
+		String path = pathForGetAllPlayerStates();
 
 		// When
 		mockMvc
@@ -444,16 +444,16 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostStates_multipleGhosts() throws Exception {
+	public void unitTest_getAllPlayerStates_multiplePlayers() throws Exception {
 
 		// Given
 		Coordinate location0 = randomCoordinateList.get(0);
-		Integer id0 = createGhost_failUponException(location0);
+		Integer id0 = createPlayer_failUponException(location0);
 
 		Coordinate location1 = randomCoordinateList.get(1);
-		Integer id1 = createGhost_failUponException(location1);
+		Integer id1 = createPlayer_failUponException(location1);
 
-		String path = pathForGetAllGhostStates();
+		String path = pathForGetAllPlayerStates();
 
 		// When
 		mockMvc
@@ -469,10 +469,10 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllGhostStates_noGhosts() throws Exception {
+	public void unitTest_getAllPlayerStates_noPlayers() throws Exception {
 
 		// Given
-		String path = pathForGetAllGhostStates();
+		String path = pathForGetAllPlayerStates();
 
 		// When
 		mockMvc
@@ -485,13 +485,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostLocationById() throws Exception {
+	public void unitTest_setPlayerLocationById() throws Exception {
 
 		// Given
 		Coordinate location_original = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location_original);
+		Integer id = createPlayer_failUponException(location_original);
 
-		String path = pathForSetGhostLocationById(id);
+		String path = pathForSetPlayerLocationById(id);
 
 		Coordinate location_updated = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location_updated);
@@ -506,18 +506,18 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 		// Then
 		Coordinate location_result =
-				getGhostLocationById_failUponException(id);
+				getPlayerLocationById_failUponException(id);
 		assertEquals(location_updated.getLatitude(), location_result.getLatitude());
 		assertEquals(location_updated.getLongitude(), location_result.getLongitude());
 
 	}
 
 	@Test
-	public void unitTest_setGhostLocationById_noGhost() throws Exception {
+	public void unitTest_setPlayerLocationById_noPlayer() throws Exception {
 
 		// Given
 		Integer randomId = 29481;
-		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+		String pathForSetLocation = pathForSetPlayerLocationById(randomId);
 
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
@@ -535,12 +535,12 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostLocationById_noLocationGiven()
+	public void unitTest_setPlayerLocationById_noLocationGiven()
 			throws Exception {
 
 		// Given
 		Integer randomId = 29481;
-		String pathForSetLocation = pathForSetGhostLocationById(randomId);
+		String pathForSetLocation = pathForSetPlayerLocationById(randomId);
 
 		// When
 		mockMvc
@@ -554,13 +554,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostStateById() throws Exception {
+	public void unitTest_setPlayerStateById() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id);
+		String path = pathForSetPlayerStateById(id);
 
 		PlayerState updatedState = PlayerState.READY;
 		PlayerStateContainer updatedStateContainer =
@@ -577,19 +577,19 @@ public class GhostControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getGhostStateById_failUponException(id);
+		PlayerState resultState = getPlayerStateById_failUponException(id);
 		assertEquals(updatedState, resultState);
 
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_sameState() throws Exception {
+	public void unitTest_setPlayerStateById_sameState() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id);
+		String path = pathForSetPlayerStateById(id);
 
 		PlayerState updatedState = PlayerState.READY;
 		PlayerStateContainer updatedStateContainer =
@@ -613,19 +613,19 @@ public class GhostControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getGhostStateById_failUponException(id);
+		PlayerState resultState = getPlayerStateById_failUponException(id);
 		assertEquals(updatedState, resultState);
 
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_illegalPowerupState() throws Exception {
+	public void unitTest_setPlayerStateById_illegalPowerupState() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id);
+		String path = pathForSetPlayerStateById(id);
 
 		PlayerState updatedState = PlayerState.POWERUP;
 		PlayerStateContainer updatedStateContainer =
@@ -646,13 +646,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_noStateGiven() throws Exception {
+	public void unitTest_setPlayerStateById_noStateGiven() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id);
+		String path = pathForSetPlayerStateById(id);
 
 		// When
 		mockMvc
@@ -666,13 +666,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_invalidStateValue() throws Exception {
+	public void unitTest_setPlayerStateById_invalidStateValue() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id);
+		String path = pathForSetPlayerStateById(id);
 
 		String body = "{\"state\":\"invalidValue\"}";
 
@@ -689,13 +689,13 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_wrongId() throws Exception {
+	public void unitTest_setPlayerStateById_wrongId() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createGhost_failUponException(location);
+		Integer id = createPlayer_failUponException(location);
 
-		String path = pathForSetGhostStateById(id + 1);
+		String path = pathForSetPlayerStateById(id + 1);
 
 		PlayerState updatedState = PlayerState.READY;
 		PlayerStateContainer updatedStateContainer =
@@ -716,11 +716,11 @@ public class GhostControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setGhostStateById_noGhost() throws Exception {
+	public void unitTest_setPlayerStateById_noPlayer() throws Exception {
 
 		// Given
 		Integer randomId = 19349;
-		String path = pathForSetGhostStateById(randomId);
+		String path = pathForSetPlayerStateById(randomId);
 
 		PlayerState updatedState = PlayerState.READY;
 		PlayerStateContainer updatedStateContainer =
@@ -740,42 +740,42 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForCreateGhost() {
+	private String pathForCreatePlayer() {
 		return BASE_MAPPING;
 	}
 
-	private String pathForDeleteGhostById(Integer id) {
+	private String pathForDeletePlayerById(Integer id) {
 		return BASE_MAPPING + "/" + id;
 	}
 
-	private String pathForGetGhostLocationById(Integer id) {
+	private String pathForGetPlayerLocationById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "location";
 	}
 
-	private String pathForGetAllGhostLocations() {
+	private String pathForGetAllPlayerLocations() {
 		return BASE_MAPPING + "/" + "locations";
 	}
 
-	private String pathForGetGhostStateById(Integer id) {
+	private String pathForGetPlayerStateById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "state";
 	}
 
-	private String pathForGetAllGhostStates() {
+	private String pathForGetAllPlayerStates() {
 		return BASE_MAPPING + "/" + "states";
 	}
 
-	private String pathForSetGhostLocationById(Integer id) {
+	private String pathForSetPlayerLocationById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "location";
 	}
 
-	private String pathForSetGhostStateById(Integer id) {
+	private String pathForSetPlayerStateById(Integer id) {
 		return BASE_MAPPING + "/" + id + "/" + "state";
 	}
 
-	// Returns the ID of the created ghost
-	private Integer createGhost_failUponException(Coordinate location) {
+	// Returns the ID of the created player
+	private Integer createPlayer_failUponException(Coordinate location) {
 
-		String path = pathForCreateGhost();
+		String path = pathForCreatePlayer();
 		String body = JsonUtils.objectToJson(location);
 		String jsonContent = null;
 
@@ -799,9 +799,9 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private Coordinate getGhostLocationById_failUponException(Integer id) {
+	private Coordinate getPlayerLocationById_failUponException(Integer id) {
 
-		String path = pathForGetGhostLocationById(id);
+		String path = pathForGetPlayerLocationById(id);
 		String jsonContent = null;
 
 		try {
@@ -827,9 +827,9 @@ public class GhostControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private PlayerState getGhostStateById_failUponException(Integer id) {
+	private PlayerState getPlayerStateById_failUponException(Integer id) {
 
-		String path = pathForGetGhostStateById(id);
+		String path = pathForGetPlayerStateById(id);
 		String jsonContent = null;
 
 		try {

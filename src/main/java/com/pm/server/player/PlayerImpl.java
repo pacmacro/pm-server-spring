@@ -10,7 +10,7 @@ import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
 
 @Component
-public abstract class PlayerImpl implements Player {
+public class PlayerImpl implements Player {
 
 	protected final PlayerName name;
 	protected Integer id = 0;
@@ -20,7 +20,7 @@ public abstract class PlayerImpl implements Player {
 	private final static Logger log =
 			LogManager.getLogger(PlayerImpl.class.getName());
 
-	PlayerImpl(PlayerName name) {
+	public PlayerImpl(PlayerName name) {
 		if(name == null) {
 			throw new NullPointerException("The Player must have a name.");
 		}
@@ -63,8 +63,13 @@ public abstract class PlayerImpl implements Player {
 			log.warn(errorMessage);
 			throw new NullPointerException(errorMessage);
 		}
+		else if(name != PlayerName.Pacman && state == PlayerState.POWERUP) {
+			String errorMessage = "A Ghost cannot be set to a POWERUP state.";
+			log.error(errorMessage);
+			throw new IllegalArgumentException(errorMessage);
+		}
 
-		log.trace("Setting location to {}", state);
+		log.trace("Setting state to {}", state);
 		this.state = state;
 
 	}

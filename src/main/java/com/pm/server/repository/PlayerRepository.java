@@ -4,17 +4,18 @@ import java.util.List;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.PlayerState;
+import com.pm.server.player.Player;
 
-public interface PlayerRepository <PlayerType> {
+public interface PlayerRepository {
 
-	void addPlayer(PlayerType player) throws Exception;
+	void addPlayer(Player player) throws Exception;
 
 	void deletePlayerById(Integer id) throws Exception;
 
 	// Returns null if the player with the corresponding id is not found
-	PlayerType getPlayerById(Integer id);
+	Player getPlayerById(Integer id);
 
-	List<PlayerType> getAllPlayers();
+	List<Player> getAllPlayers();
 
 	void setPlayerLocationById(Integer id, Coordinate location);
 
@@ -23,5 +24,7 @@ public interface PlayerRepository <PlayerType> {
 	void clearPlayers();
 
 	Integer numOfPlayers();
+
+	Integer maxPlayerId();
 
 }
