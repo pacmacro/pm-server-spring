@@ -26,6 +26,4 @@ public interface PlayerRepository {
 
 	Integer numOfPlayers();
 
-	Integer maxPlayerId();
-
 }

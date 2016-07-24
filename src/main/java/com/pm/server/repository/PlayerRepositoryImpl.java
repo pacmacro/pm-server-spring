@@ -18,8 +18,6 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 
 	private List<Player> playerList;
 
-	private final static Integer MAX_PLAYER_ID = 999;
-
 	private final static Logger log =
 			LogManager.getLogger(PlayerRepositoryImpl.class.getName());
 
@@ -160,11 +158,6 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	@Override
 	public Integer numOfPlayers() {
 		return playerList.size();
-	}
-
-	@Override
-	public Integer maxPlayerId() {
-		return MAX_PLAYER_ID;
 	}
 
 }
