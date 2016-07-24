@@ -29,6 +29,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.player.Player;
@@ -68,14 +69,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		List<Player> playerList = playerRepository.getAllPlayers();
 
-		List<Integer> playerIdList = new ArrayList<Integer>();
+		List<PlayerName> playerNameList = new ArrayList<PlayerName>();
 		for(Player player : playerList) {
-			playerIdList.add(player.getId());
+			playerNameList.add(player.getName());
 		}
 
-		for(Integer id : playerIdList) {
+		for(PlayerName playerName : playerNameList) {
 			try {
-				playerRepository.deletePlayerByName(id);
+				playerRepository.deletePlayerByName(playerName);
 			}
 			catch(Exception e) {
 				log.error(e.getMessage());
