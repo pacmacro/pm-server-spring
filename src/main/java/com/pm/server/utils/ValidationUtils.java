@@ -4,9 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
+import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 
@@ -46,23 +48,24 @@ public class ValidationUtils {
 
 	}
 
-	public static void validateRequestBodyWithLocation(Coordinate location)
+	public static Coordinate validateRequestBodyWithLocation(
+			LocationRequest locationRequest)
 			throws BadRequestException {
 
 		String errorMessage = null;
 
-		if(location == null) {
+		if(locationRequest == null) {
 			errorMessage = "Request body requires latitude and longitude.";
 		}
 		else if(
-				location.getLatitude() == null &&
-				location.getLongitude() == null) {
+				locationRequest.latitude == null &&
+				locationRequest.longitude == null) {
 			errorMessage = "Request body requires latitude and longitude.";
 		}
-		else if(location.getLatitude() == null) {
+		else if(locationRequest.latitude == null) {
 			errorMessage = "Request body requires latitude.";
 		}
-		else if(location.getLongitude() == null) {
+		else if(locationRequest.longitude == null) {
 			errorMessage = "Request body requires longitude.";
 		}
 
@@ -70,6 +73,10 @@ public class ValidationUtils {
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
+
+		return new CoordinateImpl(
+				locationRequest.latitude, locationRequest.longitude
+		);
 
 	}
 
