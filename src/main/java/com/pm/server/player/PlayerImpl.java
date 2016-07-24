@@ -2,14 +2,12 @@ package com.pm.server.player;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.stereotype.Component;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
 
-@Component
 public class PlayerImpl implements Player {
 
 	protected final PlayerName name;
