@@ -4,14 +4,47 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
+import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 
 public class ValidationUtils {
 
 	private final static Logger log =
 			LogManager.getLogger(ValidationUtils.class.getName());
+
+	public static PlayerName validateRequestBodyWithName(
+			PlayerNameRequest playerNameRequest)
+			throws BadRequestException {
+
+		if(playerNameRequest == null) {
+			String errorMessage = "Request body requires a name.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+		else if(playerNameRequest.name == null) {
+			String errorMessage = "Request body requires a name.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		PlayerName name;
+		try {
+			name = PlayerName.valueOf(playerNameRequest.name);
+		}
+		catch(IllegalArgumentException e) {
+			log.warn(e.getMessage());
+
+			String errorMessage = "Request body requires a valid name.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		return name;
+
+	}
 
 	public static void validateRequestBodyWithLocation(Coordinate location)
 			throws BadRequestException {
