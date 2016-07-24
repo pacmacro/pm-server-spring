@@ -71,7 +71,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		addPlayer_failUponException(player1);
 
 		// Then
-		Player playerFromRepository = playerRepository.getPlayerById(player1.getId());
+		Player playerFromRepository = playerRepository.getPlayerByName(player1.getName());
 		assertEquals(player1, playerFromRepository);
 
 	}
@@ -89,13 +89,13 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Then
 		Player player_retrieved;
 
-		player_retrieved = playerRepository.getPlayerById(player1.getId());
+		player_retrieved = playerRepository.getPlayerByName(player1.getName());
 		assertEquals(player1, player_retrieved);
 
-		player_retrieved = playerRepository.getPlayerById(player2.getId());
+		player_retrieved = playerRepository.getPlayerByName(player2.getName());
 		assertEquals(player2, player_retrieved);
 
-		player_retrieved = playerRepository.getPlayerById(player3.getId());
+		player_retrieved = playerRepository.getPlayerByName(player3.getName());
 		assertEquals(player3, player_retrieved);
 
 	}
@@ -129,7 +129,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_addPlayer_conflictId() throws Exception {
+	public void unitTest_addPlayer_conflictName() throws Exception {
 
 		// Given
 		addPlayer_failUponException(player1);
@@ -143,26 +143,26 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_deletePlayerById() {
+	public void unitTest_deletePlayerByName() {
 
 		// Given
 		addPlayer_failUponException(player1);
 
 		// When
-		deletePlayerById_failUponException(player1.getId());
+		deletePlayerByName_failUponException(player1.getName());
 
 		// Then
-		assertTrue(playerRepository.getPlayerById(player1.getId()) == null);
+		assertTrue(playerRepository.getPlayerByName(player1.getName()) == null);
 
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_deletePlayerById_noPlayer() throws Exception {
+	public void unitTest_deletePlayerByName_noPlayer() throws Exception {
 
 		// Given
 
 		// When
-		playerRepository.deletePlayerById(player1.getId());
+		playerRepository.deletePlayerByName(player1.getName());
 
 		// Then
 		// Exception thrown above
@@ -170,13 +170,13 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getPlayerById() {
+	public void unitTest_getPlayerByName() {
 
 		// Given
 		addPlayer_failUponException(player1);
 
 		// When
-		Player player = playerRepository.getPlayerById(player1.getId());
+		Player player = playerRepository.getPlayerByName(player1.getName());
 
 		// Then
 		assertEquals(player1, player);
@@ -184,12 +184,12 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_getPlayerById_noPlayer() {
+	public void unitTest_getPlayerByName_noPlayer() {
 
 		// Given
 
 		// When
-		Player player = playerRepository.getPlayerById(player1.getId());
+		Player player = playerRepository.getPlayerByName(player1.getName());
 
 		// Then
 		assertNull(player);
@@ -229,7 +229,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerLocationById() {
+	public void unitTest_setPlayerLocationByName() {
 
 		// Given
 		addPlayer_failUponException(player1);
@@ -237,10 +237,10 @@ public class PlayerRepositoryTest extends TestTemplate {
 		Coordinate newPlayerLocation = new CoordinateImpl(9.8, 7.6);
 
 		// When
-		playerRepository.setPlayerLocationById(player1.getId(), newPlayerLocation);
+		playerRepository.setPlayerLocationByName(player1.getName(), newPlayerLocation);
 
 		// Then
-		Player player_newLocation = playerRepository.getPlayerById(player1.getId());
+		Player player_newLocation = playerRepository.getPlayerByName(player1.getName());
 
 		assertFalse(oldPlayerLocation == player_newLocation.getLocation());
 		assertTrue(newPlayerLocation == player_newLocation.getLocation());
@@ -248,32 +248,32 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerLocationById_sameId() {
+	public void unitTest_setPlayerLocationByName_sameName() {
 
 		// Given
 		addPlayer_failUponException(player1);
 
 		// When
-		playerRepository.setPlayerLocationById(
-				player1.getId(),
+		playerRepository.setPlayerLocationByName(
+				player1.getName(),
 				player1.getLocation()
 		);
 
 		// Then
-		Player updatedPlayer = playerRepository.getPlayerById(player1.getId());
+		Player updatedPlayer = playerRepository.getPlayerByName(player1.getName());
 
 		assertEquals(updatedPlayer, player1);
 
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_setPlayerLocationById_noPlayer() {
+	public void unitTest_setPlayerLocationByName_noPlayer() {
 
 		// Given
 
 		// When
-		playerRepository.setPlayerLocationById(
-				player1.getId(),
+		playerRepository.setPlayerLocationByName(
+				player1.getName(),
 				player1.getLocation()
 		);
 
@@ -283,7 +283,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById() {
+	public void unitTest_setPlayerStateByName() {
 
 		// Given
 		Player player = player1;
@@ -291,34 +291,34 @@ public class PlayerRepositoryTest extends TestTemplate {
 		PlayerState newState = PlayerState.ACTIVE;
 
 		// When
-		playerRepository.setPlayerStateById(player1.getId(), newState);
+		playerRepository.setPlayerStateByName(player1.getName(), newState);
 
 		// Then
-		Player playerResult = playerRepository.getPlayerById(player.getId());
+		Player playerResult = playerRepository.getPlayerByName(player.getName());
 		assertEquals(newState, playerResult.getState());
 
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_sameState() {
+	public void unitTest_setPlayerStateByName_sameState() {
 
 		// Given
 		Player player = player1;
 		addPlayer_failUponException(player);
 		PlayerState state = PlayerState.CAPTURED;
-		playerRepository.setPlayerStateById(player.getId(), state);
+		playerRepository.setPlayerStateByName(player.getName(), state);
 
 		// When
-		playerRepository.setPlayerStateById(player.getId(), state);
+		playerRepository.setPlayerStateByName(player.getName(), state);
 
 		// Then
-		Player playerResult = playerRepository.getPlayerById(player.getId());
+		Player playerResult = playerRepository.getPlayerByName(player.getName());
 		assertEquals(state, playerResult.getState());
 
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void unitTest_setPlayerStateById_nullId() {
+	public void unitTest_setPlayerStateByName_nullName() {
 
 		// Given
 		Player player = player1;
@@ -326,7 +326,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		PlayerState newState = PlayerState.ACTIVE;
 
 		// When
-		playerRepository.setPlayerStateById(null, newState);
+		playerRepository.setPlayerStateByName(null, newState);
 
 		// Then
 		// Exception thrown above
@@ -334,14 +334,14 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = NullPointerException.class)
-	public void unitTest_setPlayerStateById_nullState() {
+	public void unitTest_setPlayerStateByName_nullState() {
 
 		// Given
 		Player player = player1;
 		addPlayer_failUponException(player);
 
 		// When
-		playerRepository.setPlayerStateById(player.getId(), null);
+		playerRepository.setPlayerStateByName(player.getName(), null);
 
 		// Then
 		// Exception thrown above
@@ -349,7 +349,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void unitTest_setPlayerStateById_powerUpState() {
+	public void unitTest_setPlayerStateByName_powerUpState() {
 
 		// GIven
 		Player player = player1;
@@ -357,7 +357,9 @@ public class PlayerRepositoryTest extends TestTemplate {
 		PlayerState illegalPlayerState = PlayerState.POWERUP;
 
 		// When
-		playerRepository.setPlayerStateById(player.getId(), illegalPlayerState);
+		playerRepository.setPlayerStateByName(
+				player.getName(), illegalPlayerState
+		);
 
 		// Then
 		// Exception thrown above
@@ -378,7 +380,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		assertEquals(Integer.valueOf(1), playerRepository.numOfPlayers());
 
 		// When
-		deletePlayerById_failUponException(player1.getId());
+		deletePlayerByName_failUponException(player1.getName());
 
 		// Then
 		assertEquals(Integer.valueOf(0), playerRepository.numOfPlayers());
@@ -395,9 +397,9 @@ public class PlayerRepositoryTest extends TestTemplate {
 		}
 	}
 
-	private void deletePlayerById_failUponException(Integer id) {
+	private void deletePlayerByName_failUponException(PlayerName name) {
 		try {
-			playerRepository.deletePlayerById(id);
+			playerRepository.deletePlayerByName(name);
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());

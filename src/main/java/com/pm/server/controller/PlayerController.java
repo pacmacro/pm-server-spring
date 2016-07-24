@@ -128,7 +128,7 @@ public class PlayerController {
 
 		log.debug("Mapped DELETE /player/{}", id);
 
-		Player player = playerRepository.getPlayerById(id);
+		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -139,7 +139,7 @@ public class PlayerController {
 		}
 
 		try {
-			playerRepository.deletePlayerById(id);
+			playerRepository.deletePlayerByName(id);
 		}
 		catch(Exception e) {
 			String errorMessage =
@@ -166,7 +166,7 @@ public class PlayerController {
 
 		log.debug("Mapped GET /player/{}/location", id);
 
-		Player player = playerRepository.getPlayerById(id);
+		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
 			String errorMessage =
 					"No Player with id " +
@@ -239,7 +239,7 @@ public class PlayerController {
 
 		log.debug("Mapped GET /player/{}/state", id);
 
-		Player player = playerRepository.getPlayerById(id);
+		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
 			String errorMessage =
 					"No Player with id " +
@@ -316,7 +316,7 @@ public class PlayerController {
 
 		ValidationUtils.validateRequestBodyWithLocation(location);
 
-		Player player = playerRepository.getPlayerById(id);
+		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -330,7 +330,7 @@ public class PlayerController {
 				"Setting Player with id {} to ({}, {})",
 				id, location.getLatitude(), location.getLongitude()
 		);
-		playerRepository.setPlayerLocationById(id, location);
+		playerRepository.setPlayerLocationByName(id, location);
 	}
 
 	@RequestMapping(
@@ -355,7 +355,7 @@ public class PlayerController {
 			throw new BadRequestException(errorMessage);
 		}
 
-		Player player = playerRepository.getPlayerById(id);
+		Player player = playerRepository.getPlayerByName(id);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -369,7 +369,7 @@ public class PlayerController {
 				"Changing Player with id {} from state {} to {}",
 				id, player.getState(), state
 		);
-		playerRepository.setPlayerStateById(id, state);
+		playerRepository.setPlayerStateByName(id, state);
 
 	}
 

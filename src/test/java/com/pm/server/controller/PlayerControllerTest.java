@@ -75,7 +75,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		for(Integer id : playerIdList) {
 			try {
-				playerRepository.deletePlayerById(id);
+				playerRepository.deletePlayerByName(id);
 			}
 			catch(Exception e) {
 				log.error(e.getMessage());

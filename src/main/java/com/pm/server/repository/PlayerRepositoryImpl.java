@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Player;
 import com.pm.server.utils.JsonUtils;
@@ -41,7 +42,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 			);
 		}
 
-		if(getPlayerById(player.getId()) == null) {
+		if(getPlayerByName(player.getName()) == null) {
 
 			String objectString = JsonUtils.objectToJson(player);
 			if(objectString != null) {
@@ -52,7 +53,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 		}
 		else {
 			throw new IllegalArgumentException(
-				"addPlayer() was given an id belonging to a Player which is " +
+				"addPlayer() was given a name belonging to a Player which is " +
 				"already in the registry."
 			);
 		}
@@ -60,10 +61,10 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void deletePlayerById(Integer id) throws Exception {
+	public void deletePlayerByName(PlayerName name) throws Exception {
 
 		for(Player player : playerList) {
-			if(player.getId() == id) {
+			if(player.getName() == name) {
 				String objectString = JsonUtils.objectToJson(player);
 				log.debug("Removing player {}", objectString);
 				playerList.remove(player);
@@ -72,8 +73,8 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 		}
 
 		throw new IllegalArgumentException(
-				"deleteplayerById() was given the id " +
-				Integer.toString(id) +
+				"deleteplayerByName() was given the name " +
+				name +
 				"which does not exist."
 		);
 	}
@@ -84,10 +85,10 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public Player getPlayerById(Integer id) {
+	public Player getPlayerByName(PlayerName name) {
 
 		for(Player player : playerList) {
-			if(player.getId() == id) {
+			if(player.getName() == name) {
 				log.trace("Found player {}", JsonUtils.objectToJson(player));
 				return player;
 			}
@@ -102,20 +103,20 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void setPlayerLocationById(Integer id, Coordinate location) {
+	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
 
-		if(id == null) {
-			throw new NullPointerException("No id was given");
+		if(name == null) {
+			throw new NullPointerException("No name was given");
 		}
 		else if(location == null) {
 			throw new NullPointerException("No location was given");
 		}
 
-		Player player = getPlayerById(id);
+		Player player = getPlayerByName(name);
 		if(player == null) {
 			throw new IllegalArgumentException(
-					"No player with the id " +
-					Integer.toString(id) +
+					"No player with the name " +
+					name +
 					" was found"
 			);
 		}
@@ -123,34 +124,34 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 		String oldLocationString = JsonUtils.objectToJson(player.getLocation());
 		String newLocationString = JsonUtils.objectToJson(location);
 		log.debug(
-				"Setting player with id {} from location {} to location {}",
-				id, oldLocationString, newLocationString
+				"Setting player with name {} from location {} to location {}",
+				name, oldLocationString, newLocationString
 		);
 
 		player.setLocation(location);
 	}
 
 	@Override
-	public void setPlayerStateById(Integer id, PlayerState state) {
+	public void setPlayerStateByName(PlayerName name, PlayerState state) {
 
-		if(id == null) {
-			String errorMessage = "setplayerListtateById() was given a null id.";
+		if(name == null) {
+			String errorMessage = "setplayerStateByName() was given a null name.";
 			log.error(errorMessage);
 			throw new NullPointerException(errorMessage);
 		}
-		Player player = getPlayerById(id);
+		Player player = getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"No player with the id " +
-					Integer.toString(id) +
+					"No player with the name " +
+					name +
 					" was found.";
 			log.warn(errorMessage);
 			throw new IllegalArgumentException(errorMessage);
 		}
 
 		log.debug(
-				"Setting player with id {} from state {} to state {}",
-				id, player.getState(), state
+				"Setting player with name {} from state {} to state {}",
+				name, player.getState(), state
 		);
 		player.setState(state);
 
