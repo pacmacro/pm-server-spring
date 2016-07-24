@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
@@ -26,7 +27,10 @@ import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Player;
 import com.pm.server.player.PlayerImpl;
-import com.pm.server.repository.PlayerRepository;
+import com.pm.server.registry.PlayerRegistry;
+import com.pm.server.request.LocationRequest;
+import com.pm.server.request.PlayerNameAndLocationRequest;
+import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdAndPlayerStateResponse;
 import com.pm.server.response.IdResponse;
@@ -41,7 +45,7 @@ import com.pm.server.utils.ValidationUtils;
 public class PlayerController {
 
 	@Autowired
-	private PlayerRepository playerRepository;
+	private PlayerRegistry playerRegistry;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerController.class.getName());
@@ -52,68 +56,48 @@ public class PlayerController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public IdResponse createPlayer(
-			@RequestBody(required = false) CoordinateImpl location)
+	public void selectPlayer(
+			@RequestBody(required = false)
+			PlayerNameAndLocationRequest requestBody)
 			throws ConflictException, BadRequestException {
 
 		log.debug("Mapped POST /player");
-		log.debug("Request body: {}", JsonUtils.objectToJson(location));
+		log.debug("Request body: {}", JsonUtils.objectToJson(requestBody));
 
-		ValidationUtils.validateRequestBodyWithLocation(location);
+		PlayerNameRequest nameRequest = new PlayerNameRequest();
+		nameRequest.name = requestBody.name;
+		PlayerName name = ValidationUtils.validateRequestBodyWithName(nameRequest);
 
-		log.debug("Creating Player at ({}, {}).",
+		LocationRequest locationRequest = new LocationRequest();
+		locationRequest.latitude = requestBody.location.latitude;
+		locationRequest.longitude = requestBody.location.longitude;
+		Coordinate location = ValidationUtils
+				.validateRequestBodyWithLocation(locationRequest);
+
+		log.debug("Attempting to select Player {} at ({}, {}).",
+				name,
 				location.getLatitude(),
 				location.getLongitude()
 		);
 
-		Player player = new PlayerImpl(PlayerName.Inky);
-		player.setLocation(location);
-
-		Random random = new Random();
-
-		Boolean createdPlayer = false;
-		final Integer maxPlayerId = playerRepository.maxPlayerId();
-		final Integer idCreationRetries = maxPlayerId / 2;
-		for(Integer i = 0; i < idCreationRetries; i++) {
-
-			if(createdPlayer) {
-				break;
-			}
-			createdPlayer = true;
-
-			player.setId(random.nextInt(maxPlayerId));
-			try {
-				playerRepository.addPlayer(player);
-			}
-			catch (Exception e) {
-				createdPlayer = false;
-				log.warn(e.getMessage());
-			}
-
+		Player player = playerRegistry.getPlayerByName(name);
+		if(player == null) {
+			String errorMessage = name + " is not a valid Player name.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
 		}
-
-		if(!createdPlayer) {
-			String errorMessage;
-			String objectString = JsonUtils.objectToJson(player);
-			if(objectString != null) {
-				errorMessage =
-						"Player " +
-						objectString +
-						"could not be created.";
-			}
-			else {
-				errorMessage = "Player could not be created.";
-			}
-
-			log.error(errorMessage);
+		else if(player.getState() != PlayerState.UNINITIALIZED) {
+			String errorMessage =
+					"Player "+
+					name +
+					" has already been selected.";
+			log.warn(errorMessage);
 			throw new ConflictException(errorMessage);
 		}
 
-		log.debug("Player id set to {}.", player.getId());
+		playerRegistry.setPlayerLocationByName(name, location);
+		playerRegistry.setPlayerStateByName(name, PlayerState.READY);
 
-		IdResponse idResponse = new IdResponse();
-		idResponse.setId(player.getId());
-		return idResponse;
 	}
 
 	@RequestMapping(
