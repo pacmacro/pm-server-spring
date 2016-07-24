@@ -75,12 +75,12 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createPlayer() throws Exception {
+	public void unitTest_selectPlayer() throws Exception {
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
 
-		String path = pathForCreatePlayer();
+		String path = pathForSelectPlayer();
 
 		// When
 		mockMvc
@@ -96,13 +96,13 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createPlayer_sameLocation() throws Exception {
+	public void unitTest_selectPlayer_sameLocation() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
 
-		String path = pathForCreatePlayer();
+		String path = pathForSelectPlayer();
 
 		mockMvc
 				.perform(post(path)
@@ -125,7 +125,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createPlayer_notANumber() throws Exception {
+	public void unitTest_selectPlayer_notANumber() throws Exception {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
@@ -135,7 +135,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				"longitude" +
 				"\"}";
 
-		String path = pathForCreatePlayer();
+		String path = pathForSelectPlayer();
 
 		// When
 		mockMvc
@@ -150,10 +150,10 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_createPlayer_noLocationGiven() throws Exception {
+	public void unitTest_selectPlayer_noLocationGiven() throws Exception {
 
 		// Given
-		String path = pathForCreatePlayer();
+		String path = pathForSelectPlayer();
 
 		// When
 		mockMvc
@@ -171,7 +171,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 		String path = pathForDeletePlayerById(id);
 
 		// When
@@ -204,7 +204,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 		String path = pathForDeletePlayerById(id + 1);
 
 		// When
@@ -221,7 +221,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 		String path = pathForGetPlayerLocationById(id);
 
 		// When
@@ -244,7 +244,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 		String path = pathForGetPlayerLocationById(id + 1);
 
 		// When
@@ -277,7 +277,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForGetAllPlayerLocations();
 
@@ -304,10 +304,10 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location0 = randomCoordinateList.get(0);
-		Integer id0 = createPlayer_failUponException(location0);
+		Integer id0 = selectPlayer_failUponException(location0);
 
 		Coordinate location1 = randomCoordinateList.get(1);
-		Integer id1 = createPlayer_failUponException(location1);
+		Integer id1 = selectPlayer_failUponException(location1);
 
 		String path = pathForGetAllPlayerLocations();
 
@@ -359,7 +359,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForGetPlayerStateById(id);
 
@@ -378,7 +378,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForGetPlayerStateById(id + 1);
 
@@ -413,7 +413,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForGetAllPlayerStates();
 
@@ -435,10 +435,10 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location0 = randomCoordinateList.get(0);
-		Integer id0 = createPlayer_failUponException(location0);
+		Integer id0 = selectPlayer_failUponException(location0);
 
 		Coordinate location1 = randomCoordinateList.get(1);
-		Integer id1 = createPlayer_failUponException(location1);
+		Integer id1 = selectPlayer_failUponException(location1);
 
 		String path = pathForGetAllPlayerStates();
 
@@ -476,7 +476,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location_original = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location_original);
+		Integer id = selectPlayer_failUponException(location_original);
 
 		String path = pathForSetPlayerLocationById(id);
 
@@ -545,7 +545,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id);
 
@@ -574,7 +574,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id);
 
@@ -610,7 +610,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id);
 
@@ -637,7 +637,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id);
 
@@ -657,7 +657,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id);
 
@@ -680,7 +680,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Given
 		Coordinate location = randomCoordinateList.get(0);
-		Integer id = createPlayer_failUponException(location);
+		Integer id = selectPlayer_failUponException(location);
 
 		String path = pathForSetPlayerStateById(id + 1);
 
@@ -727,7 +727,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForCreatePlayer() {
+	private String pathForSelectPlayer() {
 		return BASE_MAPPING;
 	}
 
@@ -760,9 +760,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	// Returns the ID of the created player
-	private Integer createPlayer_failUponException(Coordinate location) {
+	private Integer selectPlayer_failUponException(Coordinate location) {
 
-		String path = pathForCreatePlayer();
+		String path = pathForSelectPlayer();
 		String body = JsonUtils.objectToJson(location);
 		String jsonContent = null;
 
