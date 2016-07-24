@@ -2,7 +2,6 @@ package com.pm.server.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -26,14 +24,12 @@ import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Player;
-import com.pm.server.player.PlayerImpl;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameAndLocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdAndPlayerStateResponse;
-import com.pm.server.response.IdResponse;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerResponse;
 import com.pm.server.response.PlayerStateResponse;
@@ -112,7 +108,7 @@ public class PlayerController {
 
 		log.debug("Mapped DELETE /player/{}", id);
 
-		Player player = playerRepository.getPlayerByName(id);
+		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -123,7 +119,8 @@ public class PlayerController {
 		}
 
 		try {
-			playerRepository.deletePlayerByName(id);
+			throw new Exception();
+			//playerRegistry.deletePlayerByName(PlayerName.Inky);
 		}
 		catch(Exception e) {
 			String errorMessage =
@@ -134,7 +131,7 @@ public class PlayerController {
 			throw new InternalServerErrorException(errorMessage);
 		}
 
-		log.debug("Player with id {} was deleted", id);
+		//log.debug("Player with id {} was deleted", id);
 	}
 
 	@RequestMapping(
@@ -150,7 +147,7 @@ public class PlayerController {
 
 		log.debug("Mapped GET /player/{}/location", id);
 
-		Player player = playerRepository.getPlayerByName(id);
+		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
 		if(player == null) {
 			String errorMessage =
 					"No Player with id " +
@@ -184,7 +181,7 @@ public class PlayerController {
 
 		List<PlayerResponse> playerResponseList = new ArrayList<PlayerResponse>();
 
-		List<Player> playerList = playerRepository.getAllPlayers();
+		List<Player> playerList = playerRegistry.getAllPlayers();
 
 		if(playerList != null) {
 			for(Player player : playerList) {
@@ -223,7 +220,7 @@ public class PlayerController {
 
 		log.debug("Mapped GET /player/{}/state", id);
 
-		Player player = playerRepository.getPlayerByName(id);
+		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
 		if(player == null) {
 			String errorMessage =
 					"No Player with id " +
@@ -259,7 +256,7 @@ public class PlayerController {
 		List<IdAndPlayerStateResponse> playerResponseList =
 				new ArrayList<IdAndPlayerStateResponse>();
 
-		List<Player> players = playerRepository.getAllPlayers();
+		List<Player> players = playerRegistry.getAllPlayers();
 
 		if(players != null) {
 			for(Player player : players) {
@@ -301,7 +298,7 @@ public class PlayerController {
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
 
-		Player player = playerRepository.getPlayerByName(id);
+		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -315,7 +312,7 @@ public class PlayerController {
 				"Setting Player with id {} to ({}, {})",
 				id, location.getLatitude(), location.getLongitude()
 		);
-		playerRepository.setPlayerLocationByName(id, location);
+		playerRegistry.setPlayerLocationByName(PlayerName.Inky, location);
 	}
 
 	@RequestMapping(
@@ -340,7 +337,7 @@ public class PlayerController {
 			throw new BadRequestException(errorMessage);
 		}
 
-		Player player = playerRepository.getPlayerByName(id);
+		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
 		if(player == null) {
 			String errorMessage =
 					"Player with id " +
@@ -354,7 +351,7 @@ public class PlayerController {
 				"Changing Player with id {} from state {} to {}",
 				id, player.getState(), state
 		);
-		playerRepository.setPlayerStateByName(id, state);
+		playerRegistry.setPlayerStateByName(PlayerName.Inky, state);
 
 	}
 
