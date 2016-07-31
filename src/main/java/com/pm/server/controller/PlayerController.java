@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -41,6 +42,8 @@ public class PlayerController {
 
 	@Autowired
 	private PlayerRegistry playerRegistry;
+
+	Coordinate locationDefault = new CoordinateImpl(0.0, 0.0);
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerController.class.getName());
@@ -144,8 +147,11 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new InternalServerErrorException(errorMessage);
 		}
-
 		log.debug("Player {} was succesfully deselected", name);
+
+		log.debug("Setting Player {} to default location", name);
+		playerRegistry.setPlayerLocationByName(name, locationDefault);
+
 	}
 
 	@RequestMapping(
@@ -175,7 +181,6 @@ public class PlayerController {
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
-		log.debug(player.getLocation());
 
 		LocationResponse locationResponse = new LocationResponse();
 		if(player.getLocation() == null) {
