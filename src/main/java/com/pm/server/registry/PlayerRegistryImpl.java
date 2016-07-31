@@ -2,6 +2,8 @@ package com.pm.server.registry;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,8 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
 
-	public PlayerRegistryImpl() throws Exception {
+	@PostConstruct
+	public void init() throws Exception {
 		reset();
 	}
 

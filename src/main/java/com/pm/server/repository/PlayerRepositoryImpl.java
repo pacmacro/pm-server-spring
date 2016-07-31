@@ -21,7 +21,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	private final static Logger log =
 			LogManager.getLogger(PlayerRepositoryImpl.class.getName());
 
-	PlayerRepositoryImpl() {
+	public PlayerRepositoryImpl() {
 		playerList = new ArrayList<Player>();
 	}
 
@@ -32,11 +32,6 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 		if(player == null) {
 			throw new NullPointerException(
 					"addPlayer() was given a null player."
-			);
-		}
-		else if(player.getLocation() == null) {
-			throw new NullPointerException(
-					"addPlayer() was given a player with a null location."
 			);
 		}
 
