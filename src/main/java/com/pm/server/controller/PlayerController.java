@@ -95,41 +95,57 @@ public class PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}",
+			value="/{playerName}",
 			method=RequestMethod.DELETE
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void deletePlayerById(
-			@PathVariable Integer id,
+	public void deselectPlayer(
+			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws NotFoundException, InternalServerErrorException {
+			throws BadRequestException,
+			NotFoundException,
+			InternalServerErrorException {
 
-		log.debug("Mapped DELETE /player/{}", id);
+		log.debug("Mapped DELETE /player/{}", playerName);
 
-		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
+		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
+		playerNameRequest.name = playerName;
+		PlayerName name = ValidationUtils
+				.validateRequestWithName(playerNameRequest);
+
+		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"Player with id " +
-					Integer.toString(id) +
+					"Player " +
+					name +
 					" was not found.";
 			log.warn(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
+		else if(player.getState() == PlayerState.UNINITIALIZED) {
+			String errorMessage =
+					"Player "+
+					name +
+					" has not yet been selected.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
 
 		try {
-			throw new Exception();
-			//playerRegistry.deletePlayerByName(PlayerName.Inky);
+			playerRegistry.setPlayerStateByName(
+					name, PlayerState.UNINITIALIZED
+			);
 		}
 		catch(Exception e) {
 			String errorMessage =
-					"Player with id " +
-					Integer.toString(id) +
-					" was found but could not be deleted.";
+					"Player " +
+					name +
+					" was found but could not be deselected.";
 			log.warn(errorMessage);
 			throw new InternalServerErrorException(errorMessage);
 		}
 
-		//log.debug("Player with id {} was deleted", id);
+		log.debug("Player {} was succesfully deselected", name);
 	}
 
 	@RequestMapping(
