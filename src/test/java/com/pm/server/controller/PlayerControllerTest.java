@@ -145,13 +145,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_deletePlayerById() throws Exception {
+	public void unitTest_deselectPlayer() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
-		String path = pathForDeletePlayerById(1382);
+
+		String path = pathForDeselectPlayer(player);
 
 		// When
 		mockMvc
@@ -163,36 +164,37 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_deletePlayerById_noPlayer() throws Exception {
+	public void unitTest_deselectPlayer_alreadyUninitialized() throws Exception {
 
 		// Given
-		Integer id = 2481;
-		String path = pathForDeletePlayerById(id);
+		PlayerName player = PlayerName.Inky;
+		String path = pathForDeselectPlayer(player);
 
 		// When
 		mockMvc
 				.perform(delete(path))
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isBadRequest());
 
 	}
 
 	@Test
-	public void unitTest_deletePlayerById_incorrectId() throws Exception {
+	public void unitTest_deselectPlayer_wrongName() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
-		String path = pathForDeletePlayerById(123123);
+
+		String path = BASE_MAPPING + "/NAME_HERE";
 
 		// When
 		mockMvc
 				.perform(delete(path))
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isBadRequest());
 
 	}
 
@@ -720,8 +722,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + player;
 	}
 
-	private String pathForDeletePlayerById(Integer id) {
-		return BASE_MAPPING + "/" + id;
+	private String pathForDeselectPlayer(PlayerName player) {
+		return BASE_MAPPING + "/" + player;
 	}
 
 	private String pathForGetPlayerLocationById(Integer id) {
