@@ -149,31 +149,43 @@ public class PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}/location",
+			value="/{playerName}/location",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public LocationResponse getPlayerLocationById(
-			@PathVariable Integer id,
+	public LocationResponse getPlayerLocation(
+			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws NotFoundException {
+			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped GET /player/{}/location", id);
+		log.debug("Mapped GET /player/{}/location", playerName);
 
-		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
+		PlayerNameRequest nameRequest = new PlayerNameRequest();
+		nameRequest.name = playerName;
+		PlayerName name = ValidationUtils
+				.validateRequestWithName(nameRequest);
+
+		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"No Player with id " +
-					Integer.toString(id) +
-					".";
+					"No Player named " +
+					name +
+					" was found in the registry.";
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
+		log.debug(player.getLocation());
 
 		LocationResponse locationResponse = new LocationResponse();
-		locationResponse.setLatitude(player.getLocation().getLatitude());
-		locationResponse.setLongitude(player.getLocation().getLongitude());
+		if(player.getLocation() == null) {
+			locationResponse.setLatitude(0.0);
+			locationResponse.setLongitude(0.0);
+		}
+		else {
+			locationResponse.setLatitude(player.getLocation().getLatitude());
+			locationResponse.setLongitude(player.getLocation().getLongitude());
+		}
 
 		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {
