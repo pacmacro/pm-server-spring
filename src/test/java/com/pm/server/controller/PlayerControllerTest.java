@@ -28,6 +28,7 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.CoordinateImpl;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.registry.PlayerRegistry;
@@ -76,11 +77,13 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	@Test
 	public void unitTest_selectPlayer() throws Exception {
-		// Given
-		Coordinate location = randomCoordinateList.get(0);
-		String body = JsonUtils.objectToJson(location);
 
-		String path = pathForSelectPlayer();
+		// Given
+		PlayerName playerName = PlayerName.Inky;
+		final String path = pathForSelectPlayer(playerName);
+
+		Coordinate location = randomCoordinateList.get(0);
+		final String body = JsonUtils.objectToJson(location);
 
 		// When
 		mockMvc
@@ -90,8 +93,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				)
 
 		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").exists());
+				.andExpect(status().isOk());
 
 	}
 
@@ -99,13 +101,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer_sameLocation() throws Exception {
 
 		// Given
-		Coordinate location = randomCoordinateList.get(0);
-		String body = JsonUtils.objectToJson(location);
+		final String pathForInky = pathForSelectPlayer(PlayerName.Inky);
+		final String pathForClyde = pathForSelectPlayer(PlayerName.Clyde);
 
-		String path = pathForSelectPlayer();
+		Coordinate location = randomCoordinateList.get(0);
+		final String body = JsonUtils.objectToJson(location);
 
 		mockMvc
-				.perform(post(path)
+				.perform(post(pathForInky)
 						.content(body)
 						.header("Content-Type", "application/json")
 				)
@@ -113,39 +116,13 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// When
 		mockMvc
-				.perform(post(path)
+				.perform(post(pathForClyde)
 						.content(body)
 						.header("Content-Type", "application/json")
 				)
 
 		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.id").exists());
-
-	}
-
-	@Test
-	public void unitTest_selectPlayer_notANumber() throws Exception {
-
-		// Given
-		Coordinate location = randomCoordinateList.get(0);
-		String body =
-				"{\"" +
-				location.getLatitude() + "\":\"" +
-				"longitude" +
-				"\"}";
-
-		String path = pathForSelectPlayer();
-
-		// When
-		mockMvc
-				.perform(post(path)
-						.content(body)
-						.header("Content-Type", "application/json")
-				)
-
-		// Then
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isOk());
 
 	}
 
@@ -153,7 +130,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer_noLocationGiven() throws Exception {
 
 		// Given
-		String path = pathForSelectPlayer();
+		PlayerName playerName = PlayerName.Inky;
+		final String path = pathForSelectPlayer(playerName);
 
 		// When
 		mockMvc
@@ -537,6 +515,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isBadRequest());
+		fail();
 
 	}
 
@@ -727,8 +706,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForSelectPlayer() {
-		return BASE_MAPPING;
+	private String pathForSelectPlayer(PlayerName player) {
+		return BASE_MAPPING + "/" + player;
 	}
 
 	private String pathForDeletePlayerById(Integer id) {
@@ -762,7 +741,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	// Returns the ID of the created player
 	private Integer selectPlayer_failUponException(Coordinate location) {
 
-		String path = pathForSelectPlayer();
+		String path = pathForSelectPlayer(PlayerName.Inky);//TODO Needs to be changed to param
 		String body = JsonUtils.objectToJson(location);
 		String jsonContent = null;
 
