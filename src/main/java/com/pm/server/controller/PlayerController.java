@@ -26,7 +26,6 @@ import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Player;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
-import com.pm.server.request.PlayerNameAndLocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.IdAndPlayerStateResponse;
@@ -47,28 +46,27 @@ public class PlayerController {
 			LogManager.getLogger(PlayerController.class.getName());
 
 	@RequestMapping(
-			value = "",
+			value = "/{playerName}",
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void selectPlayer(
+			@PathVariable String playerName,
 			@RequestBody(required = false)
-			PlayerNameAndLocationRequest requestBody)
+			LocationRequest requestBody)
 			throws ConflictException, BadRequestException {
 
-		log.debug("Mapped POST /player");
+		log.debug("Mapped POST /player/{}", playerName);
 		log.debug("Request body: {}", JsonUtils.objectToJson(requestBody));
 
-		PlayerNameRequest nameRequest = new PlayerNameRequest();
-		nameRequest.name = requestBody.name;
-		PlayerName name = ValidationUtils.validateRequestBodyWithName(nameRequest);
+		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
+		playerNameRequest.name = playerName;
+		PlayerName name =
+				ValidationUtils.validateRequestWithName(playerNameRequest);
 
-		LocationRequest locationRequest = new LocationRequest();
-		locationRequest.latitude = requestBody.location.latitude;
-		locationRequest.longitude = requestBody.location.longitude;
 		Coordinate location = ValidationUtils
-				.validateRequestBodyWithLocation(locationRequest);
+				.validateRequestBodyWithLocation(requestBody);
 
 		log.debug("Attempting to select Player {} at ({}, {}).",
 				name,

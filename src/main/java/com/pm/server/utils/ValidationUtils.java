@@ -17,7 +17,7 @@ public class ValidationUtils {
 	private final static Logger log =
 			LogManager.getLogger(ValidationUtils.class.getName());
 
-	public static PlayerName validateRequestBodyWithName(
+	public static PlayerName validateRequestWithName(
 			PlayerNameRequest playerNameRequest)
 			throws BadRequestException {
 
