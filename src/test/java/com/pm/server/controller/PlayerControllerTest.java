@@ -127,6 +127,35 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
+	public void unitTest_selectPlayer_reselect() throws Exception {
+
+		// Given
+		PlayerName playerName = PlayerName.Inky;
+		final String path = pathForSelectPlayer(playerName);
+
+		Coordinate location = randomCoordinateList.get(0);
+		final String body = JsonUtils.objectToJson(location);
+
+		mockMvc
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// When
+		mockMvc
+				.perform(post(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+		)
+
+		// Then
+				.andExpect(status().isConflict());
+
+	}
+
+	@Test
 	public void unitTest_selectPlayer_noLocationGiven() throws Exception {
 
 		// Given
