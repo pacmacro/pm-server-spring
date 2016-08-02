@@ -214,7 +214,7 @@ public class PlayerController {
 				}
 
 				PlayerResponse playerResponse = new PlayerResponse();
-				playerResponse.setId(player.getId());
+				playerResponse.setName(player.getName());
 				playerResponse.setLocation(player.getLocation());
 
 				playerResponseList.add(playerResponse);
@@ -223,7 +223,7 @@ public class PlayerController {
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
 		if(objectString != null) {
-			log.debug("Returning PlayersResponse: {}", objectString);
+			log.debug("Returning Player response list: {}", objectString);
 		}
 
 		return playerResponseList;
