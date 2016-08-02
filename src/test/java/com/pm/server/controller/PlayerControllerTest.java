@@ -374,7 +374,26 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getPlayerStateById() throws Exception {
+	public void unitTest_getPlayerState_uninitialized() throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		String path = pathForGetPlayerState(player);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.state")
+						.value(PlayerState.UNINITIALIZED.toString())
+				);
+
+	}
+
+	@Test
+	public void unitTest_getPlayerState_initialized() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
@@ -389,36 +408,18 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.state").exists());
+				.andExpect(jsonPath("$.state")
+						.value(PlayerState.READY.toString())
+				);
+
 
 	}
 
 	@Test
-	public void unitTest_getPlayerStateById_wrongId() throws Exception {
+	public void unitTest_getPlayerState_wrongName() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForGetPlayerState(player);
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isNotFound());
-
-	}
-
-	@Test
-	public void unitTest_getPlayerStateById_noPlayer() throws Exception {
-
-		//TODO invalid test
-
-		// Given
-		String path = pathForGetPlayerState(null);
+		String path = BASE_MAPPING + "/player/PLAYER_NAME/state";
 
 		// When
 		mockMvc
