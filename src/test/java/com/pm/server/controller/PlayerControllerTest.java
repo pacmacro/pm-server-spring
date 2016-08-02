@@ -228,13 +228,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getPlayerLocationById() throws Exception {
+	public void unitTest_getPlayerLocation() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
-		String path = pathForGetPlayerLocationById(12312);
+
+		String path = pathForGetPlayerLocation(player);
 
 		// When
 		mockMvc
@@ -252,29 +253,58 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getPlayerLocationById_wrongId() throws Exception {
+	public void unitTest_getPlayerLocation_uninitialized() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-		String path = pathForGetPlayerLocationById(123);
+		String path = pathForGetPlayerLocation(player);
 
 		// When
 		mockMvc
 				.perform(get(path))
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.latitude")
+						.value(0.0)
+				)
+				.andExpect(jsonPath("$.longitude")
+						.value(0.0)
+				);
 
 	}
 
 	@Test
-	public void unitTest_getPlayerLocationById_noPlayer() throws Exception {
+	public void unitTest_getPlayerLocation_reUninitialized() throws Exception {
 
 		// Given
-		Integer id = 39482;
-		String path = pathForGetPlayerLocationById(id);
+		PlayerName player = PlayerName.Inky;
+		Coordinate location = randomCoordinateList.get(0);
+		selectPlayer_failUponException(player, location);
+		deselectPlayer_failUponException(player);
+
+		String path = pathForGetPlayerLocation(player);
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.latitude")
+						.value(0.0)
+				)
+				.andExpect(jsonPath("$.longitude")
+						.value(0.0)
+				);
+
+	}
+
+	@Test
+	public void unitTest_getPlayerLocation_wrongName() throws Exception {
+
+		// Given
+		String path = BASE_MAPPING + "/player/PLAYER_NAME/location";
 
 		// When
 		mockMvc
@@ -506,7 +536,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Then
 		Coordinate location_result =
-				getPlayerLocationById_failUponException(12312);
+				getPlayerLocation_failUponException(player);
 		assertEquals(location_updated.getLatitude(), location_result.getLatitude());
 		assertEquals(location_updated.getLongitude(), location_result.getLongitude());
 
@@ -755,8 +785,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + player;
 	}
 
-	private String pathForGetPlayerLocationById(Integer id) {
-		return BASE_MAPPING + "/" + id + "/" + "location";
+	private String pathForGetPlayerLocation(PlayerName player) {
+		return BASE_MAPPING + "/" + player + "/" + "location";
 	}
 
 	private String pathForGetAllPlayerLocations() {
@@ -800,9 +830,26 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private Coordinate getPlayerLocationById_failUponException(Integer id) {
+	private void deselectPlayer_failUponException(
+			PlayerName player) {
 
-		String path = pathForGetPlayerLocationById(id);
+		String path = pathForSelectPlayer(player);
+
+		try {
+			mockMvc
+					.perform(delete(path))
+					.andExpect(status().isOk());
+		}
+		catch(Exception e) {
+			log.error(e.getMessage());
+			fail();
+		}
+
+	}
+
+	private Coordinate getPlayerLocation_failUponException(PlayerName player) {
+
+		String path = pathForGetPlayerLocation(player);
 		String jsonContent = null;
 
 		try {
