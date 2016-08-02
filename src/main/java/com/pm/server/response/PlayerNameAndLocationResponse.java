@@ -7,14 +7,14 @@ import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.utils.JsonUtils;
 
-public class PlayerResponse {
+public class PlayerNameAndLocationResponse {
 
 	private PlayerName name;
 
 	private Coordinate location;
 
 	private final static Logger log =
-			LogManager.getLogger(PlayerResponse.class.getName());
+			LogManager.getLogger(PlayerNameAndLocationResponse.class.getName());
 
 	public void setName(PlayerName name) {
 

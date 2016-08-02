@@ -28,9 +28,9 @@ import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
-import com.pm.server.response.IdAndPlayerStateResponse;
+import com.pm.server.response.PlayerNameAndPlayerStateResponse;
 import com.pm.server.response.LocationResponse;
-import com.pm.server.response.PlayerResponse;
+import com.pm.server.response.PlayerNameAndLocationResponse;
 import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
@@ -197,11 +197,11 @@ public class PlayerController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<PlayerResponse> getAllPlayerLocations() {
+	public List<PlayerNameAndLocationResponse> getAllPlayerLocations() {
 
 		log.debug("Mapped GET /player/locations");
 
-		List<PlayerResponse> playerResponseList = new ArrayList<PlayerResponse>();
+		List<PlayerNameAndLocationResponse> playerResponseList = new ArrayList<PlayerNameAndLocationResponse>();
 
 		List<Player> playerList = playerRegistry.getAllPlayers();
 
@@ -213,7 +213,7 @@ public class PlayerController {
 					log.trace("Processing Player: {}", objectString);
 				}
 
-				PlayerResponse playerResponse = new PlayerResponse();
+				PlayerNameAndLocationResponse playerResponse = new PlayerNameAndLocationResponse();
 				playerResponse.setName(player.getName());
 				playerResponse.setLocation(player.getLocation());
 
@@ -275,12 +275,12 @@ public class PlayerController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public List<IdAndPlayerStateResponse> getAllPlayerStates() {
+	public List<PlayerNameAndPlayerStateResponse> getAllPlayerStates() {
 
 		log.debug("Mapped GET /player/states");
 
-		List<IdAndPlayerStateResponse> playerResponseList =
-				new ArrayList<IdAndPlayerStateResponse>();
+		List<PlayerNameAndPlayerStateResponse> playerResponseList =
+				new ArrayList<PlayerNameAndPlayerStateResponse>();
 
 		List<Player> players = playerRegistry.getAllPlayers();
 
@@ -292,7 +292,7 @@ public class PlayerController {
 					log.trace("Processing Player: {}", objectString);
 				}
 
-				IdAndPlayerStateResponse PlayerResponse = new IdAndPlayerStateResponse();
+				PlayerNameAndPlayerStateResponse PlayerResponse = new PlayerNameAndPlayerStateResponse();
 				PlayerResponse.id = player.getId();
 				PlayerResponse.state = player.getState();
 

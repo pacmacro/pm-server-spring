@@ -2,7 +2,7 @@ package com.pm.server.response;
 
 import com.pm.server.datatype.PlayerState;
 
-public class IdAndPlayerStateResponse {
+public class PlayerNameAndPlayerStateResponse {
 
 	public Integer id;
 
