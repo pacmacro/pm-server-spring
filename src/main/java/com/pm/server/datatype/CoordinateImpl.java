@@ -13,8 +13,14 @@ public class CoordinateImpl implements Coordinate {
 
 	public CoordinateImpl() {
 		log.trace(
-				"Creating coordinate with null latitude and longitude."
+				"Creating coordinate with latitude and longitude 0.0."
 		);
+		reset();
+	}
+
+	public void reset() {
+		latitude = 0.0;
+		longitude = 0.0;
 	}
 
 	public CoordinateImpl(Double latitude, Double longitude) {

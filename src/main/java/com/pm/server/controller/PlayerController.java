@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -42,8 +41,6 @@ public class PlayerController {
 
 	@Autowired
 	private PlayerRegistry playerRegistry;
-
-	Coordinate locationDefault = new CoordinateImpl(0.0, 0.0);
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerController.class.getName());
@@ -150,7 +147,7 @@ public class PlayerController {
 		log.debug("Player {} was succesfully deselected", name);
 
 		log.debug("Setting Player {} to default location", name);
-		playerRegistry.setPlayerLocationByName(name, locationDefault);
+		player.resetLocation();
 
 	}
 
@@ -183,14 +180,8 @@ public class PlayerController {
 		}
 
 		LocationResponse locationResponse = new LocationResponse();
-		if(player.getLocation() == null) {
-			locationResponse.setLatitude(0.0);
-			locationResponse.setLongitude(0.0);
-		}
-		else {
-			locationResponse.setLatitude(player.getLocation().getLatitude());
-			locationResponse.setLongitude(player.getLocation().getLongitude());
-		}
+		locationResponse.setLatitude(player.getLocation().getLatitude());
+		locationResponse.setLongitude(player.getLocation().getLongitude());
 
 		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {

@@ -5,7 +5,9 @@ import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 
 public interface Player {
-	
+
+	void resetLocation();
+
 	PlayerName getName();
 
 	void setId(Integer id);

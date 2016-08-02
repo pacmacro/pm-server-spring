@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
@@ -12,7 +13,7 @@ public class PlayerImpl implements Player {
 
 	protected final PlayerName name;
 	protected Integer id = 0;
-	protected Coordinate location;
+	protected Coordinate location = new CoordinateImpl();
 	protected PlayerState state = PlayerState.UNINITIALIZED;
 
 	private final static Logger log =
@@ -23,6 +24,10 @@ public class PlayerImpl implements Player {
 			throw new NullPointerException("The Player must have a name.");
 		}
 		this.name = name;
+	}
+
+	public void resetLocation() {
+		location.reset();
 	}
 
 	public PlayerName getName() {
