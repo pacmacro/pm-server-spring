@@ -316,7 +316,38 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllPlayerLocations_singlePlayer() throws Exception {
+	public void unitTest_getAllPlayerLocations_uninitialized() throws Exception {
+
+		// Given
+		String path = pathForGetAllPlayerLocations();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(5)))  // 4 Ghosts + 1 Pacman
+
+				.andExpect(jsonPath("$[0].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[0].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[1].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[1].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[2].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[2].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[3].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[3].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[4].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[4].location.longitude").value(0.0));
+
+	}
+
+	@Test
+	public void unitTest_getAllPlayerLocations_oneInitialized() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
@@ -331,63 +362,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].location.latitude")
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].location.latitude")
 						.value(location.getLatitude())
 				)
-				.andExpect(jsonPath("$[0].location.longitude")
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].location.longitude")
 						.value(location.getLongitude())
 				);
-
-	}
-
-	@Test
-	public void unitTest_getAllPlayerLocations_multiplePlayers() throws Exception {
-
-		// Given
-		PlayerName player0 = PlayerName.Inky;
-		Coordinate location0 = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player0, location0);
-
-		PlayerName player1 = PlayerName.Pacman;
-		Coordinate location1 = randomCoordinateList.get(1);
-		selectPlayer_failUponException(player1, location1);
-
-		String path = pathForGetAllPlayerLocations();
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].location.latitude")
-						.value(location0.getLatitude())
-				)
-				.andExpect(jsonPath("$[0].location.longitude")
-						.value(location0.getLongitude())
-				)
-				.andExpect(jsonPath("$[1].location.latitude")
-						.value(location1.getLatitude())
-				)
-				.andExpect(jsonPath("$[1].location.longitude")
-						.value(location1.getLongitude())
-				);
-
-	}
-
-	@Test
-	public void unitTest_getAllPlayerLocations_noPlayers() throws Exception {
-
-		// Given
-		String path = pathForGetAllPlayerLocations();
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(0)));
 
 	}
 
