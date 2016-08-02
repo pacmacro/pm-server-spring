@@ -381,7 +381,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
-		String path = pathForGetPlayerStateById(212312);
+		String path = pathForGetPlayerState(player);
 
 		// When
 		mockMvc
@@ -401,7 +401,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
-		String path = pathForGetPlayerStateById(123);
+		String path = pathForGetPlayerState(player);
 
 		// When
 		mockMvc
@@ -415,10 +415,10 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	@Test
 	public void unitTest_getPlayerStateById_noPlayer() throws Exception {
 
-		// Given
-		Integer randomId = 12931;
+		//TODO invalid test
 
-		String path = pathForGetPlayerStateById(randomId);
+		// Given
+		String path = pathForGetPlayerState(null);
 
 		// When
 		mockMvc
@@ -591,7 +591,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getPlayerStateById_failUponException(123);
+		PlayerState resultState = getPlayerState_failUponException(player);
 		assertEquals(updatedState, resultState);
 
 	}
@@ -628,7 +628,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getPlayerStateById_failUponException(123);
+		PlayerState resultState = getPlayerState_failUponException(player);
 		assertEquals(updatedState, resultState);
 
 	}
@@ -775,8 +775,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + "locations";
 	}
 
-	private String pathForGetPlayerStateById(Integer id) {
-		return BASE_MAPPING + "/" + id + "/" + "state";
+	private String pathForGetPlayerState(PlayerName name) {
+		return BASE_MAPPING + "/" + name + "/" + "state";
 	}
 
 	private String pathForGetAllPlayerStates() {
@@ -857,9 +857,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private PlayerState getPlayerStateById_failUponException(Integer id) {
+	private PlayerState getPlayerState_failUponException(PlayerName player) {
 
-		String path = pathForGetPlayerStateById(id);
+		String path = pathForGetPlayerState(player);
 		String jsonContent = null;
 
 		try {
