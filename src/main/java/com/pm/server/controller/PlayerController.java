@@ -292,11 +292,11 @@ public class PlayerController {
 					log.trace("Processing Player: {}", objectString);
 				}
 
-				PlayerNameAndPlayerStateResponse PlayerResponse = new PlayerNameAndPlayerStateResponse();
-				PlayerResponse.id = player.getId();
-				PlayerResponse.state = player.getState();
+				PlayerNameAndPlayerStateResponse playerResponse = new PlayerNameAndPlayerStateResponse();
+				playerResponse.name = player.getName();
+				playerResponse.state = player.getState();
 
-				playerResponseList.add(PlayerResponse);
+				playerResponseList.add(playerResponse);
 			}
 		}
 
