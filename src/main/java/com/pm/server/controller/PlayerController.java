@@ -230,24 +230,28 @@ public class PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}/state",
+			value="/{playerName}/state",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public PlayerStateResponse getPlayerStateById(
-			@PathVariable Integer id,
+	public PlayerStateResponse getPlayerState(
+			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws NotFoundException {
+			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped GET /player/{}/state", id);
+		log.debug("Mapped GET /player/{}/state", playerName);
 
-		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
+		PlayerNameRequest nameRequest = new PlayerNameRequest();
+		nameRequest.name = playerName;
+		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
+
+		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"No Player with id " +
-					Integer.toString(id) +
-					".";
+					"No Player named " +
+					name +
+					" was found in the registry.";
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
