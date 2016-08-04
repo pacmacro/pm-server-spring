@@ -431,7 +431,34 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_getAllPlayerStates_singlePlayer() throws Exception {
+	public void unitTest_getAllPlayerStates_uninitialized() throws Exception {
+
+		// Given
+		String path = pathForGetAllPlayerStates();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(5)))  // 4 Ghosts + 1 Pacman
+
+				.andExpect(jsonPath("$[0].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[1].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[2].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[3].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[4].state")
+						.value(PlayerState.UNINITIALIZED.toString()));
+
+	}
+
+	@Test
+	public void unitTest_getAllPlayerStates_oneInitialized() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
@@ -446,53 +473,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		// Then
 				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$[0].id")
-//						.value(id)
-//				)
-				.andExpect(jsonPath("$[0].state").exists());
-
-	}
-
-	@Test
-	public void unitTest_getAllPlayerStates_multiplePlayers() throws Exception {
-
-		// Given
-		PlayerName player0 = PlayerName.Inky;
-		Coordinate location0 = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player0, location0);
-
-		PlayerName player1 = PlayerName.Inky;
-		Coordinate location1 = randomCoordinateList.get(1);
-		selectPlayer_failUponException(player1, location1);
-
-		String path = pathForGetAllPlayerStates();
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$[0].id").value(id0))
-				.andExpect(jsonPath("$[0].state").exists())
-//				.andExpect(jsonPath("$[1].id").value(id1))
-				.andExpect(jsonPath("$[1].state").exists());
-
-	}
-
-	@Test
-	public void unitTest_getAllPlayerStates_noPlayers() throws Exception {
-
-		// Given
-		String path = pathForGetAllPlayerStates();
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(0)));
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].state")
+						.value(PlayerState.READY.toString())
+				)
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].state")
+						.value(PlayerState.READY.toString())
+				);
 
 	}
 
