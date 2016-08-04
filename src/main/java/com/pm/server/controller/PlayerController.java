@@ -359,42 +359,70 @@ public class PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}/state",
+			value="/{playerName}/state",
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setPlayerStateById(
-			@PathVariable Integer id,
+	public void setPlayerState(
+			@PathVariable String playerName,
 			@RequestBody PlayerStateRequest stateRequest)
-			throws BadRequestException, NotFoundException {
+			throws BadRequestException,
+			ConflictException,
+			NotFoundException {
 
-		log.debug("Mapped PUT /player/{}/state", id);
+		log.debug("Mapped PUT /player/{}/state", playerName);
 		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
+
+		PlayerNameRequest nameRequest = new PlayerNameRequest();
+		nameRequest.name = playerName;
+		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
 
 		PlayerState state =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);
 
-		if(state == PlayerState.POWERUP) {
-			String errorMessage = "The POWERUP state is not valid for a Player.";
-			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
-		}
-
-		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
+		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"Player with id " +
-					Integer.toString(id) +
+					"Player " +
+					name +
 					" was not found.";
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
 
+		// Illegal state changes
+		if(player.getState() == PlayerState.UNINITIALIZED &&
+				player.getState() != state) {
+			String errorMessage =
+					"This operation cannot change the state of an unselected/" +
+					"uninitialized player; use POST /player/{playerName} " +
+					"instead.";
+			log.warn(errorMessage);
+			throw new ConflictException(errorMessage);
+		}
+		else if(state == PlayerState.UNINITIALIZED &&
+				state != player.getState()) {
+			String errorMessage =
+					"This operation cannot change the state of a selected/" +
+					"initialized player to uninitialized; use " +
+					"DELETE /player/{playerName} instead.";
+			log.warn(errorMessage);
+			throw new ConflictException(errorMessage);
+		}
+
+		// Illegal player states
+		if(player.getName() != PlayerName.Pacman &&
+				state == PlayerState.POWERUP) {
+			String errorMessage = "The POWERUP state is not valid for a Ghost.";
+			log.warn(errorMessage);
+			throw new ConflictException(errorMessage);
+		}
+
 		log.debug(
-				"Changing Player with id {} from state {} to {}",
-				id, player.getState(), state
+				"Changing Player {} from state {} to {}",
+				name, player.getState(), state
 		);
-		playerRegistry.setPlayerStateByName(PlayerName.Inky, state);
+		playerRegistry.setPlayerStateByName(name, state);
 
 	}
 
