@@ -485,14 +485,14 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerLocationById() throws Exception {
+	public void unitTest_setPlayerLocation() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location_original = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location_original);
 
-		String path = pathForSetPlayerLocationById(123);
+		String path = pathForSetPlayerLocation(player);
 
 		Coordinate location_updated = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location_updated);
@@ -514,44 +514,67 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerLocationById_noPlayer() throws Exception {
+	public void unitTest_setPlayerLocation_wrongName() throws Exception {
 
 		// Given
-		Integer randomId = 29481;
-		String pathForSetLocation = pathForSetPlayerLocationById(randomId);
+		String path = BASE_MAPPING + "/PLAYER_NAME/location";
 
 		Coordinate location = randomCoordinateList.get(0);
 		String body = JsonUtils.objectToJson(location);
 
 		// When
 		mockMvc
-				.perform(put(pathForSetLocation)
+				.perform(put(path)
 						.content(body)
 						.header("Content-Type", "application/json")
 				)
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isBadRequest());
 
 	}
 
 	@Test
-	public void unitTest_setPlayerLocationById_noLocationGiven()
+	public void unitTest_setPlayerLocation_noLocationGiven()
 			throws Exception {
 
 		// Given
-		Integer randomId = 29481;
-		String pathForSetLocation = pathForSetPlayerLocationById(randomId);
+		PlayerName player = PlayerName.Inky;
+		Coordinate location_original = randomCoordinateList.get(0);
+		selectPlayer_failUponException(player, location_original);
+
+		String path = pathForSetPlayerLocation(player);
 
 		// When
 		mockMvc
-				.perform(put(pathForSetLocation)
+				.perform(put(path)
 						.header("Content-Type", "application/json")
 				)
 
 		// Then
 				.andExpect(status().isBadRequest());
-		fail();
+
+	}
+
+	@Test
+	public void unitTest_setPlayerLocation_uninitialized() throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		String path = pathForSetPlayerLocation(player);
+
+		Coordinate location = randomCoordinateList.get(0);
+		String body = JsonUtils.objectToJson(location);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isConflict());
 
 	}
 
@@ -772,8 +795,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + "states";
 	}
 
-	private String pathForSetPlayerLocationById(Integer id) {
-		return BASE_MAPPING + "/" + id + "/" + "location";
+	private String pathForSetPlayerLocation(PlayerName player) {
+		return BASE_MAPPING + "/" + player + "/" + "location";
 	}
 
 	private String pathForSetPlayerStateById(Integer id) {
