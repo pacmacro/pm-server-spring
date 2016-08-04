@@ -8,6 +8,7 @@ import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
+import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
@@ -19,7 +20,7 @@ public class ValidationUtils {
 
 	public static PlayerName validateRequestWithName(
 			PlayerNameRequest playerNameRequest)
-			throws BadRequestException {
+			throws BadRequestException, NotFoundException {
 
 		if(playerNameRequest == null) {
 			String errorMessage = "Request body requires a name.";
@@ -41,7 +42,7 @@ public class ValidationUtils {
 
 			String errorMessage = "Request body requires a valid name.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new NotFoundException(errorMessage);
 		}
 
 		return name;

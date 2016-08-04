@@ -223,7 +223,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.perform(delete(path))
 
 		// Then
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isNotFound());
 
 	}
 
@@ -304,7 +304,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerLocation_wrongName() throws Exception {
 
 		// Given
-		String path = BASE_MAPPING + "/player/PLAYER_NAME/location";
+		String path = BASE_MAPPING + "/PLAYER_NAME/location";
 
 		// When
 		mockMvc
@@ -419,7 +419,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerState_wrongName() throws Exception {
 
 		// Given
-		String path = BASE_MAPPING + "/player/PLAYER_NAME/state";
+		String path = BASE_MAPPING + "/PLAYER_NAME/state";
 
 		// When
 		mockMvc
@@ -530,7 +530,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				)
 
 		// Then
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isNotFound());
 
 	}
 

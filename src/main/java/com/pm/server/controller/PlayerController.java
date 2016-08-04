@@ -55,7 +55,10 @@ public class PlayerController {
 			@PathVariable String playerName,
 			@RequestBody(required = false)
 			LocationRequest requestBody)
-			throws ConflictException, BadRequestException {
+			throws
+			BadRequestException,
+			ConflictException,
+			NotFoundException {
 
 		log.debug("Mapped POST /player/{}", playerName);
 		log.debug("Request body: {}", JsonUtils.objectToJson(requestBody));
