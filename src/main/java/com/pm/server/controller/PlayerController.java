@@ -28,9 +28,9 @@ import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
-import com.pm.server.response.PlayerNameAndPlayerStateResponse;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerNameAndLocationResponse;
+import com.pm.server.response.PlayerNameAndPlayerStateResponse;
 import com.pm.server.response.PlayerStateResponse;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
@@ -309,36 +309,50 @@ public class PlayerController {
 	}
 
 	@RequestMapping(
-			value="/{id}/location",
+			value="/{playerName}/location",
 			method=RequestMethod.PUT
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public void setPlayerLocationById(
-			@PathVariable Integer id,
+	public void setPlayerLocation(
+			@PathVariable String playerName,
 			@RequestBody LocationRequest locationRequest)
-			throws BadRequestException, NotFoundException {
+			throws BadRequestException,
+			ConflictException,
+			NotFoundException {
 
-		log.debug("Mapped PUT /player/{}/location", id);
+		log.debug("Mapped PUT /player/{}/location", playerName);
 		log.debug("Request body: {}", JsonUtils.objectToJson(locationRequest));
+
+		PlayerNameRequest nameRequest = new PlayerNameRequest();
+		nameRequest.name = playerName;
+		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
 
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
 
-		Player player = playerRegistry.getPlayerByName(PlayerName.Inky);
+		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
 			String errorMessage =
-					"Player with id " +
-					Integer.toString(id) +
+					"Player " +
+					name +
 					" was not found.";
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
+		else if(player.getState() == PlayerState.UNINITIALIZED) {
+			String errorMessage =
+					"Player " +
+			        name +
+			        " has not been selected yet, so a location cannot be set.";
+			log.warn(errorMessage);
+			throw new ConflictException(errorMessage);
+		}
 
 		log.debug(
-				"Setting Player with id {} to ({}, {})",
-				id, location.getLatitude(), location.getLongitude()
+				"Setting Player {} to ({}, {})",
+				name, location.getLatitude(), location.getLongitude()
 		);
-		playerRegistry.setPlayerLocationByName(PlayerName.Inky, location);
+		playerRegistry.setPlayerLocationByName(name, location);
 	}
 
 	@RequestMapping(
