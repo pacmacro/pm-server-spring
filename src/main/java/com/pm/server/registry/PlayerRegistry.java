@@ -9,7 +9,7 @@ import com.pm.server.player.Player;
 
 public interface PlayerRegistry {
 
-	// Returns null if the player with the corresponding id is not found
+	// Returns null if the player with the corresponding name is not found
 	Player getPlayerByName(PlayerName name);
 
 	List<Player> getAllPlayers();

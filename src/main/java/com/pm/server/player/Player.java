@@ -10,10 +10,6 @@ public interface Player {
 
 	PlayerName getName();
 
-	void setId(Integer id);
-
-	int getId();
-
 	void setLocation(Coordinate location);
 
 	Coordinate getLocation();

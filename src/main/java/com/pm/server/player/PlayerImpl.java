@@ -12,7 +12,6 @@ import com.pm.server.utils.JsonUtils;
 public class PlayerImpl implements Player {
 
 	protected final PlayerName name;
-	protected Integer id = 0;
 	protected Coordinate location = new CoordinateImpl();
 	protected PlayerState state = PlayerState.UNINITIALIZED;
 
@@ -32,17 +31,6 @@ public class PlayerImpl implements Player {
 
 	public PlayerName getName() {
 		return name;
-	}
-
-	public void setId(Integer id) {
-
-		log.trace("Setting id to {}", id);
-
-		this.id = id;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	public void setLocation(Coordinate location) {

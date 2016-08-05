@@ -39,22 +39,16 @@ public class PlayerRepositoryTest extends TestTemplate {
 	@Before
 	public void setUp() {
 
-		Integer player1_id = 12345;
 		Coordinate player1_location = new CoordinateImpl(1.0, 0.1);
 		player1 = new PlayerImpl(PlayerName.Blinky);
-		player1.setId(player1_id);
 		player1.setLocation(player1_location);
 
-		Integer player2_id = 23456;
 		Coordinate player2_location = new CoordinateImpl(2.0, 0.2);
 		player2 = new PlayerImpl(PlayerName.Clyde);
-		player2.setId(player2_id);
 		player2.setLocation(player2_location);
 
-		Integer player3_id = 34567;
 		Coordinate player3_location = new CoordinateImpl(3.0, 0.3);
 		player3 = new PlayerImpl(PlayerName.Pinky);
-		player3.setId(player3_id);
 		player3.setLocation(player3_location);
 
 		playerRepository.clearPlayers();
