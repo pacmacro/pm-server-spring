@@ -100,20 +100,6 @@ public class PlayerRepositoryTest extends TestTemplate {
 
 	}
 
-	@Test(expected = NullPointerException.class)
-	public void unitTest_addPlayer_nullPlayer() throws Exception {
-
-		// Given
-
-		// When
-		playerRepository.addPlayer(null);
-
-		// Then
-		// Exception thrown above
-
-	}
-
-	@Test(expected = NullPointerException.class) 
 	public void unitTest_addPlayer_nullPlayerLocation() throws Exception {
 
 		// Given
@@ -122,6 +108,20 @@ public class PlayerRepositoryTest extends TestTemplate {
 
 		// When
 		playerRepository.addPlayer(player);
+
+		// Then
+		Player playerFromRepository = playerRepository.getPlayerByName(player1.getName());
+		assertEquals(player1, playerFromRepository);
+
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void unitTest_addPlayer_nullPlayer() throws Exception {
+
+		// Given
+
+		// When
+		playerRepository.addPlayer(null);
 
 		// Then
 		// Exception thrown above
