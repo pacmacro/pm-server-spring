@@ -579,14 +579,73 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById() throws Exception {
+	public void unitTest_setPlayerState() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
-		String path = pathForSetPlayerStateById(123);
+		String path = pathForSetPlayerState(player);
+
+		PlayerState updatedState = PlayerState.ACTIVE;
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		PlayerState resultState = getPlayerState_failUponException(player);
+		assertEquals(updatedState, resultState);
+
+	}
+
+	@Test
+	public void unitTest_setPlayerState_sameStateUninitialized()
+			throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		String path = pathForSetPlayerState(player);
+
+		PlayerState updatedState = PlayerState.UNINITIALIZED;
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+				.andExpect(status().isOk());
+
+		// Then
+		PlayerState resultState = getPlayerState_failUponException(player);
+		assertEquals(updatedState, resultState);
+
+	}
+
+	@Test
+	public void unitTest_setPlayerState_sameStateReady()
+			throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		Coordinate location = randomCoordinateList.get(0);
+		selectPlayer_failUponException(player, location);
+
+		String path = pathForSetPlayerState(player);
 
 		PlayerState updatedState = PlayerState.READY;
 		PlayerStateContainer updatedStateContainer =
@@ -609,53 +668,12 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_sameState() throws Exception {
+	public void unitTest_setPlayerState_wrongName() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
+		String path = BASE_MAPPING + "/PLAYER_NAME/state";
 
-		String path = pathForSetPlayerStateById(1231);
-
-		PlayerState updatedState = PlayerState.READY;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.header("Content-Type", "application/json")
-				)
-				.andExpect(status().isOk());
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.header("Content-Type", "application/json")
-				)
-				.andExpect(status().isOk());
-
-		// Then
-		PlayerState resultState = getPlayerState_failUponException(player);
-		assertEquals(updatedState, resultState);
-
-	}
-
-	@Test
-	public void unitTest_setPlayerStateById_illegalPowerupState() throws Exception {
-
-		// Given
-		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerStateById(123);
-
-		PlayerState updatedState = PlayerState.POWERUP;
+		PlayerState updatedState = PlayerState.UNINITIALIZED;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -669,19 +687,17 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				)
 
 		// Then
-				.andExpect(status().isBadRequest());
+				.andExpect(status().isNotFound());
 
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_noStateGiven() throws Exception {
+	public void unitTest_setPlayerState_noStateGiven()
+			throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerStateById(123);
+		String path = pathForSetPlayerState(player);
 
 		// When
 		mockMvc
@@ -695,14 +711,11 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_invalidStateValue() throws Exception {
+	public void unitTest_setPlayerState_invalidStateValue() throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerStateById(123);
+		String path = pathForSetPlayerState(player);
 
 		String body = "{\"state\":\"invalidValue\"}";
 
@@ -719,16 +732,43 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_wrongId() throws Exception {
+	public void unitTest_setPlayerState_initialize()
+			throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		String path = pathForSetPlayerState(player);
+
+		PlayerState updatedState = PlayerState.READY;
+		PlayerStateContainer updatedStateContainer =
+				new PlayerStateContainer();
+		updatedStateContainer.state = updatedState;
+		String body = JsonUtils.objectToJson(updatedStateContainer);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.header("Content-Type", "application/json")
+				)
+
+		// Then
+				.andExpect(status().isConflict());
+
+	}
+
+	@Test
+	public void unitTest_setPlayerState_uninitialize()
+			throws Exception {
 
 		// Given
 		PlayerName player = PlayerName.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
-		String path = pathForSetPlayerStateById(123);
+		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.READY;
+		PlayerState updatedState = PlayerState.UNINITIALIZED;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -742,18 +782,21 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				)
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isConflict());
 
 	}
 
 	@Test
-	public void unitTest_setPlayerStateById_noPlayer() throws Exception {
+	public void unitTest_setPlayerState_ghostPowerupState() throws Exception {
 
 		// Given
-		Integer randomId = 19349;
-		String path = pathForSetPlayerStateById(randomId);
+		PlayerName player = PlayerName.Inky;
+		Coordinate location = randomCoordinateList.get(0);
+		selectPlayer_failUponException(player, location);
 
-		PlayerState updatedState = PlayerState.READY;
+		String path = pathForSetPlayerState(player);
+
+		PlayerState updatedState = PlayerState.POWERUP;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -767,7 +810,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				)
 
 		// Then
-				.andExpect(status().isNotFound());
+				.andExpect(status().isConflict());
 
 	}
 
@@ -787,8 +830,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + "locations";
 	}
 
-	private String pathForGetPlayerState(PlayerName name) {
-		return BASE_MAPPING + "/" + name + "/" + "state";
+	private String pathForGetPlayerState(PlayerName player) {
+		return BASE_MAPPING + "/" + player + "/" + "state";
 	}
 
 	private String pathForGetAllPlayerStates() {
@@ -799,8 +842,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + player + "/" + "location";
 	}
 
-	private String pathForSetPlayerStateById(Integer id) {
-		return BASE_MAPPING + "/" + id + "/" + "state";
+	private String pathForSetPlayerState(PlayerName player) {
+		return BASE_MAPPING + "/" + player + "/" + "state";
 	}
 
 	private void selectPlayer_failUponException(
