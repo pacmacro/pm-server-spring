@@ -29,6 +29,7 @@ import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
 import com.pm.server.response.LocationResponse;
+import com.pm.server.response.PlayerDetailsResponse;
 import com.pm.server.response.PlayerNameAndLocationResponse;
 import com.pm.server.response.PlayerNameAndPlayerStateResponse;
 import com.pm.server.response.PlayerStateResponse;
@@ -270,8 +271,6 @@ public class PlayerController {
 		return playerStateResponse;
 	}
 
-
-
 	@RequestMapping(
 			value="/states",
 			method=RequestMethod.GET,
@@ -298,6 +297,46 @@ public class PlayerController {
 				PlayerNameAndPlayerStateResponse playerResponse = new PlayerNameAndPlayerStateResponse();
 				playerResponse.name = player.getName();
 				playerResponse.state = player.getState();
+
+				playerResponseList.add(playerResponse);
+			}
+		}
+
+		String objectString = JsonUtils.objectToJson(playerResponseList);
+		if(objectString != null) {
+			log.debug("Returning playerResponse: {}", objectString);
+		}
+
+		return playerResponseList;
+	}
+
+	@RequestMapping(
+			value="/details",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public List<PlayerDetailsResponse> getAllPlayerDetails() {
+
+		log.debug("Mapped GET /player/details");
+
+		List<PlayerDetailsResponse> playerResponseList =
+				new ArrayList<PlayerDetailsResponse>();
+
+		List<Player> players = playerRegistry.getAllPlayers();
+
+		if(players != null) {
+			for(Player player : players) {
+
+				String objectString = JsonUtils.objectToJson(player);
+				if(objectString != null) {
+					log.trace("Processing Player: {}", objectString);
+				}
+
+				PlayerDetailsResponse playerResponse = new PlayerDetailsResponse();
+				playerResponse.setName(player.getName());
+				playerResponse.setState(player.getState());
+				playerResponse.setLocation(player.getLocation());
 
 				playerResponseList.add(playerResponse);
 			}
