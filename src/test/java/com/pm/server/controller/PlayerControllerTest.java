@@ -476,10 +476,78 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(
 						jsonPath("$[?(@.name == 'Inky')].state")
 						.value(PlayerState.READY.toString())
-				)
+				);
+
+	}
+
+	@Test
+	public void unitTest_getAllPlayerDetails_uninitialized() throws Exception {
+
+		// Given
+		String path = pathForGetAllPlayerDetails();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(5)))  // 4 Ghosts + 1 Pacman
+
+				.andExpect(jsonPath("$[0].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[0].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[0].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[1].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[1].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[1].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[2].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[2].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[2].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[3].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[3].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[3].location.longitude").value(0.0))
+
+				.andExpect(jsonPath("$[4].state")
+						.value(PlayerState.UNINITIALIZED.toString()))
+				.andExpect(jsonPath("$[4].location.latitude").value(0.0))
+				.andExpect(jsonPath("$[4].location.longitude").value(0.0));
+
+	}
+
+	@Test
+	public void unitTest_getAllPlayerDetails_oneInitialized() throws Exception {
+
+		// Given
+		PlayerName player = PlayerName.Inky;
+		Coordinate location = randomCoordinateList.get(0);
+		selectPlayer_failUponException(player, location);
+
+		String path = pathForGetAllPlayerDetails();
+
+		// When
+		mockMvc
+				.perform(get(path))
+
+		// Then
+				.andExpect(status().isOk())
 				.andExpect(
 						jsonPath("$[?(@.name == 'Inky')].state")
 						.value(PlayerState.READY.toString())
+				)
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].location.latitude")
+						.value(location.getLatitude())
+				)
+				.andExpect(
+						jsonPath("$[?(@.name == 'Inky')].location.longitude")
+						.value(location.getLongitude())
 				);
 
 	}
@@ -836,6 +904,10 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	private String pathForGetAllPlayerStates() {
 		return BASE_MAPPING + "/" + "states";
+	}
+
+	private String pathForGetAllPlayerDetails() {
+		return BASE_MAPPING + "/" + "details";
 	}
 
 	private String pathForSetPlayerLocation(PlayerName player) {
