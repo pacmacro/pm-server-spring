@@ -3,13 +3,13 @@
 cd $(dirname $0)
 base_url=$(../base_url.sh)
 
-if [ $# -ge 2 ] ; then
+if [ $# -ge 3 ] ; then
     curl \
       --include \
       --request POST  \
       --header "Content-Type: application/json" \
-      --data '{"latitude":'$1',"longitude":'$2'}' \
-      $base_url/ghost
+      --data '{"latitude":'$2',"longitude":'$3'}' \
+      $base_url/player/$1
 else
-    echo "Usage: ./post_new_ghost.sh latitude longitude"
+    echo "Usage: ./post_select_player.sh name latitude longitude"
 fi

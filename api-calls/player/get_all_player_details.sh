@@ -5,4 +5,5 @@ base_url=$(../base_url.sh)
 
 curl \
   --request GET --include \
-  $base_url/pacman/state
+  -H "Content-Type: application/json" \
+  $base_url/player/details

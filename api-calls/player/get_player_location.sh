@@ -7,7 +7,7 @@ if [ $# -ge 1 ] ; then
     curl \
       --request GET --include \
       -H "Content-Type: application/json" \
-      $base_url/ghost/"$1"/location
+      $base_url/player/"$1"/location
 else
-    echo "Usage: ./get_ghost_location_by_id.sh id"
+    echo "Usage: ./get_player_location.sh name"
 fi

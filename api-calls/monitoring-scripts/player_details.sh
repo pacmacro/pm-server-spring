@@ -10,6 +10,6 @@ watch \
     --silent \
     --request GET \
     -H "Content-Type: application/json" \
-    $base_url/ghost/locations \
+    $base_url/player/details \
   | python -m json.tool
 "

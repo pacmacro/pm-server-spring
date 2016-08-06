@@ -9,7 +9,7 @@ if [ $# -ge 2 ] ; then
       --request PUT  \
       --header "Content-Type: application/json" \
       --data '{"state":"'$2'"}' \
-      $base_url/ghost/"$1"/state
+      $base_url/player/"$1"/state
 else
-    echo "Usage: ./put_ghost_state_by_id.sh id state"
+    echo "Usage: ./put_player_state.sh name state"
 fi

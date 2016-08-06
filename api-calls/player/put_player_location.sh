@@ -9,7 +9,7 @@ if [ $# -ge 3 ] ; then
       --request PUT  \
       --header "Content-Type: application/json" \
       --data '{"latitude":'$2',"longitude":'$3'}' \
-      $base_url/ghost/"$1"/location
+      $base_url/player/"$1"/location
 else
-    echo "Usage: ./put_ghost_location_by_id.sh id latitude longitude"
+    echo "Usage: ./put_player_location.sh name latitude longitude"
 fi

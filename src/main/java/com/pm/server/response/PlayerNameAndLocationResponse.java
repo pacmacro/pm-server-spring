@@ -4,26 +4,27 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.utils.JsonUtils;
 
-public class PlayerResponse {
+public class PlayerNameAndLocationResponse {
 
-	private Integer id;
+	private PlayerName name;
 
 	private Coordinate location;
 
 	private final static Logger log =
-			LogManager.getLogger(PlayerResponse.class.getName());
+			LogManager.getLogger(PlayerNameAndLocationResponse.class.getName());
 
-	public void setId(Integer id) {
+	public void setName(PlayerName name) {
 
-		log.trace("Setting id {}", id);
+		log.trace("Setting name to {}", name);
 
-		this.id = id;
+		this.name = name;
 	}
 
-	public Integer getId() {
-		return id;
+	public PlayerName getName() {
+		return name;
 	}
 
 	public void setLocation(Coordinate location) {
