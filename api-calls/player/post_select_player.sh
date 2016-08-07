@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cd $(dirname $0)
-base_url=$(../base_url.sh)
+base_url=$(../utility/base_url.sh)
 
 if [ $# -ge 3 ] ; then
     curl \
