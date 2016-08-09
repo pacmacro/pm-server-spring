@@ -53,6 +53,12 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 	public void deletePacdotByLocation(Coordinate location)
 			throws IllegalArgumentException, NullPointerException {
 
+		if(location == null) {
+			throw new NullPointerException(
+					"deletePacdotByLocation() was given a null location."
+			);
+		}
+
 		for(Pacdot pacdot : pacdotList) {
 			if(pacdot.getLocation() == location) {
 				String objectString = JsonUtils.objectToJson(pacdot);
@@ -70,7 +76,14 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 	}
 
 	@Override
-	public Pacdot getPacdotByLocation(Coordinate location) {
+	public Pacdot getPacdotByLocation(Coordinate location)
+			throws NullPointerException {
+
+		if(location == null) {
+			throw new NullPointerException(
+					"getPacdotByLocation() was given a null location."
+			);
+		}
 
 		for(Pacdot pacdot : pacdotList) {
 			if(pacdot.getLocation() == location) {

@@ -35,9 +35,11 @@ public interface PacdotRepository {
 	 * Returns null if no pacdot with the given location is found
 	 * 
 	 * @param location Location of the requested pacdot
+	 * @throws NullPointerException if the location is null
 	 * @return the requested pacdot
 	 */
-	Pacdot getPacdotByLocation(Coordinate location);
+	Pacdot getPacdotByLocation(Coordinate location)
+			throws NullPointerException;
 
 	/**
 	 * Retrieves all pacdots in the repository.
