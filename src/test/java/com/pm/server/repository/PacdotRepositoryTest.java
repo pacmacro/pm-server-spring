@@ -52,15 +52,15 @@ public class PacdotRepositoryTest extends TestTemplate {
 		pacdot3.setPowerdot(true);
 		pacdotList.add(pacdot3);
 
+		pacdotRepository.clear();
+		assert(pacdotRepository.getAllPacdots().isEmpty());
+
 	}
 
 	@After
 	public void cleanUp() {
 
 		pacdotList.clear();
-
-		pacdotRepository.clear();
-		assert(pacdotRepository.getAllPacdots().isEmpty());
 
 	}
 
