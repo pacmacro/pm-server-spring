@@ -1,6 +1,7 @@
 package com.pm.server.registry;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -81,13 +82,17 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		pacdotRepository.setEatenStatusByLocation(location, eaten);
 	}
 
-	private static List<CoordinateImpl> readPacdotListFromFile(String filename)
+	private List<CoordinateImpl> readPacdotListFromFile(String filename)
 			throws Exception {
 
-		InputStream inputStream = ClassLoader.
-				getSystemResourceAsStream(filename);
-		ObjectMapper mapper = new ObjectMapper();
+		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
+		if(inputStream == null) {
+			throw new IllegalArgumentException(
+					"InputStream could not be opened for reading " +
+					"file " + filename + ".");
+		}
 
+		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(
 					inputStream,
