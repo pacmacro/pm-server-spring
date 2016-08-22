@@ -1,6 +1,8 @@
 package com.pm.server.registry;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 
@@ -24,6 +26,13 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@Autowired
 	private PacdotRegistry pacdotRegistry;
+
+	private static Integer activePowerups = 0;
+
+	/**
+	 * Units: Milliseconds
+	 */
+	private static final Integer POWERUP_TIME = 30 * 1000;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
@@ -51,7 +60,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			Boolean powerDotEaten =
 					pacdotRegistry.eatPacdotsNearLocation(location);
 			if(powerDotEaten) {
-				setPlayerStateByName(PlayerName.Pacman, PlayerState.POWERUP);
+				activatePowerup();
 			}
 		}
 
@@ -78,6 +87,28 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 				throw e;
 			}
 		}
+
+	}
+
+	private void activatePowerup() {
+
+		setPlayerStateByName(PlayerName.Pacman, PlayerState.POWERUP);
+		activePowerups++;
+
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run()
+			{
+
+				activePowerups--;
+				// TODO: Add check that gamestate is still active before
+				// resetting Pacman's state to ACTIVE
+				if(activePowerups == 0) {
+					setPlayerStateByName(PlayerName.Pacman, PlayerState.ACTIVE);
+				}
+
+			}
+		}, POWERUP_TIME);
 
 	}
 
