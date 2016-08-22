@@ -38,4 +38,15 @@ public interface PacdotRegistry {
 	void setEatenStatusByLocation(Coordinate location, boolean eaten)
 			throws NullPointerException;
 
+	/**
+	 * Sets all Pacdots within a set distance of the given location
+	 * to eaten.
+	 * 
+	 * Idempotent (e.g. eating an eaten dot is valid)
+	 * 
+	 * @param location Location of the Player eating the dots
+	 * @return Whether a Powerdot has been eaten
+	 */
+	Boolean eatPacdotsNearLocation(Coordinate location);
+
 }
