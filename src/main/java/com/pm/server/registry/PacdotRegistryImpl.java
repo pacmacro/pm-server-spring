@@ -30,6 +30,11 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	@Value("${powerdots.locations.filename}")
 	private String powerdotsFilename;
 
+	/**
+	 * Distance in GPS coordinate units
+	 */
+	private static final Double DISTANCE_TO_PACDOTS = 0.0005;
+
 	private final static Logger log =
 			LogManager.getLogger(PacdotRegistryImpl.class.getName());
 
@@ -94,7 +99,10 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		List<Pacdot> pacdotList = getAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
-			if(withinDistance(location, pacdot.getLocation(), 0.0005)) {
+			if(withinDistance(
+					location,
+					pacdot.getLocation(),
+					DISTANCE_TO_PACDOTS)) {
 				pacdot.setEaten(true);
 				if(pacdot.getPowerdot() == true) {
 					powerDotEaten = true;
