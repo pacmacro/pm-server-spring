@@ -1,7 +1,6 @@
 package com.pm.server.registry;
 
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -82,6 +81,31 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		pacdotRepository.setEatenStatusByLocation(location, eaten);
 	}
 
+	@Override
+	public Boolean eatPacdotsNearLocation(Coordinate location) {
+
+		Boolean powerDotEaten = false;
+
+		/*
+		 * Incredibly inefficient but I have no time to implement a quicker
+		 * algorithm. If you feel like helping me improve this, please
+		 * check out issue 52 on GitHub.
+		 */
+		List<Pacdot> pacdotList = getAllPacdots();
+		for(Pacdot pacdot : pacdotList) {
+
+			if(withinDistance(location, pacdot.getLocation(), 0.0005)) {
+				pacdot.setEaten(true);
+				if(pacdot.getPowerdot() == true) {
+					powerDotEaten = true;
+				}
+			}
+
+		}
+
+		return powerDotEaten;
+	}
+
 	private List<CoordinateImpl> readPacdotListFromFile(String filename)
 			throws Exception {
 
@@ -103,6 +127,22 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 			throw e;
 		}
 
+	}
+
+	private Boolean withinDistance(
+			Coordinate location1, Coordinate location2,
+			Double distance) {
+		Double latitudeDistance =
+				Math.abs(location1.getLatitude() - location2.getLatitude());
+		Double longitudeDistance =
+				Math.abs(location1.getLongitude() - location2.getLongitude());
+
+		return (square(latitudeDistance) + square(longitudeDistance))
+				< square(distance);
+	}
+
+	private Double square(Double val) {
+		return Math.pow(val, 2);
 	}
 
 }

@@ -20,7 +20,10 @@ import com.pm.server.repository.PlayerRepository;
 public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@Autowired
-	PlayerRepository playerRepository;
+	private PlayerRepository playerRepository;
+
+	@Autowired
+	private PacdotRegistry pacdotRegistry;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
@@ -43,6 +46,15 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	@Override
 	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
 		playerRepository.setPlayerLocationByName(name, location);
+
+		if(name == PlayerName.Pacman) {
+			Boolean powerDotEaten =
+					pacdotRegistry.eatPacdotsNearLocation(location);
+			if(powerDotEaten) {
+				setPlayerStateByName(PlayerName.Pacman, PlayerState.POWERUP);
+			}
+		}
+
 	}
 
 	@Override
