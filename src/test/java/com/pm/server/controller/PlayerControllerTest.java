@@ -66,7 +66,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void cleanUp() {
 
 		try {
-			playerRegistry.reset();
+			playerRegistry.resetHard();
 		}
 		catch(Exception e) {
 			log.error(e.getMessage());

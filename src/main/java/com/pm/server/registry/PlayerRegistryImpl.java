@@ -39,7 +39,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@PostConstruct
 	public void init() throws Exception {
-		reset();
+		resetHard();
 	}
 
 	@Override
@@ -72,7 +72,18 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void reset() throws NullPointerException, IllegalArgumentException {
+	public void reset() {
+
+		List<Player> playerList = playerRepository.getAllPlayers();
+		for(Player player : playerList) {
+			player.setState(PlayerState.UNINITIALIZED);
+			player.resetLocation();
+		}
+
+	}
+
+	@Override
+	public void resetHard() throws NullPointerException, IllegalArgumentException {
 
 		playerRepository.clearPlayers();
 
