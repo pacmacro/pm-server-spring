@@ -9,9 +9,11 @@ import com.pm.server.player.Player;
 
 public interface PlayerRepository {
 
-	void addPlayer(Player player) throws Exception;
+	void addPlayer(Player player)
+			throws NullPointerException, IllegalArgumentException;
 
-	void deletePlayerByName(PlayerName name) throws Exception;
+	void deletePlayerByName(PlayerName name)
+			throws IllegalArgumentException;
 
 	// Returns null if the player with the corresponding name is not found
 	Player getPlayerByName(PlayerName name);

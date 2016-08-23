@@ -54,7 +54,8 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void deletePlayerByName(PlayerName name) throws Exception {
+	public void deletePlayerByName(PlayerName name)
+			throws IllegalArgumentException {
 
 		for(Player player : playerList) {
 			if(player.getName() == name) {

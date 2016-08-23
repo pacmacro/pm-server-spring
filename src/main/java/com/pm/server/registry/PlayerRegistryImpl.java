@@ -72,21 +72,17 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void reset() throws Exception {
+	public void reset() throws NullPointerException, IllegalArgumentException {
 
 		playerRepository.clearPlayers();
 
+		log.debug("Attempting to recreate players");
 		Player player;
 		for(PlayerName playerName : PlayerName.values()) {
 			player = new PlayerImpl(playerName);
-			try {
-				playerRepository.addPlayer(player);
-			}
-			catch(Exception e) {
-				log.error(e.getMessage());
-				throw e;
-			}
+			playerRepository.addPlayer(player);
 		}
+		log.debug("Recreation of players completed");
 
 	}
 

@@ -18,6 +18,6 @@ public interface PlayerRegistry {
 
 	void setPlayerStateByName(PlayerName name, PlayerState state);
 
-	void reset() throws Exception;
+	void reset() throws NullPointerException, IllegalArgumentException;
 
 }
