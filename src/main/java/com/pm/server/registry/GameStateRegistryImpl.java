@@ -1,7 +1,10 @@
 package com.pm.server.registry;
 
+import org.springframework.stereotype.Repository;
+
 import com.pm.server.game.GameState;
 
+@Repository
 public class GameStateRegistryImpl implements GameStateRegistry {
 
 	private static GameState state = GameState.INITIALIZING;
