@@ -18,6 +18,8 @@ public interface PlayerRegistry {
 
 	void setPlayerStateByName(PlayerName name, PlayerState state);
 
+	void setPlayersReadyToActive();
+
 	void reset();
 
 	void resetHard() throws NullPointerException, IllegalArgumentException;
