@@ -9,9 +9,11 @@ import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.NotFoundException;
+import com.pm.server.game.GameState;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;
+import com.pm.server.request.StringStateContainer;
 
 public class ValidationUtils {
 
@@ -109,6 +111,33 @@ public class ValidationUtils {
 		}
 
 		return state;
+
+	}
+
+	public static GameState validateRequestBodyWithGameState(
+			StringStateContainer request)
+			throws BadRequestException {
+
+		if(request == null) {
+			String errorMessage = "Request body requires a state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+		else if(request.getState() == null) {
+			String errorMessage = "Request body requires a state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
+
+		try {
+			return GameState.valueOf(request.getState());
+		}
+		catch(IllegalArgumentException e) {
+			log.warn(e.getMessage());
+			String errorMessage = "Request body requires a valid state.";
+			log.warn(errorMessage);
+			throw new BadRequestException(errorMessage);
+		}
 
 	}
 
