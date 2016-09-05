@@ -49,4 +49,12 @@ public interface PacdotRegistry {
 	 */
 	Boolean eatPacdotsNearLocation(Coordinate location);
 
+	/**
+	 * Resets all Pacdots to uneaten.
+	 * 
+	 * Idempotent (e.g. can be used when no Pacdots have been eaten yet)
+	 * 
+	 */
+	void resetPacdots();
+
 }

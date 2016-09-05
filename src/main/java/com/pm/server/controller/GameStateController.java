@@ -17,6 +17,8 @@ import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.game.GameState;
 import com.pm.server.registry.GameStateRegistry;
+import com.pm.server.registry.PacdotRegistry;
+import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.StringStateContainer;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
@@ -27,6 +29,12 @@ public class GameStateController {
 
 	@Autowired
 	private GameStateRegistry gameStateRegistry;
+
+	@Autowired
+	private PlayerRegistry playerRegistry;
+
+	@Autowired
+	private PacdotRegistry pacdotRegistry;
 
 	private final static Logger log =
 			LogManager.getLogger(GameStateController.class.getName());
@@ -69,6 +77,8 @@ public class GameStateController {
 			switch(newState) {
 				case INITIALIZING:
 					gameStateRegistry.resetGame();
+					playerRegistry.reset();
+					pacdotRegistry.resetPacdots();
 					break;
 				case IN_PROGRESS:
 					gameStateRegistry.startGame();
