@@ -72,13 +72,9 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void setPlayersReadyToActive() {
-		List<Player> playerList = playerRepository.getAllPlayers();
-		for(Player player : playerList) {
-			if(player.getState() == PlayerState.READY) {
-				player.setState(PlayerState.ACTIVE);
-			}
-		}
+	public void changePlayerStates(PlayerState fromState, PlayerState toState)
+			throws NullPointerException {
+		playerRepository.changePlayerStates(fromState, toState);
 	}
 
 	@Override

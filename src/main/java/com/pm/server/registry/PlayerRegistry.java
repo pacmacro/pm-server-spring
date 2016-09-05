@@ -18,7 +18,8 @@ public interface PlayerRegistry {
 
 	void setPlayerStateByName(PlayerName name, PlayerState state);
 
-	void setPlayersReadyToActive();
+	void changePlayerStates(PlayerState fromState, PlayerState toState)
+			throws NullPointerException;
 
 	void reset();
 

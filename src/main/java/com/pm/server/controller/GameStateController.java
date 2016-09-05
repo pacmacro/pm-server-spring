@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.GameStateContainer;
+import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.game.GameState;
@@ -82,6 +83,9 @@ public class GameStateController {
 					break;
 				case IN_PROGRESS:
 					gameStateRegistry.startGame();
+					playerRegistry.changePlayerStates(
+							PlayerState.READY, PlayerState.ACTIVE
+					);
 					break;
 				case PAUSED:
 					gameStateRegistry.pauseGame();

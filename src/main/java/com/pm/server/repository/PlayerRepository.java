@@ -24,6 +24,9 @@ public interface PlayerRepository {
 
 	void setPlayerStateByName(PlayerName name, PlayerState state);
 
+	void changePlayerStates(PlayerState fromState, PlayerState toState)
+			throws NullPointerException;
+
 	void clearPlayers();
 
 	Integer numOfPlayers();

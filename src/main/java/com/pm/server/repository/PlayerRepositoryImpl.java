@@ -152,6 +152,22 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
+	public void changePlayerStates(PlayerState fromState, PlayerState toState)
+			throws NullPointerException {
+		if(fromState == null || toState == null) {
+			throw new NullPointerException(
+					"changePlayerStates() was given a null state."
+			);
+		}
+
+		for(Player player : playerList) {
+			if(player.getState() == fromState) {
+				player.setState(toState);
+			}
+		}
+	}
+
+	@Override
 	public Integer numOfPlayers() {
 		return playerList.size();
 	}
