@@ -25,8 +25,8 @@ import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
 
 @RestController
-@RequestMapping("/gamestate")
-public class GameStateController {
+@RequestMapping("/admin/gamestate")
+public class AdminGameStateController {
 
 	@Autowired
 	private GameStateRegistry gameStateRegistry;
@@ -38,7 +38,7 @@ public class GameStateController {
 	private PacdotRegistry pacdotRegistry;
 
 	private final static Logger log =
-			LogManager.getLogger(GameStateController.class.getName());
+			LogManager.getLogger(AdminGameStateController.class.getName());
 
 	@RequestMapping(
 			value="",
