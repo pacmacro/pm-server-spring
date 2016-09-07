@@ -14,6 +14,8 @@ public interface PlayerRegistry {
 
 	List<Player> getAllPlayers();
 
+	boolean allPlayersReady();
+
 	void setPlayerLocationByName(PlayerName name, Coordinate location);
 
 	void setPlayerStateByName(PlayerName name, PlayerState state);

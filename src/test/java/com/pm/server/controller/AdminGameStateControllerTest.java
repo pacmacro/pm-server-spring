@@ -19,12 +19,12 @@ import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.request.StringStateContainer;
 import com.pm.server.utils.JsonUtils;
 
-public class GameStateControllerTest extends ControllerTestTemplate {
+public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 	@Autowired
 	private GameStateRegistry gameStateRegistry;
 
-	private static final String BASE_MAPPING = "/gamestate";
+	private static final String BASE_MAPPING = "/admin/gamestate";
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;

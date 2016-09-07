@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.GameStateContainer;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
@@ -25,8 +26,8 @@ import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
 
 @RestController
-@RequestMapping("/gamestate")
-public class GameStateController {
+@RequestMapping("/admin/gamestate")
+public class AdminGameStateController {
 
 	@Autowired
 	private GameStateRegistry gameStateRegistry;
@@ -38,7 +39,7 @@ public class GameStateController {
 	private PacdotRegistry pacdotRegistry;
 
 	private final static Logger log =
-			LogManager.getLogger(GameStateController.class.getName());
+			LogManager.getLogger(AdminGameStateController.class.getName());
 
 	@RequestMapping(
 			value="",
@@ -95,6 +96,9 @@ public class GameStateController {
 					break;
 				case FINISHED_GHOSTS_WIN:
 					gameStateRegistry.setWinnerGhosts();
+					playerRegistry
+							.getPlayerByName(PlayerName.Pacman)
+							.setState(PlayerState.CAPTURED);
 					break;
 			}
 		}
