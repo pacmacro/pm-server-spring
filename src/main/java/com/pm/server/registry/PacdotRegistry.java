@@ -27,6 +27,13 @@ public interface PacdotRegistry {
 	List<Pacdot> getAllPacdots();
 
 	/**
+	 * Returns whether all Pacdots have been eaten.
+	 * 
+	 * @return Whether all Pacdots have been eaten
+	 */
+	boolean allPacdotsEaten();
+
+	/**
 	 * Sets the eaten status of a pacdot to true/false.
 	 * 
 	 * Idempotent (e.g. eaten to eaten is valid)

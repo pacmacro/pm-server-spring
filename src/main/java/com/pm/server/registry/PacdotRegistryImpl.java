@@ -80,6 +80,19 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		return pacdotRepository.getAllPacdots();
 	}
 
+	// TODO: Inefficient, but I am on an extremely tight schedule right now.
+	// Even a counter variable would be better.
+	@Override
+	public boolean allPacdotsEaten() {
+		List<Pacdot> pacdotList = pacdotRepository.getAllPacdots();
+		for(Pacdot pacdot : pacdotList) {
+			if(!pacdot.getEaten()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	@Override
 	public void setEatenStatusByLocation(Coordinate location, boolean eaten)
 			throws NullPointerException {

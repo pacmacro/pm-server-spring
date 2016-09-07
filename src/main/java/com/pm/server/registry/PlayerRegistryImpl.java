@@ -79,6 +79,11 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			if(powerDotEaten) {
 				activatePowerup();
 			}
+
+			if(pacdotRegistry.allPacdotsEaten()) {
+				gameStateRegistry.setWinnerPacman();
+			}
+
 		}
 
 	}
