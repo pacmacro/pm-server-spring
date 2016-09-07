@@ -114,6 +114,11 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		return powerDotEaten;
 	}
 
+	@Override
+	public void resetPacdots() {
+		pacdotRepository.resetPacdots();
+	}
+
 	private List<CoordinateImpl> readPacdotListFromFile(String filename)
 			throws Exception {
 

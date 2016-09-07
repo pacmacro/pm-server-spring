@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
+import com.pm.server.game.GameState;
 import com.pm.server.player.Player;
 import com.pm.server.player.PlayerImpl;
 import com.pm.server.repository.PlayerRepository;
@@ -26,6 +27,9 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@Autowired
 	private PacdotRegistry pacdotRegistry;
+
+	@Autowired
+	private GameStateRegistry gameStateRegistry;
 
 	private static Integer activePowerups = 0;
 
@@ -56,7 +60,9 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
 		playerRepository.setPlayerLocationByName(name, location);
 
-		if(name == PlayerName.Pacman) {
+		if(name == PlayerName.Pacman &&
+		   gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS) {
+
 			Boolean powerDotEaten =
 					pacdotRegistry.eatPacdotsNearLocation(location);
 			if(powerDotEaten) {
@@ -72,13 +78,9 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void setPlayersReadyToActive() {
-		List<Player> playerList = playerRepository.getAllPlayers();
-		for(Player player : playerList) {
-			if(player.getState() == PlayerState.READY) {
-				player.setState(PlayerState.ACTIVE);
-			}
-		}
+	public void changePlayerStates(PlayerState fromState, PlayerState toState)
+			throws NullPointerException {
+		playerRepository.changePlayerStates(fromState, toState);
 	}
 
 	@Override
@@ -118,9 +120,10 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			{
 
 				activePowerups--;
-				// TODO: Add check that gamestate is still active before
-				// resetting Pacman's state to ACTIVE
-				if(activePowerups == 0) {
+				if(	activePowerups == 0 &&
+						(gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS ||
+						gameStateRegistry.getCurrentState() == GameState.PAUSED)
+						) {
 					setPlayerStateByName(PlayerName.Pacman, PlayerState.ACTIVE);
 				}
 

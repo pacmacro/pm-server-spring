@@ -61,6 +61,14 @@ public interface PacdotRepository {
 			throws NullPointerException;
 
 	/**
+	 * Resets all Pacdots to uneaten.
+	 * 
+	 * Idempotent (e.g. can be used when no Pacdots have been eaten yet)
+	 * 
+	 */
+	void resetPacdots();
+
+	/**
 	 * Removes all pacdots from the repository.
 	 */
 	void clear();

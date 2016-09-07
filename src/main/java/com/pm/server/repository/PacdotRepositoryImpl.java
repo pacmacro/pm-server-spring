@@ -130,6 +130,13 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 	}
 
 	@Override
+	public void resetPacdots() {
+		for(Pacdot pacdot : pacdotList) {
+			pacdot.setEaten(false);
+		}
+	}
+
+	@Override
 	public void clear() {
 		pacdotList = new ArrayList<Pacdot>();
 	}
