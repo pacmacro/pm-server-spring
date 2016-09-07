@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Pacdot;
+import com.pm.server.datatype.ScoreContainer;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
@@ -30,6 +31,35 @@ public class PacdotController {
 
 	private final static Logger log =
 			LogManager.getLogger(PacdotController.class.getName());
+
+	@RequestMapping(
+			value="/score",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	@ResponseStatus(value = HttpStatus.OK)
+	public ScoreContainer getGameScore(HttpServletResponse response) {
+
+		log.debug("Mapped GET /pacdots/score");
+
+		Integer score = 0;
+		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		for(Pacdot pacdot : pacdotList) {
+			if(pacdot.getEaten()) {
+				if(pacdot.getPowerdot()) {
+					score += 50;
+				}
+				else {
+					score += 10;
+				}
+			}
+		}
+
+		ScoreContainer scoreContainer = new ScoreContainer();
+		scoreContainer.setScore(score);
+		return scoreContainer;
+
+	}
 
 	@RequestMapping(
 			value="/count",
