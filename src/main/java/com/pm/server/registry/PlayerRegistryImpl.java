@@ -120,9 +120,10 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			{
 
 				activePowerups--;
-				// TODO: Add check that gamestate is still active before
-				// resetting Pacman's state to ACTIVE
-				if(activePowerups == 0) {
+				if(	activePowerups == 0 &&
+						(gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS ||
+						gameStateRegistry.getCurrentState() == GameState.PAUSED)
+						) {
 					setPlayerStateByName(PlayerName.Pacman, PlayerState.ACTIVE);
 				}
 
