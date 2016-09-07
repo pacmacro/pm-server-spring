@@ -57,6 +57,17 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
+	public boolean allPlayersReady() {
+		List<Player> playerList = playerRepository.getAllPlayers();
+		for(Player player : playerList) {
+			if(player.getState() != PlayerState.READY) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
 		playerRepository.setPlayerLocationByName(name, location);
 
