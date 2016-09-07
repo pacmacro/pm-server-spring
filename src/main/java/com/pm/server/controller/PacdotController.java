@@ -51,9 +51,9 @@ public class PacdotController {
 			}
 			else {
 				countResponse.incrementUneaten();
-			}
-			if(pacdot.getPowerdot()) {
-				countResponse.incrementUneatenPowerdots();
+				if(pacdot.getPowerdot()) {
+					countResponse.incrementUneatenPowerdots();
+				}
 			}
 
 		}
