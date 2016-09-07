@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.GameStateContainer;
+import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
@@ -95,6 +96,9 @@ public class AdminGameStateController {
 					break;
 				case FINISHED_GHOSTS_WIN:
 					gameStateRegistry.setWinnerGhosts();
+					playerRegistry
+							.getPlayerByName(PlayerName.Pacman)
+							.setState(PlayerState.CAPTURED);
 					break;
 			}
 		}
