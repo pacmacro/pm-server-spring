@@ -99,14 +99,6 @@ public class PlayerController {
 
 		playerRegistry.setPlayerLocationByName(name, location);
 		playerRegistry.setPlayerStateByName(name, PlayerState.READY);
-
-		if(playerRegistry.allPlayersReady()) {
-			gameStateRegistry.startGame();
-			playerRegistry.changePlayerStates(
-					PlayerState.READY, PlayerState.ACTIVE
-			);
-		}
-
 	}
 
 	@RequestMapping(
