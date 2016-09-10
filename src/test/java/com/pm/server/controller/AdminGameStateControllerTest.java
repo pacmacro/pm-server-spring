@@ -1,9 +1,7 @@
 package com.pm.server.controller;
 
 import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -41,23 +39,6 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 		if(gameStateRegistry.getCurrentState() != GameState.INITIALIZING) {
 			gameStateRegistry.resetGame();
 		}
-
-	}
-
-	@Test
-	public void unitTest_getGameState() throws Exception {
-
-		// Given
-		final String path = pathForGetGameState();
-
-		// When
-		mockMvc
-				.perform(get(path))
-
-		// Then
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.state")
-						.value(GameState.INITIALIZING.toString()));
 
 	}
 
@@ -550,10 +531,6 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 		// Then
 				.andExpect(status().isConflict());
 
-	}
-
-	private String pathForGetGameState() {
-		return BASE_MAPPING;
 	}
 
 	private String pathForPutGameState() {

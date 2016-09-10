@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.datatype.GameStateContainer;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -40,22 +39,6 @@ public class AdminGameStateController {
 
 	private final static Logger log =
 			LogManager.getLogger(AdminGameStateController.class.getName());
-
-	@RequestMapping(
-			value="",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public GameStateContainer resetPacdots(HttpServletResponse response) {
-
-		log.info("Mapped GET /admin/gamestate");
-
-		GameStateContainer stateContainer = new GameStateContainer();
-		stateContainer.setState(gameStateRegistry.getCurrentState());
-		return stateContainer;
-
-	}
 
 	@RequestMapping(
 			value = "",
