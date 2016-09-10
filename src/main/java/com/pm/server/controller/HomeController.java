@@ -21,7 +21,7 @@ public class HomeController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public String home() {
 
-		log.debug("Mapped GET /");
+		log.info("Mapped GET /");
 
 		return "Welcome to the Pac Macro server!";
 	}

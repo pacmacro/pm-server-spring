@@ -65,8 +65,8 @@ public class PlayerController {
 			ConflictException,
 			NotFoundException {
 
-		log.debug("Mapped POST /player/{}", playerName);
-		log.debug("Request body: {}", JsonUtils.objectToJson(requestBody));
+		log.info("Mapped POST /player/{}", playerName);
+		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
 
 		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
 		playerNameRequest.name = playerName;
@@ -76,7 +76,7 @@ public class PlayerController {
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(requestBody);
 
-		log.debug("Attempting to select Player {} at ({}, {}).",
+		log.info("Attempting to select Player {} at ({}, {}).",
 				name,
 				location.getLatitude(),
 				location.getLongitude()
@@ -121,7 +121,7 @@ public class PlayerController {
 			NotFoundException,
 			InternalServerErrorException {
 
-		log.debug("Mapped DELETE /player/{}", playerName);
+		log.info("Mapped DELETE /player/{}", playerName);
 
 		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
 		playerNameRequest.name = playerName;
@@ -159,7 +159,7 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new InternalServerErrorException(errorMessage);
 		}
-		log.debug("Player {} was succesfully deselected", name);
+		log.info("Player {} was succesfully deselected", name);
 
 		log.debug("Setting Player {} to default location", name);
 		player.resetLocation();
@@ -177,7 +177,7 @@ public class PlayerController {
 			HttpServletResponse response)
 			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped GET /player/{}/location", playerName);
+		log.info("Mapped GET /player/{}/location", playerName);
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
@@ -214,7 +214,7 @@ public class PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<PlayerNameAndLocationResponse> getAllPlayerLocations() {
 
-		log.debug("Mapped GET /player/locations");
+		log.info("Mapped GET /player/locations");
 
 		List<PlayerNameAndLocationResponse> playerResponseList = new ArrayList<PlayerNameAndLocationResponse>();
 
@@ -255,7 +255,7 @@ public class PlayerController {
 			HttpServletResponse response)
 			throws BadRequestException, NotFoundException {
 
-		log.debug("Mapped GET /player/{}/state", playerName);
+		log.info("Mapped GET /player/{}/state", playerName);
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
@@ -276,7 +276,7 @@ public class PlayerController {
 
 		String objectString = JsonUtils.objectToJson(playerStateResponse);
 		if(objectString != null) {
-			log.debug("Returning playerStateResponse: {}", objectString);
+			log.info("Returning Player " + playerName + " with state {}", objectString);
 		}
 
 		return playerStateResponse;
@@ -290,7 +290,7 @@ public class PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<PlayerNameAndPlayerStateResponse> getAllPlayerStates() {
 
-		log.debug("Mapped GET /player/states");
+		log.info("Mapped GET /player/states");
 
 		List<PlayerNameAndPlayerStateResponse> playerResponseList =
 				new ArrayList<PlayerNameAndPlayerStateResponse>();
@@ -315,7 +315,7 @@ public class PlayerController {
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
 		if(objectString != null) {
-			log.debug("Returning playerResponse: {}", objectString);
+			log.debug("Returning Player states: {}", objectString);
 		}
 
 		return playerResponseList;
@@ -329,7 +329,7 @@ public class PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<PlayerDetailsResponse> getAllPlayerDetails() {
 
-		log.debug("Mapped GET /player/details");
+		log.info("Mapped GET /player/details");
 
 		List<PlayerDetailsResponse> playerResponseList =
 				new ArrayList<PlayerDetailsResponse>();
@@ -355,7 +355,7 @@ public class PlayerController {
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
 		if(objectString != null) {
-			log.debug("Returning playerResponse: {}", objectString);
+			log.debug("Returning player details: {}", objectString);
 		}
 
 		return playerResponseList;
@@ -373,8 +373,8 @@ public class PlayerController {
 			ConflictException,
 			NotFoundException {
 
-		log.debug("Mapped PUT /player/{}/location", playerName);
-		log.debug("Request body: {}", JsonUtils.objectToJson(locationRequest));
+		log.info("Mapped PUT /player/{}/location", playerName);
+		log.info("Request body: {}", JsonUtils.objectToJson(locationRequest));
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
@@ -401,7 +401,7 @@ public class PlayerController {
 			throw new ConflictException(errorMessage);
 		}
 
-		log.debug(
+		log.info(
 				"Setting Player {} to ({}, {})",
 				name, location.getLatitude(), location.getLongitude()
 		);
@@ -420,8 +420,8 @@ public class PlayerController {
 			ConflictException,
 			NotFoundException {
 
-		log.debug("Mapped PUT /player/{}/state", playerName);
-		log.debug("Request body: {}", JsonUtils.objectToJson(stateRequest));
+		log.info("Mapped PUT /player/{}/state", playerName);
+		log.info("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
@@ -436,7 +436,7 @@ public class PlayerController {
 					"Player " +
 					name +
 					" was not found.";
-			log.debug(errorMessage);
+			log.warn(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
 
@@ -468,7 +468,7 @@ public class PlayerController {
 			throw new ConflictException(errorMessage);
 		}
 
-		log.debug(
+		log.info(
 				"Changing Player {} from state {} to {}",
 				name, player.getState(), state
 		);

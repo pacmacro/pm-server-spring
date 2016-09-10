@@ -34,12 +34,13 @@ public class AdminController {
 	@ResponseStatus(value = HttpStatus.CREATED)
 	public void resetPacdots(HttpServletResponse response) {
 
-		log.debug("Mapped POST /admin/pacdots/reset");
+		log.info("Mapped POST /admin/pacdots/reset");
 
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 			pacdot.setEaten(false);
 		}
+		log.info("All pacdots successfully reset");
 
 	}
 

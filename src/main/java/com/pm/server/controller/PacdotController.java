@@ -21,6 +21,7 @@ import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
 import com.pm.server.response.PacdotResponse;
 import com.pm.server.response.PacdotUneatenResponse;
+import com.pm.server.utils.JsonUtils;
 
 @RestController
 @RequestMapping("/pacdots")
@@ -40,7 +41,7 @@ public class PacdotController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public ScoreContainer getGameScore(HttpServletResponse response) {
 
-		log.debug("Mapped GET /pacdots/score");
+		log.info("Mapped GET /pacdots/score");
 
 		Integer score = 0;
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
@@ -55,10 +56,11 @@ public class PacdotController {
 			}
 		}
 
+		log.info("Calculated score {}", score);
+
 		ScoreContainer scoreContainer = new ScoreContainer();
 		scoreContainer.setScore(score);
 		return scoreContainer;
-
 	}
 
 	@RequestMapping(
@@ -69,7 +71,7 @@ public class PacdotController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public PacdotCountResponse getPacdotCount(HttpServletResponse response) {
 
-		log.debug("Mapped GET /pacdots/count");
+		log.info("Mapped GET /pacdots/count");
 
 		PacdotCountResponse countResponse = new PacdotCountResponse();
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
@@ -99,7 +101,7 @@ public class PacdotController {
 	public List<PacdotUneatenResponse>
 			getUneatenPacdots(HttpServletResponse response) {
 
-		log.debug("Mapped GET /pacdots/uneaten");
+		log.info("Mapped GET /pacdots/uneaten");
 
 		List<PacdotUneatenResponse> responseList = new ArrayList<PacdotUneatenResponse>();
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
@@ -118,6 +120,10 @@ public class PacdotController {
 			}
 		}
 
+		String objectString = JsonUtils.objectToJson(responseList);
+		if(objectString != null) {
+			log.trace("Returning uneaten pacdots: {}", objectString);
+		}
 		return responseList;
 
 	}
@@ -130,7 +136,7 @@ public class PacdotController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public List<PacdotResponse> getAllPacdots(HttpServletResponse response) {
 
-		log.debug("Mapped GET /pacdots");
+		log.info("Mapped GET /pacdots");
 
 		List<PacdotResponse> responseList = new ArrayList<PacdotResponse>();
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
@@ -148,8 +154,11 @@ public class PacdotController {
 			responseList.add(pacdotResponse);
 		}
 
+		String objectString = JsonUtils.objectToJson(responseList);
+		if(objectString != null) {
+			log.trace("Returning pacdot details: {}", objectString);
+		}
 		return responseList;
-
 	}
 
 }

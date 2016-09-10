@@ -49,7 +49,7 @@ public class AdminGameStateController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public GameStateContainer resetPacdots(HttpServletResponse response) {
 
-		log.debug("Mapped GET /admin/gamestate");
+		log.info("Mapped GET /admin/gamestate");
 
 		GameStateContainer stateContainer = new GameStateContainer();
 		stateContainer.setState(gameStateRegistry.getCurrentState());
@@ -70,8 +70,8 @@ public class AdminGameStateController {
 			BadRequestException,
 			ConflictException {
 
-		log.debug("Mapped PUT /admin/gamestate");
-		log.debug("Request body: {}", JsonUtils.objectToJson(requestBody));
+		log.info("Mapped PUT /admin/gamestate");
+		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
 
 		GameState newState =
 				ValidationUtils.validateRequestBodyWithGameState(requestBody);
