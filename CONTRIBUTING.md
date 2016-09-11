@@ -73,3 +73,7 @@ docker ps
 The port mapping should look like `0.0.0.0:22222->8080/tcp`. This tells you that port 22222 of the host machine is mapped to port 8080 of the virtual machine. Now you can access the server from your local machine, with your URI looking something like `http://localhost:22222/`!
 
 From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 pacmacro/pm-server` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
+
+## Contributions
+
+When updating the server version, update it both in the file `pom.xml` (for the actual version)  and the file `Procfile` (to find the file to deploy).
