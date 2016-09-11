@@ -30,3 +30,10 @@ For example calls using cURL, see the directory [api-calls/](https://github.com/
 | Build System | [Apache Maven](https://maven.apache.org/) |
 | Deployment | [Heroku](http://heroku.com/) |
 | Application Container | [Docker](https://www.docker.com/) |
+
+## Credits
+
+This project is brought to you in part by:
+
+* ![Mobify logo](readme-img/mobify-logo.png) [Mobify](https://www.mobify.com/about/), a sponsor of this Pac Macro implementation
+* [Andy Lumb (alumb)](https://github.com/alumb), the original creator of Pac Macro with the SFU CSSS
