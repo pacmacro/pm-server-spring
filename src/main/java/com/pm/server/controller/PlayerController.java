@@ -24,7 +24,6 @@ import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.player.Player;
-import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
@@ -43,9 +42,6 @@ public class PlayerController {
 
 	@Autowired
 	private PlayerRegistry playerRegistry;
-
-	@Autowired
-	private GameStateRegistry gameStateRegistry;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerController.class.getName());

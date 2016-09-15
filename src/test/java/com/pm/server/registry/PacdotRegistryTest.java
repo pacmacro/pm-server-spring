@@ -107,6 +107,23 @@ public class PacdotRegistryTest extends TestTemplate {
 
 	}
 
+	@Test
+	public void unitTest_eatPacdotsNearLocation_eatenAgain() {
+
+		// Given
+		Coordinate location = new CoordinateImpl(pacdotList.get(0).getLocation());
+
+		Boolean powerDotEaten = pacdotRegistry.eatPacdotsNearLocation(location);
+		assertTrue(powerDotEaten);
+
+		// When
+		powerDotEaten = pacdotRegistry.eatPacdotsNearLocation(location);
+
+		// Then
+		assertFalse(powerDotEaten);
+
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void unitTest_eatPacdotsNearLocation_nullLocation() {
 

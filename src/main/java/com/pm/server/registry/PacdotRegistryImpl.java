@@ -113,17 +113,16 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		for(Pacdot pacdot : pacdotList) {
 
 			if(withinDistance(
-					location,
-					pacdot.getLocation(),
-					DISTANCE_TO_PACDOTS)) {
+					location, pacdot.getLocation(), DISTANCE_TO_PACDOTS
+				) && !pacdot.getEaten() ) {
+
 				pacdot.setEaten(true);
 				if(pacdot.getPowerdot() == true) {
 					powerDotEaten = true;
 				}
+
 			}
-
 		}
-
 		return powerDotEaten;
 	}
 
