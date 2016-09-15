@@ -18,11 +18,6 @@ public class CoordinateImpl implements Coordinate {
 		reset();
 	}
 
-	public void reset() {
-		latitude = 0.0;
-		longitude = 0.0;
-	}
-
 	public CoordinateImpl(Double latitude, Double longitude) {
 
 		log.trace(
@@ -32,6 +27,22 @@ public class CoordinateImpl implements Coordinate {
 
 		this.latitude = latitude;
 		this.longitude = longitude;
+	}
+
+	public CoordinateImpl(Coordinate coordinate) {
+
+		log.trace(
+				"Creating coordinate with latitude {} and longitude {}",
+				coordinate.getLatitude(), coordinate.getLongitude()
+		);
+
+		this.latitude = coordinate.getLatitude();
+		this.longitude = coordinate.getLongitude();
+	}
+
+	public void reset() {
+		latitude = 0.0;
+		longitude = 0.0;
 	}
 
 	@Override
