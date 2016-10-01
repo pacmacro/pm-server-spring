@@ -78,6 +78,10 @@ The port mapping should look like `0.0.0.0:22222->8080/tcp`. This tells you that
 
 From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 pacmacro/pm-server` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
 
+## Software Architecture
+
+When a request is received by the server, it is initially sent through a Controller, which does minimal parsing, verification, and data storage/retrieval. The relevant information is passed to a Manager (to be created upon an imminent refactor) which processes the information and retrieves/saves any relevant data to/from the Registries. Each Registry is a thin wrapper designed to provide basic contextual setup and access for a Repository, which is built simply to store and retrieve from a collection of a single unit of data.
+
 ## Deployment Pipeline
 
 When a change is pushed to GitHub, two processes are triggered and run concurrently. A [Docker image](https://hub.docker.com/r/pacmacro/pm-server) is built and a [Travis CI](travis-ci.org/pacmacro/pm-server) build is run. If the Travis CI build passes all tests, then Heroku will build the WAR file, deploy it to a Heroku dyno, and spin up the server at [this URL](http://pacmacro.herokuapp.com/).
