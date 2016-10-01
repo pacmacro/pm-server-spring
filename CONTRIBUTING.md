@@ -1,5 +1,9 @@
 # CONTRIBUTING
 
+## When Making Contributions
+
+When updating the server version, update it both in the file `pom.xml` (for the actual version)  and the file `Procfile` (to find the file to deploy).
+
 ## Setup
 
 ### Manual Setup / Development Setup
@@ -74,6 +78,6 @@ The port mapping should look like `0.0.0.0:22222->8080/tcp`. This tells you that
 
 From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 pacmacro/pm-server` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
 
-## Contributions
+## Deployment Pipeline
 
-When updating the server version, update it both in the file `pom.xml` (for the actual version)  and the file `Procfile` (to find the file to deploy).
+When a change is pushed to GitHub, two processes are triggered and run concurrently. A [Docker image](https://hub.docker.com/r/pacmacro/pm-server) is built and a [Travis CI](travis-ci.org/pacmacro/pm-server) build is run. If the Travis CI build passes all tests, then Heroku will build the WAR file, deploy it to a Heroku dyno, and spin up the server at [this URL](http://pacmacro.herokuapp.com/).
