@@ -12,3 +12,4 @@ notifications:
   email:
     on_success: change
     on_failure: always
+  slack: jleung-services:uoE4cCbtpfyBZkeYFLaOC3if
