@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.PmServerException;
 import com.pm.server.datatype.Player;
-import com.pm.server.exceptionhttp.BadRequestException;
-import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.game.GameState;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PacdotRegistry;
@@ -48,9 +47,7 @@ public class AdminGameStateController {
 	public void changeGameState(
 			@RequestBody StringStateContainer requestBody,
 			HttpServletResponse response)
-			throws
-			BadRequestException,
-			ConflictException {
+			throws PmServerException {
 
 		log.info("Mapped PUT /admin/gamestate");
 		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
@@ -85,7 +82,7 @@ public class AdminGameStateController {
 			}
 		}
 		catch(IllegalStateException e) {
-			throw new ConflictException(e.getMessage());
+			throw new PmServerException(HttpStatus.CONFLICT, e.getMessage());
 		}
 
 	}

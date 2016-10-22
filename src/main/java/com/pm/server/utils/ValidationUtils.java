@@ -2,11 +2,11 @@ package com.pm.server.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 
+import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.exceptionhttp.BadRequestException;
-import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.game.GameState;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
@@ -20,17 +20,17 @@ public class ValidationUtils {
 
 	public static Player.Name validateRequestWithName(
 			PlayerNameRequest playerNameRequest)
-			throws BadRequestException, NotFoundException {
+			throws PmServerException {
 
 		if(playerNameRequest == null) {
 			String errorMessage = "Request body requires a name.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 		else if(playerNameRequest.name == null) {
 			String errorMessage = "Request body requires a name.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		Player.Name name;
@@ -42,7 +42,7 @@ public class ValidationUtils {
 
 			String errorMessage = "Request body requires a valid name.";
 			log.warn(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 
 		return name;
@@ -51,7 +51,7 @@ public class ValidationUtils {
 
 	public static Coordinate validateRequestBodyWithLocation(
 			LocationRequest locationRequest)
-			throws BadRequestException {
+			throws PmServerException {
 
 		String errorMessage = null;
 
@@ -72,7 +72,7 @@ public class ValidationUtils {
 
 		if(errorMessage != null) {
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		return new Coordinate(
@@ -83,17 +83,17 @@ public class ValidationUtils {
 
 	public static Player.State validateRequestBodyWithState(
 			PlayerStateRequest stateRequest)
-			throws BadRequestException {
+			throws PmServerException {
 
 		if(stateRequest == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 		else if(stateRequest.state == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		Player.State state = null;
@@ -105,7 +105,7 @@ public class ValidationUtils {
 
 			String errorMessage = "Request body requires a valid state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		return state;
@@ -114,17 +114,17 @@ public class ValidationUtils {
 
 	public static GameState validateRequestBodyWithGameState(
 			StringStateContainer request)
-			throws BadRequestException {
+			throws PmServerException {
 
 		if(request == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 		else if(request.getState() == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		try {
@@ -134,7 +134,7 @@ public class ValidationUtils {
 			log.warn(e.getMessage());
 			String errorMessage = "Request body requires a valid state.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 	}

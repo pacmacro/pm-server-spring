@@ -16,12 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.exceptionhttp.BadRequestException;
-import com.pm.server.exceptionhttp.ConflictException;
-import com.pm.server.exceptionhttp.InternalServerErrorException;
-import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
@@ -54,10 +51,7 @@ public class PlayerController {
 			@PathVariable String playerName,
 			@RequestBody(required = false)
 			LocationRequest requestBody)
-			throws
-			BadRequestException,
-			ConflictException,
-			NotFoundException {
+			throws PmServerException {
 
 		log.info("Mapped POST /player/{}", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
@@ -80,7 +74,7 @@ public class PlayerController {
 		if(player == null) {
 			String errorMessage = name + " is not a valid Player name.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 		else if(player.getState() != Player.State.UNINITIALIZED) {
 			String errorMessage =
@@ -88,7 +82,7 @@ public class PlayerController {
 					name +
 					" has already been selected.";
 			log.warn(errorMessage);
-			throw new ConflictException(errorMessage);
+			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
 
 		playerRegistry.setPlayerLocationByName(name, location);
@@ -103,9 +97,7 @@ public class PlayerController {
 	public void deselectPlayer(
 			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws BadRequestException,
-			NotFoundException,
-			InternalServerErrorException {
+			throws PmServerException {
 
 		log.info("Mapped DELETE /player/{}", playerName);
 
@@ -121,7 +113,7 @@ public class PlayerController {
 					name +
 					" was not found.";
 			log.warn(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 		else if(player.getState() == Player.State.UNINITIALIZED) {
 			String errorMessage =
@@ -129,7 +121,7 @@ public class PlayerController {
 					name +
 					" has not yet been selected.";
 			log.warn(errorMessage);
-			throw new BadRequestException(errorMessage);
+			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
 		try {
@@ -143,7 +135,9 @@ public class PlayerController {
 					name +
 					" was found but could not be deselected.";
 			log.warn(errorMessage);
-			throw new InternalServerErrorException(errorMessage);
+			throw new PmServerException(
+					HttpStatus.INTERNAL_SERVER_ERROR, errorMessage
+			);
 		}
 		log.info("Player {} was succesfully deselected", name);
 
@@ -161,7 +155,7 @@ public class PlayerController {
 	public LocationResponse getPlayerLocation(
 			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws BadRequestException, NotFoundException {
+			throws PmServerException {
 
 		log.info("Mapped GET /player/{}/location", playerName);
 
@@ -177,7 +171,7 @@ public class PlayerController {
 					name +
 					" was found in the registry.";
 			log.debug(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 
 		LocationResponse locationResponse = new LocationResponse();
@@ -239,7 +233,7 @@ public class PlayerController {
 	public PlayerStateResponse getPlayerState(
 			@PathVariable String playerName,
 			HttpServletResponse response)
-			throws BadRequestException, NotFoundException {
+			throws PmServerException {
 
 		log.info("Mapped GET /player/{}/state", playerName);
 
@@ -254,7 +248,7 @@ public class PlayerController {
 					name +
 					" was found in the registry.";
 			log.debug(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 
 		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
@@ -355,9 +349,7 @@ public class PlayerController {
 	public void setPlayerLocation(
 			@PathVariable String playerName,
 			@RequestBody LocationRequest locationRequest)
-			throws BadRequestException,
-			ConflictException,
-			NotFoundException {
+			throws PmServerException {
 
 		log.info("Mapped PUT /player/{}/location", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(locationRequest));
@@ -376,7 +368,7 @@ public class PlayerController {
 					name +
 					" was not found.";
 			log.debug(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 		else if(player.getState() == Player.State.UNINITIALIZED) {
 			String errorMessage =
@@ -384,7 +376,7 @@ public class PlayerController {
 			        name +
 			        " has not been selected yet, so a location cannot be set.";
 			log.warn(errorMessage);
-			throw new ConflictException(errorMessage);
+			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
 
 		log.info(
@@ -402,9 +394,7 @@ public class PlayerController {
 	public void setPlayerState(
 			@PathVariable String playerName,
 			@RequestBody PlayerStateRequest stateRequest)
-			throws BadRequestException,
-			ConflictException,
-			NotFoundException {
+			throws PmServerException {
 
 		log.info("Mapped PUT /player/{}/state", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(stateRequest));
@@ -423,7 +413,7 @@ public class PlayerController {
 					name +
 					" was not found.";
 			log.warn(errorMessage);
-			throw new NotFoundException(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
 		}
 
 		// Illegal state changes
@@ -434,7 +424,7 @@ public class PlayerController {
 					"uninitialized player; use POST /player/{playerName} " +
 					"instead.";
 			log.warn(errorMessage);
-			throw new ConflictException(errorMessage);
+			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
 		else if(state == Player.State.UNINITIALIZED &&
 				state != player.getState()) {
@@ -443,7 +433,7 @@ public class PlayerController {
 					"initialized player to uninitialized; use " +
 					"DELETE /player/{playerName} instead.";
 			log.warn(errorMessage);
-			throw new ConflictException(errorMessage);
+			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
 
 		// Illegal player states
@@ -451,7 +441,7 @@ public class PlayerController {
 				state == Player.State.POWERUP) {
 			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
-			throw new ConflictException(errorMessage);
+			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
 
 		log.info(
