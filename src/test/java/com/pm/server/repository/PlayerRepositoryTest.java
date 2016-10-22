@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.player.Player;
@@ -39,15 +38,15 @@ public class PlayerRepositoryTest extends TestTemplate {
 	@Before
 	public void setUp() {
 
-		Coordinate player1_location = new CoordinateImpl(1.0, 0.1);
+		Coordinate player1_location = new Coordinate(1.0, 0.1);
 		player1 = new PlayerImpl(PlayerName.Blinky);
 		player1.setLocation(player1_location);
 
-		Coordinate player2_location = new CoordinateImpl(2.0, 0.2);
+		Coordinate player2_location = new Coordinate(2.0, 0.2);
 		player2 = new PlayerImpl(PlayerName.Clyde);
 		player2.setLocation(player2_location);
 
-		Coordinate player3_location = new CoordinateImpl(3.0, 0.3);
+		Coordinate player3_location = new Coordinate(3.0, 0.3);
 		player3 = new PlayerImpl(PlayerName.Pinky);
 		player3.setLocation(player3_location);
 
@@ -228,7 +227,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Given
 		addPlayer_failUponException(player1);
 		Coordinate oldPlayerLocation = player1.getLocation();
-		Coordinate newPlayerLocation = new CoordinateImpl(9.8, 7.6);
+		Coordinate newPlayerLocation = new Coordinate(9.8, 7.6);
 
 		// When
 		playerRepository.setPlayerLocationByName(player1.getName(), newPlayerLocation);

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.Pacdot;
 
 public class PacdotRepositoryTest extends TestTemplate {
@@ -35,19 +34,19 @@ public class PacdotRepositoryTest extends TestTemplate {
 	public void setUp() {
 
 		Pacdot pacdot1 = new Pacdot();
-		pacdot1.setLocation(new CoordinateImpl(123.456, 321.654));
+		pacdot1.setLocation(new Coordinate(123.456, 321.654));
 		pacdot1.setEaten(false);
 		pacdot1.setPowerdot(false);
 		pacdotList.add(pacdot1);
 
 		Pacdot pacdot2 = new Pacdot();
-		pacdot2.setLocation(new CoordinateImpl(390.412, 491.212));
+		pacdot2.setLocation(new Coordinate(390.412, 491.212));
 		pacdot2.setEaten(true);
 		pacdot2.setPowerdot(false);
 		pacdotList.add(pacdot2);
 
 		Pacdot pacdot3 = new Pacdot();
-		pacdot3.setLocation(new CoordinateImpl(221.156, 918.412));
+		pacdot3.setLocation(new Coordinate(221.156, 918.412));
 		pacdot3.setEaten(false);
 		pacdot3.setPowerdot(true);
 		pacdotList.add(pacdot3);

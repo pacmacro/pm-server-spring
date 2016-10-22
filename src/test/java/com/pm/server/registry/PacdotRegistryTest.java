@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.repository.PacdotRepository;
 
@@ -40,14 +39,14 @@ public class PacdotRegistryTest extends TestTemplate {
 		MockitoAnnotations.initMocks(this);
 
 		Pacdot pacdot1 = new Pacdot();
-		CoordinateImpl location1 = new CoordinateImpl(3919.12391013, 9488.49119489);
+		Coordinate location1 = new Coordinate(3919.12391013, 9488.49119489);
 		pacdot1.setLocation(location1);
 		pacdot1.setEaten(false);
 		pacdot1.setPowerdot(false);
 		pacdotList.add(pacdot1);
 
 		Pacdot pacdot2 = new Pacdot();
-		CoordinateImpl location2 = new CoordinateImpl(3919.12391012, 9488.49119488);
+		Coordinate location2 = new Coordinate(3919.12391012, 9488.49119488);
 		pacdot2.setLocation(location2);
 		pacdot2.setEaten(false);
 		pacdot2.setPowerdot(true);
@@ -79,7 +78,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		Pacdot pacdot = pacdotList.get(0);
 		assertFalse(pacdot.getEaten());
 
-		Coordinate location = new CoordinateImpl();
+		Coordinate location = new Coordinate();
 		location.setLatitude(pacdot.getLocation().getLatitude() + 0.0000001);
 		location.setLongitude(pacdot.getLocation().getLongitude() + 0.0000001);
 
@@ -95,7 +94,7 @@ public class PacdotRegistryTest extends TestTemplate {
 	public void unitTest_eatPacdotsNearLocation_distant() {
 
 		// Given
-		Coordinate location = new CoordinateImpl(-99999.0, -99999.0);
+		Coordinate location = new Coordinate(-99999.0, -99999.0);
 
 		// When
 		pacdotRegistry.eatPacdotsNearLocation(location);
@@ -111,7 +110,7 @@ public class PacdotRegistryTest extends TestTemplate {
 	public void unitTest_eatPacdotsNearLocation_eatenAgain() {
 
 		// Given
-		Coordinate location = new CoordinateImpl(pacdotList.get(0).getLocation());
+		Coordinate location = new Coordinate(pacdotList.get(0).getLocation());
 
 		Boolean powerDotEaten = pacdotRegistry.eatPacdotsNearLocation(location);
 		assertTrue(powerDotEaten);

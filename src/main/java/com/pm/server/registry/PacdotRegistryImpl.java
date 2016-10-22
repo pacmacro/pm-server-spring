@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.repository.PacdotRepository;
 
@@ -47,10 +46,10 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	@PostConstruct
 	public void postConstruct() throws Exception {
 
-		List<CoordinateImpl> locationList;
+		List<Coordinate> locationList;
 
 		locationList = readPacdotListFromFile(pacdotsFilename);
-		for(CoordinateImpl location : locationList) {
+		for(Coordinate location : locationList) {
 			Pacdot pacdot = new Pacdot();
 			pacdot.setLocation(location);
 			pacdot.setEaten(false);
@@ -59,7 +58,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		}
 
 		locationList = readPacdotListFromFile(powerdotsFilename);
-		for(CoordinateImpl location : locationList) {
+		for(Coordinate location : locationList) {
 			Pacdot pacdot = new Pacdot();
 			pacdot.setLocation(location);
 			pacdot.setEaten(false);
@@ -131,7 +130,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		pacdotRepository.resetPacdots();
 	}
 
-	private List<CoordinateImpl> readPacdotListFromFile(String filename)
+	private List<Coordinate> readPacdotListFromFile(String filename)
 			throws Exception {
 
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
@@ -145,7 +144,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		try {
 			return mapper.readValue(
 					inputStream,
-					new TypeReference<List<CoordinateImpl>>(){}
+					new TypeReference<List<Coordinate>>(){}
 			);
 		} catch (Exception e) {
 			log.fatal("Failed to read pacdot locations from file.");

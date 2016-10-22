@@ -27,7 +27,6 @@ import org.springframework.web.context.WebApplicationContext;
 import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
@@ -39,8 +38,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	private PlayerRegistry playerRegistry;
 
 	private static final List<Coordinate> randomCoordinateList = Arrays.asList(
-			new CoordinateImpl(12345.54321, 95837.39821),
-			new CoordinateImpl(49381.30982, 39399.49932)
+			new Coordinate(12345.54321, 95837.39821),
+			new Coordinate(49381.30982, 39399.49932)
 	);
 
 	private static final String BASE_MAPPING = "/player";
@@ -980,7 +979,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		Double longitude = JsonPath.read(jsonContent, "$.longitude");
 		assertNotNull(longitude);
 
-		return new CoordinateImpl(latitude, longitude);
+		return new Coordinate(latitude, longitude);
 
 	}
 

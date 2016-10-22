@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
@@ -77,7 +76,7 @@ public class ValidationUtils {
 			throw new BadRequestException(errorMessage);
 		}
 
-		return new CoordinateImpl(
+		return new Coordinate(
 				locationRequest.latitude, locationRequest.longitude
 		);
 

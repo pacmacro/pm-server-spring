@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.CoordinateImpl;
 import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
@@ -12,7 +11,7 @@ import com.pm.server.utils.JsonUtils;
 public class PlayerImpl implements Player {
 
 	protected final PlayerName name;
-	protected Coordinate location = new CoordinateImpl();
+	protected Coordinate location = new Coordinate();
 	protected PlayerState state = PlayerState.UNINITIALIZED;
 
 	private final static Logger log =
