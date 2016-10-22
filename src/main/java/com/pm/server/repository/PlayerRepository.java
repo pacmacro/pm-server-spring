@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 
 public interface PlayerRepository {
 
@@ -21,9 +20,9 @@ public interface PlayerRepository {
 
 	void setPlayerLocationByName(Player.Name name, Coordinate location);
 
-	void setPlayerStateByName(Player.Name name, PlayerState state);
+	void setPlayerStateByName(Player.Name name, Player.State state);
 
-	void changePlayerStates(PlayerState fromState, PlayerState toState)
+	void changePlayerStates(Player.State fromState, Player.State toState)
 			throws NullPointerException;
 
 	void clearPlayers();

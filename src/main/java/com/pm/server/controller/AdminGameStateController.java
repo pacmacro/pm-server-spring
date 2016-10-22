@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.game.GameState;
@@ -68,7 +67,7 @@ public class AdminGameStateController {
 				case IN_PROGRESS:
 					gameStateRegistry.startGame();
 					playerRegistry.changePlayerStates(
-							PlayerState.READY, PlayerState.ACTIVE
+							Player.State.READY, Player.State.ACTIVE
 					);
 					break;
 				case PAUSED:
@@ -81,7 +80,7 @@ public class AdminGameStateController {
 					gameStateRegistry.setWinnerGhosts();
 					playerRegistry
 							.getPlayerByName(Player.Name.Pacman)
-							.setState(PlayerState.CAPTURED);
+							.setState(Player.State.CAPTURED);
 					break;
 			}
 		}

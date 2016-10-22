@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.NotFoundException;
 import com.pm.server.game.GameState;
@@ -82,7 +81,7 @@ public class ValidationUtils {
 
 	}
 
-	public static PlayerState validateRequestBodyWithState(
+	public static Player.State validateRequestBodyWithState(
 			PlayerStateRequest stateRequest)
 			throws BadRequestException {
 
@@ -97,9 +96,9 @@ public class ValidationUtils {
 			throw new BadRequestException(errorMessage);
 		}
 
-		PlayerState state = null;
+		Player.State state = null;
 		try {
-			state = PlayerState.valueOf(stateRequest.state);
+			state = Player.State.valueOf(stateRequest.state);
 		}
 		catch(IllegalArgumentException e) {
 			log.warn(e.getMessage());

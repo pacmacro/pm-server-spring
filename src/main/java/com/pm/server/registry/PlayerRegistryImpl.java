@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.game.GameState;
 import com.pm.server.repository.PlayerRepository;
 
@@ -58,7 +57,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	public boolean allPlayersReady() {
 		List<Player> playerList = playerRepository.getAllPlayers();
 		for(Player player : playerList) {
-			if(player.getState() != PlayerState.READY) {
+			if(player.getState() != Player.State.READY) {
 				return false;
 			}
 		}
@@ -87,12 +86,12 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void setPlayerStateByName(Player.Name name, PlayerState state) {
+	public void setPlayerStateByName(Player.Name name, Player.State state) {
 		playerRepository.setPlayerStateByName(name, state);
 	}
 
 	@Override
-	public void changePlayerStates(PlayerState fromState, PlayerState toState)
+	public void changePlayerStates(Player.State fromState, Player.State toState)
 			throws NullPointerException {
 		playerRepository.changePlayerStates(fromState, toState);
 	}
@@ -102,7 +101,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 		List<Player> playerList = playerRepository.getAllPlayers();
 		for(Player player : playerList) {
-			player.setState(PlayerState.UNINITIALIZED);
+			player.setState(Player.State.UNINITIALIZED);
 			player.resetLocation();
 		}
 
@@ -125,7 +124,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	private void activatePowerup() {
 
-		setPlayerStateByName(Player.Name.Pacman, PlayerState.POWERUP);
+		setPlayerStateByName(Player.Name.Pacman, Player.State.POWERUP);
 		activePowerups++;
 
 		new Timer().schedule(new TimerTask() {
@@ -138,7 +137,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 						(gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS ||
 						gameStateRegistry.getCurrentState() == GameState.PAUSED)
 						) {
-					setPlayerStateByName(Player.Name.Pacman, PlayerState.ACTIVE);
+					setPlayerStateByName(Player.Name.Pacman, Player.State.ACTIVE);
 				}
 
 			}

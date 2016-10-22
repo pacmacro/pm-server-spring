@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
@@ -83,7 +82,7 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new BadRequestException(errorMessage);
 		}
-		else if(player.getState() != PlayerState.UNINITIALIZED) {
+		else if(player.getState() != Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player "+
 					name +
@@ -93,7 +92,7 @@ public class PlayerController {
 		}
 
 		playerRegistry.setPlayerLocationByName(name, location);
-		playerRegistry.setPlayerStateByName(name, PlayerState.READY);
+		playerRegistry.setPlayerStateByName(name, Player.State.READY);
 	}
 
 	@RequestMapping(
@@ -124,7 +123,7 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
-		else if(player.getState() == PlayerState.UNINITIALIZED) {
+		else if(player.getState() == Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player "+
 					name +
@@ -135,7 +134,7 @@ public class PlayerController {
 
 		try {
 			playerRegistry.setPlayerStateByName(
-					name, PlayerState.UNINITIALIZED
+					name, Player.State.UNINITIALIZED
 			);
 		}
 		catch(Exception e) {
@@ -379,7 +378,7 @@ public class PlayerController {
 			log.debug(errorMessage);
 			throw new NotFoundException(errorMessage);
 		}
-		else if(player.getState() == PlayerState.UNINITIALIZED) {
+		else if(player.getState() == Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player " +
 			        name +
@@ -414,7 +413,7 @@ public class PlayerController {
 		nameRequest.name = playerName;
 		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
 
-		PlayerState state =
+		Player.State state =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);
 
 		Player player = playerRegistry.getPlayerByName(name);
@@ -428,7 +427,7 @@ public class PlayerController {
 		}
 
 		// Illegal state changes
-		if(player.getState() == PlayerState.UNINITIALIZED &&
+		if(player.getState() == Player.State.UNINITIALIZED &&
 				player.getState() != state) {
 			String errorMessage =
 					"This operation cannot change the state of an unselected/" +
@@ -437,7 +436,7 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new ConflictException(errorMessage);
 		}
-		else if(state == PlayerState.UNINITIALIZED &&
+		else if(state == Player.State.UNINITIALIZED &&
 				state != player.getState()) {
 			String errorMessage =
 					"This operation cannot change the state of a selected/" +
@@ -449,7 +448,7 @@ public class PlayerController {
 
 		// Illegal player states
 		if(player.getName() != Player.Name.Pacman &&
-				state == PlayerState.POWERUP) {
+				state == Player.State.POWERUP) {
 			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
 			throw new ConflictException(errorMessage);

@@ -29,7 +29,6 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.utils.JsonUtils;
@@ -387,7 +386,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// Then
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.state")
-						.value(PlayerState.UNINITIALIZED.toString())
+						.value(Player.State.UNINITIALIZED.toString())
 				);
 
 	}
@@ -409,7 +408,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// Then
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.state")
-						.value(PlayerState.READY.toString())
+						.value(Player.State.READY.toString())
 				);
 
 
@@ -445,15 +444,15 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(jsonPath("$", hasSize(5)))  // 4 Ghosts + 1 Pacman
 
 				.andExpect(jsonPath("$[0].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[1].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[2].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[3].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[4].state")
-						.value(PlayerState.UNINITIALIZED.toString()));
+						.value(Player.State.UNINITIALIZED.toString()));
 
 	}
 
@@ -475,7 +474,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk())
 				.andExpect(
 						jsonPath("$[?(@.name == 'Inky')].state")
-						.value(PlayerState.READY.toString())
+						.value(Player.State.READY.toString())
 				);
 
 	}
@@ -495,27 +494,27 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(jsonPath("$", hasSize(5)))  // 4 Ghosts + 1 Pacman
 
 				.andExpect(jsonPath("$[0].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[0].location.latitude").value(0.0))
 				.andExpect(jsonPath("$[0].location.longitude").value(0.0))
 
 				.andExpect(jsonPath("$[1].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[1].location.latitude").value(0.0))
 				.andExpect(jsonPath("$[1].location.longitude").value(0.0))
 
 				.andExpect(jsonPath("$[2].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[2].location.latitude").value(0.0))
 				.andExpect(jsonPath("$[2].location.longitude").value(0.0))
 
 				.andExpect(jsonPath("$[3].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[3].location.latitude").value(0.0))
 				.andExpect(jsonPath("$[3].location.longitude").value(0.0))
 
 				.andExpect(jsonPath("$[4].state")
-						.value(PlayerState.UNINITIALIZED.toString()))
+						.value(Player.State.UNINITIALIZED.toString()))
 				.andExpect(jsonPath("$[4].location.latitude").value(0.0))
 				.andExpect(jsonPath("$[4].location.longitude").value(0.0));
 
@@ -539,7 +538,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk())
 				.andExpect(
 						jsonPath("$[?(@.name == 'Inky')].state")
-						.value(PlayerState.READY.toString())
+						.value(Player.State.READY.toString())
 				)
 				.andExpect(
 						jsonPath("$[?(@.name == 'Inky')].location.latitude")
@@ -656,7 +655,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.ACTIVE;
+		Player.State updatedState = Player.State.ACTIVE;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -671,7 +670,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getPlayerState_failUponException(player);
+		Player.State resultState = getPlayerState_failUponException(player);
 		assertEquals(updatedState, resultState);
 
 	}
@@ -684,7 +683,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.UNINITIALIZED;
+		Player.State updatedState = Player.State.UNINITIALIZED;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -699,7 +698,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getPlayerState_failUponException(player);
+		Player.State resultState = getPlayerState_failUponException(player);
 		assertEquals(updatedState, resultState);
 
 	}
@@ -715,7 +714,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.READY;
+		Player.State updatedState = Player.State.READY;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -730,7 +729,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 				.andExpect(status().isOk());
 
 		// Then
-		PlayerState resultState = getPlayerState_failUponException(player);
+		Player.State resultState = getPlayerState_failUponException(player);
 		assertEquals(updatedState, resultState);
 
 	}
@@ -741,7 +740,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// Given
 		String path = BASE_MAPPING + "/PLAYER_NAME/state";
 
-		PlayerState updatedState = PlayerState.UNINITIALIZED;
+		Player.State updatedState = Player.State.UNINITIALIZED;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -807,7 +806,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.READY;
+		Player.State updatedState = Player.State.READY;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -836,7 +835,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.UNINITIALIZED;
+		Player.State updatedState = Player.State.UNINITIALIZED;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -864,7 +863,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 		String path = pathForSetPlayerState(player);
 
-		PlayerState updatedState = PlayerState.POWERUP;
+		Player.State updatedState = Player.State.POWERUP;
 		PlayerStateContainer updatedStateContainer =
 				new PlayerStateContainer();
 		updatedStateContainer.state = updatedState;
@@ -984,7 +983,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private PlayerState getPlayerState_failUponException(Player.Name player) {
+	private Player.State getPlayerState_failUponException(Player.Name player) {
 
 		String path = pathForGetPlayerState(player);
 		String jsonContent = null;
@@ -1004,9 +1003,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		assertNotNull(jsonContent);
 		String stateString = JsonPath.read(jsonContent, "$.state");
 
-		PlayerState state = null;
+		Player.State state = null;
 		try {
-			state = PlayerState.valueOf(stateString);
+			state = Player.State.valueOf(stateString);
 		}
 		catch(IllegalArgumentException e) {
 			log.error(e.getMessage());

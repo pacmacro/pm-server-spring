@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 
 public class PlayerRepositoryTest extends TestTemplate {
 
@@ -279,7 +278,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Given
 		Player player = player1;
 		addPlayer_failUponException(player);
-		PlayerState newState = PlayerState.ACTIVE;
+		Player.State newState = Player.State.ACTIVE;
 
 		// When
 		playerRepository.setPlayerStateByName(player1.getName(), newState);
@@ -296,7 +295,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Given
 		Player player = player1;
 		addPlayer_failUponException(player);
-		PlayerState state = PlayerState.CAPTURED;
+		Player.State state = Player.State.CAPTURED;
 		playerRepository.setPlayerStateByName(player.getName(), state);
 
 		// When
@@ -314,7 +313,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Given
 		Player player = player1;
 		addPlayer_failUponException(player);
-		PlayerState newState = PlayerState.ACTIVE;
+		Player.State newState = Player.State.ACTIVE;
 
 		// When
 		playerRepository.setPlayerStateByName(null, newState);
@@ -345,7 +344,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// GIven
 		Player player = player1;
 		addPlayer_failUponException(player);
-		PlayerState illegalPlayerState = PlayerState.POWERUP;
+		Player.State illegalPlayerState = Player.State.POWERUP;
 
 		// When
 		playerRepository.setPlayerStateByName(

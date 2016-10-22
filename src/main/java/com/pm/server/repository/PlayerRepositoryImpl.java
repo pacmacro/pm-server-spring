@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
 
 @Repository
@@ -125,7 +124,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void setPlayerStateByName(Player.Name name, PlayerState state) {
+	public void setPlayerStateByName(Player.Name name, Player.State state) {
 
 		if(name == null) {
 			String errorMessage = "setplayerStateByName() was given a null name.";
@@ -151,7 +150,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void changePlayerStates(PlayerState fromState, PlayerState toState)
+	public void changePlayerStates(Player.State fromState, Player.State toState)
 			throws NullPointerException {
 		if(fromState == null || toState == null) {
 			throw new NullPointerException(

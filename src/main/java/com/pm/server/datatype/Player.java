@@ -9,7 +9,7 @@ public class Player {
 
 	protected final Name name;
 	protected Coordinate location = new Coordinate();
-	protected PlayerState state = PlayerState.UNINITIALIZED;
+	protected Player.State state = Player.State.UNINITIALIZED;
 
 	private final static Logger log =
 			LogManager.getLogger(Player.class.getName());
@@ -43,14 +43,14 @@ public class Player {
 		return location;
 	}
 
-	public void setState(PlayerState state) throws NullPointerException {
+	public void setState(Player.State state) throws NullPointerException {
 
 		if(state == null) {
 			String errorMessage = "setState() was given a null state.";
 			log.warn(errorMessage);
 			throw new NullPointerException(errorMessage);
 		}
-		else if(name != Name.Pacman && state == PlayerState.POWERUP) {
+		else if(name != Name.Pacman && state == Player.State.POWERUP) {
 			String errorMessage = "A Ghost cannot be set to a POWERUP state.";
 			log.error(errorMessage);
 			throw new IllegalArgumentException(errorMessage);
@@ -61,7 +61,7 @@ public class Player {
 
 	}
 
-	public PlayerState getState() {
+	public Player.State getState() {
 		return state;
 	}
 
@@ -71,6 +71,14 @@ public class Player {
 		Inky,
 		Pinky,
 		Clyde
+	}
+
+	public enum State {
+		UNINITIALIZED,
+		READY,
+		ACTIVE,
+		CAPTURED,
+		POWERUP
 	}
 
 }
