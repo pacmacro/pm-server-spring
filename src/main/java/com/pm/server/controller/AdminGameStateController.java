@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.PmServerException;
+import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
-import com.pm.server.game.GameState;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.registry.PlayerRegistry;

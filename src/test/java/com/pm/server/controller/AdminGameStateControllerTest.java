@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.pm.server.ControllerTestTemplate;
-import com.pm.server.game.GameState;
+import com.pm.server.datatype.GameState;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.request.StringStateContainer;
 import com.pm.server.utils.JsonUtils;

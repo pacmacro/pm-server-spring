@@ -1,4 +1,4 @@
-package com.pm.server.game;
+package com.pm.server.datatype;
 
 public enum GameState {
 

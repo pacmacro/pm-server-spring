@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
-import com.pm.server.game.GameState;
 import com.pm.server.repository.PlayerRepository;
 
 @Repository

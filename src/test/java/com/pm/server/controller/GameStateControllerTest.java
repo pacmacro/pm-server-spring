@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.pm.server.ControllerTestTemplate;
-import com.pm.server.game.GameState;
+import com.pm.server.datatype.GameState;
 import com.pm.server.registry.GameStateRegistry;
 
 public class GameStateControllerTest extends ControllerTestTemplate {

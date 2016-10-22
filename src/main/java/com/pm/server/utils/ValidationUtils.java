@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 
 import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
-import com.pm.server.game.GameState;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.PlayerStateRequest;

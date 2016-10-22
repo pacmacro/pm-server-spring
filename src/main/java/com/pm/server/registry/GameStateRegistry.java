@@ -1,6 +1,6 @@
 package com.pm.server.registry;
 
-import com.pm.server.game.GameState;
+import com.pm.server.datatype.GameState;
 
 public interface GameStateRegistry {
 
