@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -88,7 +89,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(post(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -109,7 +110,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(post(pathForInky)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -117,7 +118,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(post(pathForClyde)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -138,7 +139,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(post(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -146,7 +147,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(post(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 		)
 
 		// Then
@@ -164,7 +165,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// When
 		mockMvc
 				.perform(post(path)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -568,7 +569,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -593,7 +594,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -615,7 +616,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// When
 		mockMvc
 				.perform(put(path)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -637,7 +638,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -665,7 +666,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -693,7 +694,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -724,7 +725,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 				.andExpect(status().isOk());
 
@@ -750,7 +751,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -769,7 +770,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		// When
 		mockMvc
 				.perform(put(path)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -790,7 +791,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -816,7 +817,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -845,7 +846,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -873,7 +874,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		mockMvc
 				.perform(put(path)
 						.content(body)
-						.header("Content-Type", "application/json")
+						.contentType(MediaType.APPLICATION_JSON)
 				)
 
 		// Then
@@ -927,7 +928,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			mockMvc
 					.perform(post(path)
 							.content(body)
-							.header("Content-Type", "application/json")
+							.contentType(MediaType.APPLICATION_JSON)
 					)
 					.andExpect(status().isOk());
 		}
