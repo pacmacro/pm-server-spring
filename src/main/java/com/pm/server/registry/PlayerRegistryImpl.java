@@ -16,7 +16,6 @@ import com.pm.server.datatype.PlayerName;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.game.GameState;
 import com.pm.server.player.Player;
-import com.pm.server.player.PlayerImpl;
 import com.pm.server.repository.PlayerRepository;
 
 @Repository
@@ -118,7 +117,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 		log.debug("Attempting to recreate players");
 		Player player;
 		for(PlayerName playerName : PlayerName.values()) {
-			player = new PlayerImpl(playerName);
+			player = new Player(playerName);
 			playerRepository.addPlayer(player);
 		}
 		log.debug("Recreation of players completed");
