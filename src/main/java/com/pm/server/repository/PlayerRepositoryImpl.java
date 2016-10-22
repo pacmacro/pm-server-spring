@@ -8,9 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
-import com.pm.server.player.Player;
 import com.pm.server.utils.JsonUtils;
 
 @Repository
@@ -54,7 +53,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void deletePlayerByName(PlayerName name)
+	public void deletePlayerByName(Player.Name name)
 			throws IllegalArgumentException {
 
 		for(Player player : playerList) {
@@ -79,7 +78,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public Player getPlayerByName(PlayerName name) {
+	public Player getPlayerByName(Player.Name name) {
 
 		for(Player player : playerList) {
 			if(player.getName() == name) {
@@ -97,7 +96,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
+	public void setPlayerLocationByName(Player.Name name, Coordinate location) {
 
 		if(name == null) {
 			throw new NullPointerException("No name was given");
@@ -126,7 +125,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 	}
 
 	@Override
-	public void setPlayerStateByName(PlayerName name, PlayerState state) {
+	public void setPlayerStateByName(Player.Name name, PlayerState state) {
 
 		if(name == null) {
 			String errorMessage = "setplayerStateByName() was given a null name.";

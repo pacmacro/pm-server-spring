@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.NotFoundException;
@@ -19,7 +19,7 @@ public class ValidationUtils {
 	private final static Logger log =
 			LogManager.getLogger(ValidationUtils.class.getName());
 
-	public static PlayerName validateRequestWithName(
+	public static Player.Name validateRequestWithName(
 			PlayerNameRequest playerNameRequest)
 			throws BadRequestException, NotFoundException {
 
@@ -34,9 +34,9 @@ public class ValidationUtils {
 			throw new BadRequestException(errorMessage);
 		}
 
-		PlayerName name;
+		Player.Name name;
 		try {
-			name = PlayerName.valueOf(playerNameRequest.name);
+			name = Player.Name.valueOf(playerNameRequest.name);
 		}
 		catch(IllegalArgumentException e) {
 			log.warn(e.getMessage());

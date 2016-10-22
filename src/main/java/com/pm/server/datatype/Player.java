@@ -1,23 +1,20 @@
-package com.pm.server.player;
+package com.pm.server.datatype;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
-import com.pm.server.datatype.PlayerState;
 import com.pm.server.utils.JsonUtils;
 
 public class Player {
 
-	protected final PlayerName name;
+	protected final Name name;
 	protected Coordinate location = new Coordinate();
 	protected PlayerState state = PlayerState.UNINITIALIZED;
 
 	private final static Logger log =
 			LogManager.getLogger(Player.class.getName());
 
-	public Player(PlayerName name) {
+	public Player(Name name) {
 		if(name == null) {
 			throw new NullPointerException("The Player must have a name.");
 		}
@@ -28,7 +25,7 @@ public class Player {
 		location.reset();
 	}
 
-	public PlayerName getName() {
+	public Name getName() {
 		return name;
 	}
 
@@ -53,7 +50,7 @@ public class Player {
 			log.warn(errorMessage);
 			throw new NullPointerException(errorMessage);
 		}
-		else if(name != PlayerName.Pacman && state == PlayerState.POWERUP) {
+		else if(name != Name.Pacman && state == PlayerState.POWERUP) {
 			String errorMessage = "A Ghost cannot be set to a POWERUP state.";
 			log.error(errorMessage);
 			throw new IllegalArgumentException(errorMessage);
@@ -66,6 +63,14 @@ public class Player {
 
 	public PlayerState getState() {
 		return state;
+	}
+
+	public enum Name {
+		Pacman,
+		Blinky,
+		Inky,
+		Pinky,
+		Clyde
 	}
 
 }

@@ -1,7 +1,7 @@
 package com.pm.server.response;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
 
 /**
@@ -10,17 +10,17 @@ import com.pm.server.datatype.PlayerState;
  */
 public class PlayerDetailsResponse {
 
-	private PlayerName name;
+	private Player.Name name;
 
 	private PlayerState state;
 
 	private Coordinate location;
 
-	public PlayerName getName() {
+	public Player.Name getName() {
 		return name;
 	}
 
-	public void setName(PlayerName playerName) {
+	public void setName(Player.Name playerName) {
 		this.name = playerName;
 	}
 

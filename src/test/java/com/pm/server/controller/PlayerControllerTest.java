@@ -27,7 +27,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.registry.PlayerRegistry;
@@ -78,7 +78,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer() throws Exception {
 
 		// Given
-		PlayerName playerName = PlayerName.Inky;
+		Player.Name playerName = Player.Name.Inky;
 		final String path = pathForSelectPlayer(playerName);
 
 		Coordinate location = randomCoordinateList.get(0);
@@ -100,8 +100,8 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer_sameLocation() throws Exception {
 
 		// Given
-		final String pathForInky = pathForSelectPlayer(PlayerName.Inky);
-		final String pathForClyde = pathForSelectPlayer(PlayerName.Clyde);
+		final String pathForInky = pathForSelectPlayer(Player.Name.Inky);
+		final String pathForClyde = pathForSelectPlayer(Player.Name.Clyde);
 
 		Coordinate location = randomCoordinateList.get(0);
 		final String body = JsonUtils.objectToJson(location);
@@ -129,7 +129,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer_reselect() throws Exception {
 
 		// Given
-		PlayerName playerName = PlayerName.Inky;
+		Player.Name playerName = Player.Name.Inky;
 		final String path = pathForSelectPlayer(playerName);
 
 		Coordinate location = randomCoordinateList.get(0);
@@ -158,7 +158,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_selectPlayer_noLocationGiven() throws Exception {
 
 		// Given
-		PlayerName playerName = PlayerName.Inky;
+		Player.Name playerName = Player.Name.Inky;
 		final String path = pathForSelectPlayer(playerName);
 
 		// When
@@ -176,7 +176,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_deselectPlayer() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -195,7 +195,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_deselectPlayer_alreadyUninitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForDeselectPlayer(player);
 
 		// When
@@ -211,7 +211,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_deselectPlayer_wrongName() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -230,7 +230,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerLocation() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -255,7 +255,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerLocation_uninitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForGetPlayerLocation(player);
 
 		// When
@@ -277,7 +277,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerLocation_reUninitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 		deselectPlayer_failUponException(player);
@@ -349,7 +349,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getAllPlayerLocations_oneInitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -376,7 +376,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerState_uninitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForGetPlayerState(player);
 
 		// When
@@ -395,7 +395,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getPlayerState_initialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -460,7 +460,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getAllPlayerStates_oneInitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -524,7 +524,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_getAllPlayerDetails_oneInitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -555,7 +555,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_setPlayerLocation() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location_original = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location_original);
 
@@ -606,7 +606,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location_original = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location_original);
 
@@ -627,7 +627,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_setPlayerLocation_uninitialized() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerLocation(player);
 
 		Coordinate location = randomCoordinateList.get(0);
@@ -649,7 +649,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_setPlayerState() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -680,7 +680,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
 		PlayerState updatedState = PlayerState.UNINITIALIZED;
@@ -708,7 +708,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -763,7 +763,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
 		// When
@@ -781,7 +781,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_setPlayerState_invalidStateValue() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
 		String body = "{\"state\":\"invalidValue\"}";
@@ -803,7 +803,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		String path = pathForSetPlayerState(player);
 
 		PlayerState updatedState = PlayerState.READY;
@@ -829,7 +829,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 			throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -857,7 +857,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	public void unitTest_setPlayerState_ghostPowerupState() throws Exception {
 
 		// Given
-		PlayerName player = PlayerName.Inky;
+		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);
 		selectPlayer_failUponException(player, location);
 
@@ -881,15 +881,15 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForSelectPlayer(PlayerName player) {
+	private String pathForSelectPlayer(Player.Name player) {
 		return BASE_MAPPING + "/" + player;
 	}
 
-	private String pathForDeselectPlayer(PlayerName player) {
+	private String pathForDeselectPlayer(Player.Name player) {
 		return BASE_MAPPING + "/" + player;
 	}
 
-	private String pathForGetPlayerLocation(PlayerName player) {
+	private String pathForGetPlayerLocation(Player.Name player) {
 		return BASE_MAPPING + "/" + player + "/" + "location";
 	}
 
@@ -897,7 +897,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + "locations";
 	}
 
-	private String pathForGetPlayerState(PlayerName player) {
+	private String pathForGetPlayerState(Player.Name player) {
 		return BASE_MAPPING + "/" + player + "/" + "state";
 	}
 
@@ -909,16 +909,16 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		return BASE_MAPPING + "/" + "details";
 	}
 
-	private String pathForSetPlayerLocation(PlayerName player) {
+	private String pathForSetPlayerLocation(Player.Name player) {
 		return BASE_MAPPING + "/" + player + "/" + "location";
 	}
 
-	private String pathForSetPlayerState(PlayerName player) {
+	private String pathForSetPlayerState(Player.Name player) {
 		return BASE_MAPPING + "/" + player + "/" + "state";
 	}
 
 	private void selectPlayer_failUponException(
-			PlayerName player, Coordinate location) {
+			Player.Name player, Coordinate location) {
 
 		String path = pathForSelectPlayer(player);
 		String body = JsonUtils.objectToJson(location);
@@ -939,7 +939,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 	}
 
 	private void deselectPlayer_failUponException(
-			PlayerName player) {
+			Player.Name player) {
 
 		String path = pathForSelectPlayer(player);
 
@@ -955,7 +955,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private Coordinate getPlayerLocation_failUponException(PlayerName player) {
+	private Coordinate getPlayerLocation_failUponException(Player.Name player) {
 
 		String path = pathForGetPlayerLocation(player);
 		String jsonContent = null;
@@ -983,7 +983,7 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private PlayerState getPlayerState_failUponException(PlayerName player) {
+	private PlayerState getPlayerState_failUponException(Player.Name player) {
 
 		String path = pathForGetPlayerState(player);
 		String jsonContent = null;

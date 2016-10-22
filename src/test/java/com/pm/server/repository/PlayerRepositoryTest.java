@@ -16,9 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
-import com.pm.server.player.Player;
 
 public class PlayerRepositoryTest extends TestTemplate {
 
@@ -38,15 +37,15 @@ public class PlayerRepositoryTest extends TestTemplate {
 	public void setUp() {
 
 		Coordinate player1_location = new Coordinate(1.0, 0.1);
-		player1 = new Player(PlayerName.Blinky);
+		player1 = new Player(Player.Name.Blinky);
 		player1.setLocation(player1_location);
 
 		Coordinate player2_location = new Coordinate(2.0, 0.2);
-		player2 = new Player(PlayerName.Clyde);
+		player2 = new Player(Player.Name.Clyde);
 		player2.setLocation(player2_location);
 
 		Coordinate player3_location = new Coordinate(3.0, 0.3);
-		player3 = new Player(PlayerName.Pinky);
+		player3 = new Player(Player.Name.Pinky);
 		player3.setLocation(player3_location);
 
 		playerRepository.clearPlayers();
@@ -389,7 +388,7 @@ public class PlayerRepositoryTest extends TestTemplate {
 		}
 	}
 
-	private void deletePlayerByName_failUponException(PlayerName name) {
+	private void deletePlayerByName_failUponException(Player.Name name) {
 		try {
 			playerRepository.deletePlayerByName(name);
 		}

@@ -12,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.game.GameState;
-import com.pm.server.player.Player;
 import com.pm.server.repository.PlayerRepository;
 
 @Repository
@@ -46,7 +45,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public Player getPlayerByName(PlayerName name) {
+	public Player getPlayerByName(Player.Name name) {
 		return playerRepository.getPlayerByName(name);
 	}
 
@@ -67,10 +66,10 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void setPlayerLocationByName(PlayerName name, Coordinate location) {
+	public void setPlayerLocationByName(Player.Name name, Coordinate location) {
 		playerRepository.setPlayerLocationByName(name, location);
 
-		if(name == PlayerName.Pacman &&
+		if(name == Player.Name.Pacman &&
 		   gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS) {
 
 			Boolean powerDotEaten =
@@ -88,7 +87,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public void setPlayerStateByName(PlayerName name, PlayerState state) {
+	public void setPlayerStateByName(Player.Name name, PlayerState state) {
 		playerRepository.setPlayerStateByName(name, state);
 	}
 
@@ -116,7 +115,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 		log.debug("Attempting to recreate players");
 		Player player;
-		for(PlayerName playerName : PlayerName.values()) {
+		for(Player.Name playerName : Player.Name.values()) {
 			player = new Player(playerName);
 			playerRepository.addPlayer(player);
 		}
@@ -126,7 +125,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	private void activatePowerup() {
 
-		setPlayerStateByName(PlayerName.Pacman, PlayerState.POWERUP);
+		setPlayerStateByName(Player.Name.Pacman, PlayerState.POWERUP);
 		activePowerups++;
 
 		new Timer().schedule(new TimerTask() {
@@ -139,7 +138,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 						(gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS ||
 						gameStateRegistry.getCurrentState() == GameState.PAUSED)
 						) {
-					setPlayerStateByName(PlayerName.Pacman, PlayerState.ACTIVE);
+					setPlayerStateByName(Player.Name.Pacman, PlayerState.ACTIVE);
 				}
 
 			}

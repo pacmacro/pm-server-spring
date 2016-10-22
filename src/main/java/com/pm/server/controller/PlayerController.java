@@ -17,13 +17,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.PlayerName;
+import com.pm.server.datatype.Player;
 import com.pm.server.datatype.PlayerState;
 import com.pm.server.exceptionhttp.BadRequestException;
 import com.pm.server.exceptionhttp.ConflictException;
 import com.pm.server.exceptionhttp.InternalServerErrorException;
 import com.pm.server.exceptionhttp.NotFoundException;
-import com.pm.server.player.Player;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
@@ -66,7 +65,7 @@ public class PlayerController {
 
 		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
 		playerNameRequest.name = playerName;
-		PlayerName name =
+		Player.Name name =
 				ValidationUtils.validateRequestWithName(playerNameRequest);
 
 		Coordinate location = ValidationUtils
@@ -113,7 +112,7 @@ public class PlayerController {
 
 		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
 		playerNameRequest.name = playerName;
-		PlayerName name = ValidationUtils
+		Player.Name name = ValidationUtils
 				.validateRequestWithName(playerNameRequest);
 
 		Player player = playerRegistry.getPlayerByName(name);
@@ -169,7 +168,7 @@ public class PlayerController {
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
-		PlayerName name = ValidationUtils
+		Player.Name name = ValidationUtils
 				.validateRequestWithName(nameRequest);
 
 		Player player = playerRegistry.getPlayerByName(name);
@@ -247,7 +246,7 @@ public class PlayerController {
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
-		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
 
 		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
@@ -366,7 +365,7 @@ public class PlayerController {
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
-		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
 
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
@@ -413,7 +412,7 @@ public class PlayerController {
 
 		PlayerNameRequest nameRequest = new PlayerNameRequest();
 		nameRequest.name = playerName;
-		PlayerName name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
 
 		PlayerState state =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);
@@ -449,7 +448,7 @@ public class PlayerController {
 		}
 
 		// Illegal player states
-		if(player.getName() != PlayerName.Pacman &&
+		if(player.getName() != Player.Name.Pacman &&
 				state == PlayerState.POWERUP) {
 			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
