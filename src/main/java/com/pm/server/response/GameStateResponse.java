@@ -1,6 +1,8 @@
-package com.pm.server.datatype;
+package com.pm.server.response;
 
-public class GameStateContainer {
+import com.pm.server.datatype.GameState;
+
+public class GameStateResponse {
 
 	private GameState state;
 

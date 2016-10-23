@@ -1,6 +1,6 @@
 package com.pm.server.request;
 
-public class StringStateContainer {
+public class StateRequest {
 
 	private String state;
 

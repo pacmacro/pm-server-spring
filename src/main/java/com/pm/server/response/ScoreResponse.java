@@ -1,6 +1,6 @@
-package com.pm.server.datatype;
+package com.pm.server.response;
 
-public class ScoreContainer {
+public class ScoreResponse {
 
 	private Integer score;
 

@@ -10,8 +10,7 @@ import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
-import com.pm.server.request.PlayerStateRequest;
-import com.pm.server.request.StringStateContainer;
+import com.pm.server.request.StateRequest;
 
 public class ValidationUtils {
 
@@ -82,7 +81,7 @@ public class ValidationUtils {
 	}
 
 	public static Player.State validateRequestBodyWithState(
-			PlayerStateRequest stateRequest)
+			StateRequest stateRequest)
 			throws PmServerException {
 
 		if(stateRequest == null) {
@@ -90,7 +89,7 @@ public class ValidationUtils {
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
-		else if(stateRequest.state == null) {
+		else if(stateRequest.getState() == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
@@ -98,7 +97,7 @@ public class ValidationUtils {
 
 		Player.State state = null;
 		try {
-			state = Player.State.valueOf(stateRequest.state);
+			state = Player.State.valueOf(stateRequest.getState());
 		}
 		catch(IllegalArgumentException e) {
 			log.warn(e.getMessage());
@@ -113,7 +112,7 @@ public class ValidationUtils {
 	}
 
 	public static GameState validateRequestBodyWithGameState(
-			StringStateContainer request)
+			StateRequest request)
 			throws PmServerException {
 
 		if(request == null) {

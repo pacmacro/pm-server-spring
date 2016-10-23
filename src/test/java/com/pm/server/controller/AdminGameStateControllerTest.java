@@ -15,7 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.GameState;
 import com.pm.server.registry.GameStateRegistry;
-import com.pm.server.request.StringStateContainer;
+import com.pm.server.request.StateRequest;
 import com.pm.server.utils.JsonUtils;
 
 public class AdminGameStateControllerTest extends ControllerTestTemplate {
@@ -66,7 +66,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState("Invalid state");
 		final String body = JsonUtils.objectToJson(state);
 
@@ -94,7 +94,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.INITIALIZING.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -126,7 +126,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.INITIALIZING.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -153,7 +153,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -187,7 +187,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -220,7 +220,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -249,7 +249,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -277,7 +277,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -309,7 +309,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -338,7 +338,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -367,7 +367,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -395,7 +395,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_GHOSTS_WIN.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -428,7 +428,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -460,7 +460,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -489,7 +489,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
 		final String body = JsonUtils.objectToJson(state);
 
@@ -518,7 +518,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		final String path = pathForPutGameState();
 
-		StringStateContainer state = new StringStateContainer();
+		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_GHOSTS_WIN.toString());
 		final String body = JsonUtils.objectToJson(state);
 

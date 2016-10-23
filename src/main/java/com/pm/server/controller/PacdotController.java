@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Pacdot;
-import com.pm.server.datatype.ScoreContainer;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
 import com.pm.server.response.PacdotResponse;
 import com.pm.server.response.PacdotUneatenResponse;
+import com.pm.server.response.ScoreResponse;
 import com.pm.server.utils.JsonUtils;
 
 @RestController
@@ -39,7 +39,7 @@ public class PacdotController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public ScoreContainer getGameScore(HttpServletResponse response) {
+	public ScoreResponse getGameScore(HttpServletResponse response) {
 
 		log.info("Mapped GET /pacdots/score");
 
@@ -58,7 +58,7 @@ public class PacdotController {
 
 		log.info("Calculated score {}", score);
 
-		ScoreContainer scoreContainer = new ScoreContainer();
+		ScoreResponse scoreContainer = new ScoreResponse();
 		scoreContainer.setScore(score);
 		return scoreContainer;
 	}

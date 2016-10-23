@@ -22,7 +22,7 @@ import com.pm.server.datatype.Player;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.request.PlayerNameRequest;
-import com.pm.server.request.PlayerStateRequest;
+import com.pm.server.request.StateRequest;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PlayerDetailsResponse;
 import com.pm.server.response.PlayerNameAndLocationResponse;
@@ -393,7 +393,7 @@ public class PlayerController {
 	@ResponseStatus(value = HttpStatus.OK)
 	public void setPlayerState(
 			@PathVariable String playerName,
-			@RequestBody PlayerStateRequest stateRequest)
+			@RequestBody StateRequest stateRequest)
 			throws PmServerException {
 
 		log.info("Mapped PUT /player/{}/state", playerName);

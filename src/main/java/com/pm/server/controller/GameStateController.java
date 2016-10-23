@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.datatype.GameStateContainer;
 import com.pm.server.registry.GameStateRegistry;
+import com.pm.server.response.GameStateResponse;
 
 @RestController
 @RequestMapping("/gamestate")
@@ -30,11 +30,11 @@ public class GameStateController {
 			produces={ "application/json" }
 	)
 	@ResponseStatus(value = HttpStatus.OK)
-	public GameStateContainer getGamestate(HttpServletResponse response) {
+	public GameStateResponse getGamestate(HttpServletResponse response) {
 
 		log.info("Mapped GET /gamestate");
 
-		GameStateContainer stateContainer = new GameStateContainer();
+		GameStateResponse stateContainer = new GameStateResponse();
 		stateContainer.setState(gameStateRegistry.getCurrentState());
 		return stateContainer;
 	}

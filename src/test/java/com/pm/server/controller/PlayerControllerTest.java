@@ -29,8 +29,8 @@ import com.jayway.jsonpath.JsonPath;
 import com.pm.server.ControllerTestTemplate;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
-import com.pm.server.datatype.PlayerStateContainer;
 import com.pm.server.registry.PlayerRegistry;
+import com.pm.server.request.StateRequest;
 import com.pm.server.utils.JsonUtils;
 public class PlayerControllerTest extends ControllerTestTemplate {
 
@@ -656,9 +656,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.ACTIVE;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -684,9 +684,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.UNINITIALIZED;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -715,9 +715,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.READY;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -741,9 +741,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = BASE_MAPPING + "/PLAYER_NAME/state";
 
 		Player.State updatedState = Player.State.UNINITIALIZED;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -807,9 +807,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.READY;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -836,9 +836,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.UNINITIALIZED;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When
@@ -864,9 +864,9 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		String path = pathForSetPlayerState(player);
 
 		Player.State updatedState = Player.State.POWERUP;
-		PlayerStateContainer updatedStateContainer =
-				new PlayerStateContainer();
-		updatedStateContainer.state = updatedState;
+		StateRequest updatedStateContainer =
+				new StateRequest();
+		updatedStateContainer.setState(updatedState.toString());
 		String body = JsonUtils.objectToJson(updatedStateContainer);
 
 		// When

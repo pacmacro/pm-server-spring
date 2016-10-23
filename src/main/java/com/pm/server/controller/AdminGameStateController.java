@@ -18,7 +18,7 @@ import com.pm.server.datatype.Player;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.registry.PlayerRegistry;
-import com.pm.server.request.StringStateContainer;
+import com.pm.server.request.StateRequest;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
 
@@ -45,7 +45,7 @@ public class AdminGameStateController {
 	)
 	@ResponseStatus(value = HttpStatus.OK)
 	public void changeGameState(
-			@RequestBody StringStateContainer requestBody,
+			@RequestBody StateRequest requestBody,
 			HttpServletResponse response)
 			throws PmServerException {
 
