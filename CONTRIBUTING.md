@@ -85,3 +85,8 @@ When a request is received by the server, it is initially sent through a Control
 ## Deployment Pipeline
 
 When a change is pushed to GitHub, two processes are triggered and run concurrently. A [Docker image](https://hub.docker.com/r/pacmacro/pm-server) is built and a [Travis CI](travis-ci.org/pacmacro/pm-server) build is run. If the Travis CI build passes all tests, then Heroku will build the WAR file, deploy it to a Heroku dyno, and spin up the server at [this URL](http://pacmacro.herokuapp.com/).
+
+## Design Decisions
+
+* _Request_ classes (e.g. `LocationRequest`) are designed as String containers for a specific HTTP request body. The String for each field in the request body is parsed into a specific value by the `ValidationUtils` class.  
+_Response_ classes (e.g. `GameStateResponse`) are designed as Java object containers for a specific HTTP response body. Values such as enums are directly assigned to the class members, which are automatically parsed into a response body by Jackson.
