@@ -9,9 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Pacdot;
@@ -38,8 +38,8 @@ public class PacdotController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public ScoreResponse getGameScore(HttpServletResponse response) {
+	public ResponseEntity<ScoreResponse>
+			getGameScore(HttpServletResponse response) {
 
 		log.info("Mapped GET /pacdots/score");
 
@@ -58,9 +58,11 @@ public class PacdotController {
 
 		log.info("Calculated score {}", score);
 
-		ScoreResponse scoreContainer = new ScoreResponse();
-		scoreContainer.setScore(score);
-		return scoreContainer;
+		ScoreResponse scoreResponse = new ScoreResponse();
+		scoreResponse.setScore(score);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(scoreResponse);
 	}
 
 	@RequestMapping(
@@ -68,8 +70,8 @@ public class PacdotController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public PacdotCountResponse getPacdotCount(HttpServletResponse response) {
+	public ResponseEntity<PacdotCountResponse>
+			getPacdotCount(HttpServletResponse response) {
 
 		log.info("Mapped GET /pacdots/count");
 
@@ -89,7 +91,9 @@ public class PacdotController {
 			}
 
 		}
-		return countResponse;
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(countResponse);
 	}
 
 	@RequestMapping(
@@ -97,8 +101,7 @@ public class PacdotController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public List<PacdotUneatenResponse>
+	public ResponseEntity<List<PacdotUneatenResponse>>
 			getUneatenPacdots(HttpServletResponse response) {
 
 		log.info("Mapped GET /pacdots/uneaten");
@@ -124,8 +127,10 @@ public class PacdotController {
 		if(objectString != null) {
 			log.trace("Returning uneaten pacdots: {}", objectString);
 		}
-		return responseList;
 
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(responseList);
 	}
 
 	@RequestMapping(
@@ -133,8 +138,8 @@ public class PacdotController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public List<PacdotResponse> getAllPacdots(HttpServletResponse response) {
+	public ResponseEntity<List<PacdotResponse>>
+			getAllPacdots(HttpServletResponse response) {
 
 		log.info("Mapped GET /pacdots");
 
@@ -158,7 +163,10 @@ public class PacdotController {
 		if(objectString != null) {
 			log.trace("Returning pacdot details: {}", objectString);
 		}
-		return responseList;
+
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(responseList);
 	}
 
 }

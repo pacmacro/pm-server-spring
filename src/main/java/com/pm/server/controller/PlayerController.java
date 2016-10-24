@@ -9,11 +9,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.PmServerException;
@@ -46,8 +46,8 @@ public class PlayerController {
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void selectPlayer(
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity selectPlayer(
 			@PathVariable String playerName,
 			@RequestBody(required = false)
 			LocationRequest requestBody)
@@ -87,14 +87,16 @@ public class PlayerController {
 
 		playerRegistry.setPlayerLocationByName(name, location);
 		playerRegistry.setPlayerStateByName(name, Player.State.READY);
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 
 	@RequestMapping(
 			value="/{playerName}",
 			method=RequestMethod.DELETE
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void deselectPlayer(
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity deselectPlayer(
 			@PathVariable String playerName,
 			HttpServletResponse response)
 			throws PmServerException {
@@ -144,6 +146,7 @@ public class PlayerController {
 		log.debug("Setting Player {} to default location", name);
 		player.resetLocation();
 
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 
 	@RequestMapping(
@@ -151,8 +154,7 @@ public class PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public LocationResponse getPlayerLocation(
+	public ResponseEntity<LocationResponse> getPlayerLocation(
 			@PathVariable String playerName,
 			HttpServletResponse response)
 			throws PmServerException {
@@ -183,7 +185,7 @@ public class PlayerController {
 			log.debug("Returning locationResponse: {}", objectString);
 		}
 
-		return locationResponse;
+		return ResponseEntity.status(HttpStatus.OK).body(locationResponse);
 	}
 
 	@RequestMapping(
@@ -191,8 +193,8 @@ public class PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public List<PlayerNameAndLocationResponse> getAllPlayerLocations() {
+	public ResponseEntity<List<PlayerNameAndLocationResponse>>
+			getAllPlayerLocations() {
 
 		log.info("Mapped GET /player/locations");
 
@@ -221,7 +223,7 @@ public class PlayerController {
 			log.debug("Returning Player response list: {}", objectString);
 		}
 
-		return playerResponseList;
+		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
 	}
 
 	@RequestMapping(
@@ -229,8 +231,7 @@ public class PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public PlayerStateResponse getPlayerState(
+	public ResponseEntity<PlayerStateResponse> getPlayerState(
 			@PathVariable String playerName,
 			HttpServletResponse response)
 			throws PmServerException {
@@ -256,10 +257,13 @@ public class PlayerController {
 
 		String objectString = JsonUtils.objectToJson(playerStateResponse);
 		if(objectString != null) {
-			log.info("Returning Player " + playerName + " with state {}", objectString);
+			log.info(
+					"Returning Player " + playerName +
+					" with state {}", objectString
+			);
 		}
 
-		return playerStateResponse;
+		return ResponseEntity.status(HttpStatus.OK).body(playerStateResponse);
 	}
 
 	@RequestMapping(
@@ -267,8 +271,8 @@ public class PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public List<PlayerNameAndPlayerStateResponse> getAllPlayerStates() {
+	public ResponseEntity<List<PlayerNameAndPlayerStateResponse>>
+			getAllPlayerStates() {
 
 		log.info("Mapped GET /player/states");
 
@@ -298,7 +302,7 @@ public class PlayerController {
 			log.debug("Returning Player states: {}", objectString);
 		}
 
-		return playerResponseList;
+		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
 	}
 
 	@RequestMapping(
@@ -306,8 +310,8 @@ public class PlayerController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public List<PlayerDetailsResponse> getAllPlayerDetails() {
+	public ResponseEntity<List<PlayerDetailsResponse>>
+			getAllPlayerDetails() {
 
 		log.info("Mapped GET /player/details");
 
@@ -338,15 +342,15 @@ public class PlayerController {
 			log.debug("Returning player details: {}", objectString);
 		}
 
-		return playerResponseList;
+		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
 	}
 
 	@RequestMapping(
 			value="/{playerName}/location",
 			method=RequestMethod.PUT
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void setPlayerLocation(
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity setPlayerLocation(
 			@PathVariable String playerName,
 			@RequestBody LocationRequest locationRequest)
 			throws PmServerException {
@@ -384,14 +388,16 @@ public class PlayerController {
 				name, location.getLatitude(), location.getLongitude()
 		);
 		playerRegistry.setPlayerLocationByName(name, location);
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 
 	@RequestMapping(
 			value="/{playerName}/state",
 			method=RequestMethod.PUT
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void setPlayerState(
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity setPlayerState(
 			@PathVariable String playerName,
 			@RequestBody StateRequest stateRequest)
 			throws PmServerException {
@@ -450,6 +456,7 @@ public class PlayerController {
 		);
 		playerRegistry.setPlayerStateByName(name, state);
 
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
 
 }

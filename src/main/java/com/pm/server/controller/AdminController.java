@@ -8,9 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.datatype.Pacdot;
@@ -31,9 +31,8 @@ public class AdminController {
 			method=RequestMethod.POST,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.CREATED)
-	public void resetPacdots(HttpServletResponse response) {
-
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity resetPacdots(HttpServletResponse response) {
 		log.info("Mapped POST /admin/pacdots/reset");
 
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
@@ -42,6 +41,7 @@ public class AdminController {
 		}
 		log.info("All pacdots successfully reset");
 
+		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
 
 }

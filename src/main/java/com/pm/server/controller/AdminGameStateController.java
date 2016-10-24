@@ -6,10 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.PmServerException;
@@ -43,8 +43,8 @@ public class AdminGameStateController {
 			method = RequestMethod.PUT,
 			produces = { "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public void changeGameState(
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity changeGameState(
 			@RequestBody StateRequest requestBody,
 			HttpServletResponse response)
 			throws PmServerException {
@@ -84,6 +84,8 @@ public class AdminGameStateController {
 		catch(IllegalStateException e) {
 			throw new PmServerException(HttpStatus.CONFLICT, e.getMessage());
 		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
 
 	}
 

@@ -6,9 +6,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pm.server.registry.GameStateRegistry;
@@ -29,14 +29,13 @@ public class GameStateController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	@ResponseStatus(value = HttpStatus.OK)
-	public GameStateResponse getGamestate(HttpServletResponse response) {
-
+	public ResponseEntity<GameStateResponse> getGamestate(HttpServletResponse response) {
 		log.info("Mapped GET /gamestate");
 
-		GameStateResponse stateContainer = new GameStateResponse();
-		stateContainer.setState(gameStateRegistry.getCurrentState());
-		return stateContainer;
+		GameStateResponse stateResponse = new GameStateResponse();
+		stateResponse.setState(gameStateRegistry.getCurrentState());
+
+		return ResponseEntity.status(HttpStatus.OK).body(stateResponse);
 	}
 
 }
