@@ -2,6 +2,7 @@ package com.pm.server.registry;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,12 +10,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
@@ -24,19 +22,22 @@ import com.pm.server.repository.PacdotRepository;
 @RunWith(MockitoJUnitRunner.class)
 public class PacdotRegistryTest extends TestTemplate {
 
-	private List<Pacdot> pacdotList = new ArrayList<>();
-
 	@Mock
 	private PacdotRepository pacdotRepositoryMock;
 
-	@InjectMocks
-	@Autowired
 	private PacdotRegistryImpl pacdotRegistry;
+
+	private List<Pacdot> pacdotList = new ArrayList<>();
 
 	@Before
 	public void setUp() {
 
 		MockitoAnnotations.initMocks(this);
+		when(pacdotRepositoryMock.getAllPacdots()).thenReturn(pacdotList);
+
+		pacdotRegistry = new PacdotRegistryImpl(
+				pacdotRepositoryMock, "pacdots.json", "powerdots.json"
+		);
 
 		Pacdot pacdot1 = new Pacdot();
 		Coordinate location1 = new Coordinate(3919.12391013, 9488.49119489);
@@ -51,8 +52,6 @@ public class PacdotRegistryTest extends TestTemplate {
 		pacdot2.setEaten(false);
 		pacdot2.setPowerdot(true);
 		pacdotList.add(pacdot2);
-
-		Mockito.when(pacdotRepositoryMock.getAllPacdots()).thenReturn(pacdotList);
 
 	}
 

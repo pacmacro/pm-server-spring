@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
@@ -22,16 +21,18 @@ import com.pm.server.datatype.Pacdot;
 
 public class PacdotRepositoryTest extends TestTemplate {
 
-	private List<Pacdot> pacdotList = new ArrayList<Pacdot>();
-
-	@Autowired
 	private PacdotRepository pacdotRepository;
+
+	private List<Pacdot> pacdotList;
 
 	private static final Logger log =
 			LogManager.getLogger(PacdotRepositoryTest.class.getName());
 
 	@Before
 	public void setUp() {
+
+		pacdotRepository = new PacdotRepositoryImpl();
+		pacdotList = new ArrayList<>();
 
 		Pacdot pacdot1 = new Pacdot();
 		pacdot1.setLocation(new Coordinate(123.456, 321.654));
@@ -50,9 +51,6 @@ public class PacdotRepositoryTest extends TestTemplate {
 		pacdot3.setEaten(false);
 		pacdot3.setPowerdot(true);
 		pacdotList.add(pacdot3);
-
-		pacdotRepository.clear();
-		assert(pacdotRepository.getAllPacdots().isEmpty());
 
 	}
 

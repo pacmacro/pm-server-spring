@@ -14,10 +14,14 @@ import com.pm.server.utils.JsonUtils;
 @Repository
 public class PacdotRepositoryImpl implements PacdotRepository {
 
-	private List<Pacdot> pacdotList = new ArrayList<Pacdot>();
+	private List<Pacdot> pacdotList;
 
 	private final static Logger log =
 			LogManager.getLogger(PacdotRepositoryImpl.class.getName());
+
+	public PacdotRepositoryImpl() {
+		 this.pacdotList = new ArrayList<Pacdot>();
+	}
 
 	@Override
 	public void addPacdot(Pacdot pacdot)

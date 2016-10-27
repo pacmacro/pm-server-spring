@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
@@ -20,20 +19,19 @@ import com.pm.server.datatype.Player;
 
 public class PlayerRepositoryTest extends TestTemplate {
 
+	private PlayerRepository playerRepository;
+
 	private Player player1;
 
 	private Player player2;
-
-	private Player player3;
-
-	@Autowired
-	private PlayerRepository playerRepository;
 
 	private static final Logger log =
 			LogManager.getLogger(PlayerRepositoryTest.class.getName());
 
 	@Before
 	public void setUp() {
+
+		playerRepository = new PlayerRepositoryImpl();
 
 		Coordinate player1_location = new Coordinate(1.0, 0.1);
 		player1 = new Player(Player.Name.Blinky);
@@ -42,13 +40,6 @@ public class PlayerRepositoryTest extends TestTemplate {
 		Coordinate player2_location = new Coordinate(2.0, 0.2);
 		player2 = new Player(Player.Name.Clyde);
 		player2.setLocation(player2_location);
-
-		Coordinate player3_location = new Coordinate(3.0, 0.3);
-		player3 = new Player(Player.Name.Pinky);
-		player3.setLocation(player3_location);
-
-		playerRepository.clearPlayers();
-		assert(playerRepository.getAllPlayers().isEmpty());
 
 	}
 
@@ -74,7 +65,6 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// When
 		addPlayer_failUponException(player1);
 		addPlayer_failUponException(player2);
-		addPlayer_failUponException(player3);
 
 		// Then
 		Player player_retrieved;
@@ -84,9 +74,6 @@ public class PlayerRepositoryTest extends TestTemplate {
 
 		player_retrieved = playerRepository.getPlayerByName(player2.getName());
 		assertEquals(player2, player_retrieved);
-
-		player_retrieved = playerRepository.getPlayerByName(player3.getName());
-		assertEquals(player3, player_retrieved);
 
 	}
 
@@ -192,16 +179,14 @@ public class PlayerRepositoryTest extends TestTemplate {
 		// Given
 		addPlayer_failUponException(player1);
 		addPlayer_failUponException(player2);
-		addPlayer_failUponException(player3);
 
 		// When
 		List<Player> playerList = playerRepository.getAllPlayers();
 
 		// Then
-		assertEquals(3, playerList.size());
+		assertEquals(2, playerList.size());
 		assertTrue(playerList.contains(player1));
 		assertTrue(playerList.contains(player2));
-		assertTrue(playerList.contains(player3));
 
 	}
 

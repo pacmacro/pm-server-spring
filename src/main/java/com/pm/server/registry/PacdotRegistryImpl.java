@@ -20,13 +20,10 @@ import com.pm.server.repository.PacdotRepository;
 @Repository
 public class PacdotRegistryImpl implements PacdotRegistry {
 
-	@Autowired
 	private PacdotRepository pacdotRepository;
 
-	@Value("${pacdots.locations.filename}")
 	private String pacdotsFilename;
 
-	@Value("${powerdots.locations.filename}")
 	private String powerdotsFilename;
 
 	/**
@@ -34,8 +31,18 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	 */
 	private static final Double DISTANCE_TO_PACDOTS = 0.0005;
 
-	private final static Logger log =
+	private static final Logger log =
 			LogManager.getLogger(PacdotRegistryImpl.class.getName());
+
+	@Autowired
+	public PacdotRegistryImpl(
+			PacdotRepository pacdotRepository,
+			@Value("${pacdots.locations.filename}") String pacdotsFilename,
+			@Value("${powerdots.locations.filename}") String powerdotsFilename) {
+		this.pacdotRepository = pacdotRepository;
+		this.pacdotsFilename = pacdotsFilename;
+		this.powerdotsFilename = powerdotsFilename;
+	}
 
 	/**
 	 * 
