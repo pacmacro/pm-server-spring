@@ -36,7 +36,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		when(pacdotRepositoryMock.getAllPacdots()).thenReturn(pacdotList);
 
 		pacdotRegistry = new PacdotRegistryImpl(
-				pacdotRepositoryMock, "pacdots.json", "powerdots.json"
+				pacdotRepositoryMock, "pacdots.json", "powerdots.json", 0.0005
 		);
 
 		Pacdot pacdot1 = new Pacdot();

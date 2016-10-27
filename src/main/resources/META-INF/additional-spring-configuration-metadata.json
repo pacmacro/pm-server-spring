@@ -1,14 +1,17 @@
-{
-  "properties": [
-    {
-      "name": "pacdots.locations.filename",
-      "type": "java.lang.String",
-      "description": "File containing the location of the normal pacdots"
-    },
-    {
-      "name": "powerdots.locations.filename",
-      "type": "java.lang.String",
-      "description": "File containing the location of the powerdots"
-    }
-  ]
-}
+{"properties": [
+  {
+    "name": "pacdots.locations.filename",
+    "type": "java.lang.String",
+    "description": "File containing the location of the normal pacdots"
+  },
+  {
+    "name": "powerdots.locations.filename",
+    "type": "java.lang.String",
+    "description": "File containing the location of the powerdots"
+  },
+  {
+    "name": "pacdot.capturing.distance",
+    "type": "java.lang.String",
+    "description": "A description for 'pacdot.capturing.distance'"
+  }
+]}
