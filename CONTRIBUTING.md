@@ -47,36 +47,29 @@ A Docker image is available for a quick and minimal way to run the server on you
 
 First, install Docker using the installation instructions for your environment at the [official Docker website](https://www.docker.com/).
 
-Download and build the Docker image located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/):
+Download, build, and run the Docker image located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/):
 
 ```
-docker run -t pacmacro/pm-server
+docker run -t -p 8080:8080 pacmacro/pm-server
 ```
+
+This includes a flag to map port 8080 of the host machine to port 8080 of the virtual machine (which the Spring Boot server runs on by default).
+
+Now you can access the server from your local machine using the URI `http://localhost:8080/`.
 
 If all goes well, your server should be up and running in the terminal (after a long initialization period which will only happen the first time).
 
-The Docker image runs within a virtual machine, so the ports aren't accessible from your local machine without a little manual port configuration. Exit the process while leaving it running in the background by pressing `Ctrl + c`. Check the running process, and kill it with its container ID:
+You can exit the process while leaving it running in the background by pressing `Ctrl + c`. To check the running process, execute:
 
 ```
 docker ps
+```
+
+which will display the ID of the container currently running, and you can use this to kill the process:
+
+```
 docker kill CONTAINER_ID
 ```
-
-This time, run the image while configuring port 8080 of the virtual machine (which the Spring Boot server runs on by default) to be mapped:
-
-```
-docker run -t -p 8080 pacmacro/pm-server
-```
-
-Finally, `Ctrl + c` out of the process and find the mapped port:
-
-```
-docker ps
-```
-
-The port mapping should look like `0.0.0.0:22222->8080/tcp`. This tells you that port 22222 of the host machine is mapped to port 8080 of the virtual machine. Now you can access the server from your local machine, with your URI looking something like `http://localhost:22222/`!
-
-From now on, every time you run the server, you should bring it up with `docker run -t -p 8080 pacmacro/pm-server` and find the new URI, because Docker will map the port to any arbitrary available port when it runs.
 
 ## Software Architecture
 
