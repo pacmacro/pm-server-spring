@@ -50,8 +50,10 @@ First, install Docker using the installation instructions for your environment a
 Download, build, and run the Docker image located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/):
 
 ```
-docker run -t pacmacro/pm-server
+docker run -t -p 8080:8080 pacmacro/pm-server
 ```
+
+This includes a flag to map port 8080 of the host machine to port 8080 of the virtual machine (which the Spring Boot server runs on by default).
 
 Now you can access the server from your local machine using the URI `http://localhost:8080/`.
 
