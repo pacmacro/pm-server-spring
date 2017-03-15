@@ -2,7 +2,7 @@
 
 ## When Making Contributions
 
-When updating the server version, update it both in the file `pom.xml` (for the actual version)  and the file `Procfile` (to find the file to deploy).
+When updating the server version, update it in both `pom.xml` (for the actual version)  and `Procfile` (to find the file to deploy).
 
 ## Setup
 
@@ -16,7 +16,7 @@ My personal preference for setup is to run the following:
 sudo apt-get install -y git openjdk-8-jdk maven
 ```
 
-Got an error? Your dependencies may not be up to date, so try executing this and then re-running the installs:
+Got an error? Your dependencies may not be up to date. Try executing the following then re-running the installs:
 
 ```
 sudo apt-get update
