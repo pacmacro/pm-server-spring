@@ -1,35 +1,24 @@
 package com.pm.server.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
-import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.StateRequest;
-import com.pm.server.response.LocationResponse;
-import com.pm.server.response.PlayerDetailsResponse;
-import com.pm.server.response.PlayerNameAndLocationResponse;
-import com.pm.server.response.PlayerNameAndPlayerStateResponse;
-import com.pm.server.response.PlayerStateResponse;
+import com.pm.server.response.*;
 import com.pm.server.utils.JsonUtils;
 import com.pm.server.utils.ValidationUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/player")
@@ -56,10 +45,7 @@ public class PlayerController {
 		log.info("Mapped POST /player/{}", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
 
-		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
-		playerNameRequest.name = playerName;
-		Player.Name name =
-				ValidationUtils.validateRequestWithName(playerNameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(requestBody);
@@ -103,10 +89,7 @@ public class PlayerController {
 
 		log.info("Mapped DELETE /player/{}", playerName);
 
-		PlayerNameRequest playerNameRequest = new PlayerNameRequest();
-		playerNameRequest.name = playerName;
-		Player.Name name = ValidationUtils
-				.validateRequestWithName(playerNameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
@@ -161,10 +144,7 @@ public class PlayerController {
 
 		log.info("Mapped GET /player/{}/location", playerName);
 
-		PlayerNameRequest nameRequest = new PlayerNameRequest();
-		nameRequest.name = playerName;
-		Player.Name name = ValidationUtils
-				.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
@@ -210,7 +190,8 @@ public class PlayerController {
 					log.trace("Processing Player: {}", objectString);
 				}
 
-				PlayerNameAndLocationResponse playerResponse = new PlayerNameAndLocationResponse();
+				PlayerNameAndLocationResponse playerResponse =
+						new PlayerNameAndLocationResponse();
 				playerResponse.setName(player.getName());
 				playerResponse.setLocation(player.getLocation());
 
@@ -238,9 +219,7 @@ public class PlayerController {
 
 		log.info("Mapped GET /player/{}/state", playerName);
 
-		PlayerNameRequest nameRequest = new PlayerNameRequest();
-		nameRequest.name = playerName;
-		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Player player = playerRegistry.getPlayerByName(name);
 		if(player == null) {
@@ -358,9 +337,7 @@ public class PlayerController {
 		log.info("Mapped PUT /player/{}/location", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(locationRequest));
 
-		PlayerNameRequest nameRequest = new PlayerNameRequest();
-		nameRequest.name = playerName;
-		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
@@ -405,9 +382,7 @@ public class PlayerController {
 		log.info("Mapped PUT /player/{}/state", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(stateRequest));
 
-		PlayerNameRequest nameRequest = new PlayerNameRequest();
-		nameRequest.name = playerName;
-		Player.Name name = ValidationUtils.validateRequestWithName(nameRequest);
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
 		Player.State state =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);

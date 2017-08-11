@@ -1,16 +1,14 @@
 package com.pm.server.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
-
 import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.request.LocationRequest;
-import com.pm.server.request.PlayerNameRequest;
 import com.pm.server.request.StateRequest;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 
 public class ValidationUtils {
 
@@ -18,15 +16,10 @@ public class ValidationUtils {
 			LogManager.getLogger(ValidationUtils.class.getName());
 
 	public static Player.Name validateRequestWithName(
-			PlayerNameRequest playerNameRequest)
+			String playerNameRequest)
 			throws PmServerException {
 
-		if(playerNameRequest == null) {
-			String errorMessage = "Request body requires a name.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
-		}
-		else if(playerNameRequest.name == null) {
+		if(playerNameRequest == null || playerNameRequest.isEmpty()) {
 			String errorMessage = "Request body requires a name.";
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
@@ -34,7 +27,7 @@ public class ValidationUtils {
 
 		Player.Name name;
 		try {
-			name = Player.Name.valueOf(playerNameRequest.name);
+			name = Player.Name.valueOf(playerNameRequest);
 		}
 		catch(IllegalArgumentException e) {
 			log.warn(e.getMessage());
