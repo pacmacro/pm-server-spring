@@ -1,9 +1,6 @@
 package com.pm.server.controller;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.pm.server.manager.AdminManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.registry.PacdotRegistry;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 
 	@Autowired
-	private PacdotRegistry pacdotRegistry;
+	private AdminManager adminManager;
 
 	private final static Logger log =
 			LogManager.getLogger(AdminController.class.getName());
@@ -35,11 +31,8 @@ public class AdminController {
 	public ResponseEntity resetPacdots(HttpServletResponse response) {
 		log.info("Mapped POST /admin/pacdots/reset");
 
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
-			pacdot.setEaten(false);
-		}
-		log.info("All pacdots successfully reset");
+		adminManager.resetPacdots();
+		log.info("All pacdots reset.");
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(null);
 	}
