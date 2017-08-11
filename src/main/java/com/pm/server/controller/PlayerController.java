@@ -38,9 +38,8 @@ public class PlayerController {
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity selectPlayer(
 			@PathVariable String playerName,
-			@RequestBody(required = false)
-			LocationRequest requestBody)
-			throws PmServerException {
+			@RequestBody(required = false) LocationRequest requestBody
+			) throws PmServerException {
 
 		log.info("Mapped POST /player/{}", playerName);
 		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));

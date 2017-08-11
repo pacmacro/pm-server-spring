@@ -51,14 +51,14 @@ public class ValidationUtils {
 			errorMessage = "Request body requires latitude and longitude.";
 		}
 		else if(
-				locationRequest.latitude == null &&
-				locationRequest.longitude == null) {
+				locationRequest.getLatitude() == null &&
+				locationRequest.getLongitude() == null) {
 			errorMessage = "Request body requires latitude and longitude.";
 		}
-		else if(locationRequest.latitude == null) {
+		else if(locationRequest.getLatitude() == null) {
 			errorMessage = "Request body requires latitude.";
 		}
-		else if(locationRequest.longitude == null) {
+		else if(locationRequest.getLongitude() == null) {
 			errorMessage = "Request body requires longitude.";
 		}
 
@@ -68,7 +68,7 @@ public class ValidationUtils {
 		}
 
 		return new Coordinate(
-				locationRequest.latitude, locationRequest.longitude
+				locationRequest.getLatitude(), locationRequest.getLongitude()
 		);
 
 	}
@@ -77,20 +77,14 @@ public class ValidationUtils {
 			StateRequest stateRequest)
 			throws PmServerException {
 
-		if(stateRequest == null) {
-			String errorMessage = "Request body requires a state.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
-		}
-		else if(stateRequest.getState() == null) {
+		if(stateRequest == null || stateRequest.getState() == null) {
 			String errorMessage = "Request body requires a state.";
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
 
-		Player.State state = null;
 		try {
-			state = Player.State.valueOf(stateRequest.getState());
+			return Player.State.valueOf(stateRequest.getState());
 		}
 		catch(IllegalArgumentException e) {
 			log.warn(e.getMessage());
@@ -99,9 +93,6 @@ public class ValidationUtils {
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
 		}
-
-		return state;
-
 	}
 
 	public static GameState validateRequestBodyWithGameState(
