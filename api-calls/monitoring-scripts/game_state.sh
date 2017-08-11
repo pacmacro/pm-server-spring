@@ -10,6 +10,6 @@ watch \
     --silent \
     --request GET \
     -H "Content-Type: application/json" \
-    $base_url/admin/gamestate \
+    $base_url/gamestate \
   | python -m json.tool
 "
