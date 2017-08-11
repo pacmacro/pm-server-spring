@@ -81,12 +81,9 @@
 			<artifactId>jackson-annotations</artifactId>
 		</dependency>
 
-		<!-- Scope: Provided -->
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-			<scope>provided</scope>
 		</dependency>
 
 		<!-- Scope: Test -->
