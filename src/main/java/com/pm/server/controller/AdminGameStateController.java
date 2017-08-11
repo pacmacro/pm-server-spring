@@ -2,6 +2,7 @@ package com.pm.server.controller;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.pm.server.manager.AdminGameStateManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,7 @@ import com.pm.server.utils.ValidationUtils;
 public class AdminGameStateController {
 
 	@Autowired
-	private GameStateRegistry gameStateRegistry;
-
-	@Autowired
-	private PlayerRegistry playerRegistry;
-
-	@Autowired
-	private PacdotRegistry pacdotRegistry;
+	private AdminGameStateManager adminGameStateManager;
 
 	private final static Logger log =
 			LogManager.getLogger(AdminGameStateController.class.getName());
@@ -54,36 +49,8 @@ public class AdminGameStateController {
 
 		GameState newState =
 				ValidationUtils.validateRequestBodyWithGameState(requestBody);
-		try {
-			switch(newState) {
-				case INITIALIZING:
-					gameStateRegistry.resetGame();
-					playerRegistry.reset();
-					pacdotRegistry.resetPacdots();
-					break;
-				case IN_PROGRESS:
-					gameStateRegistry.startGame();
-					playerRegistry.changePlayerStates(
-							Player.State.READY, Player.State.ACTIVE
-					);
-					break;
-				case PAUSED:
-					gameStateRegistry.pauseGame();
-					break;
-				case FINISHED_PACMAN_WIN:
-					gameStateRegistry.setWinnerPacman();
-					break;
-				case FINISHED_GHOSTS_WIN:
-					gameStateRegistry.setWinnerGhosts();
-					playerRegistry
-							.getPlayerByName(Player.Name.Pacman)
-							.setState(Player.State.CAPTURED);
-					break;
-			}
-		}
-		catch(IllegalStateException e) {
-			throw new PmServerException(HttpStatus.CONFLICT, e.getMessage());
-		}
+
+		adminGameStateManager.changeGameState(newState);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 

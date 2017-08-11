@@ -1,27 +1,30 @@
 package com.pm.server.controller;
 
-import static org.junit.Assert.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.pm.server.ControllerTestTemplate;
+import com.pm.server.datatype.GameState;
+import com.pm.server.manager.AdminGameStateManager;
+import com.pm.server.request.StateRequest;
+import com.pm.server.utils.JsonUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.pm.server.ControllerTestTemplate;
-import com.pm.server.datatype.GameState;
-import com.pm.server.registry.GameStateRegistry;
-import com.pm.server.request.StateRequest;
-import com.pm.server.utils.JsonUtils;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
-	@Autowired
-	private GameStateRegistry gameStateRegistry;
+	@Mock
+	private AdminGameStateManager adminGameStateManager;
+
+	@InjectMocks
+	private AdminGameStateController adminGameStateController;
 
 	private static final String BASE_MAPPING = "/admin/gamestate";
 
@@ -37,22 +40,78 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				.webAppContextSetup(this.webApplicationContext)
 				.build();
 
-		if(gameStateRegistry.getCurrentState() != GameState.INITIALIZING) {
-			gameStateRegistry.resetGame();
-		}
-
 	}
 
 	@Test
-	public void unitTest_putGameState_noState() throws Exception {
+	public void unitTest_changeGameState_validState() throws Exception {
 
 		// Given
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
+
+		StateRequest state = new StateRequest();
+		state.setState(GameState.IN_PROGRESS.toString());
+		final String body = JsonUtils.objectToJson(state);
 
 		// When
 		mockMvc
 				.perform(put(path)
+						.content(body)
+						.contentType(MediaType.APPLICATION_JSON)
 				)
+
+		// Then
+		.andExpect(status().isOk());
+
+	}
+
+	@Test
+	public void unitTest_changeGameState_invalidState() throws Exception {
+
+		// Given
+		final String path = pathForChangeGameState();
+
+		StateRequest state = new StateRequest();
+		state.setState("Invalid state");
+		final String body = JsonUtils.objectToJson(state);
+
+		// When
+		mockMvc
+				.perform(put(path)
+						.content(body)
+						.contentType(MediaType.APPLICATION_JSON)
+				)
+
+				// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	@Test
+	public void unitTest_changeGameState_noBody() throws Exception {
+
+		// Given
+		final String path = pathForChangeGameState();
+
+		// When
+		mockMvc
+				.perform(put(path))
+
+				// Then
+				.andExpect(status().isBadRequest());
+
+	}
+
+	/* // Integration tests, not unit tests
+
+	@Test
+	public void unitTest_changeGameState() throws Exception {
+
+		// Given
+		final String path = pathForChangeGameState();
+
+		// When
+		mockMvc
+				.perform(put(path))
 
 		// Then
 				.andExpect(status().isBadRequest());
@@ -64,7 +123,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 		// Given
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState("Invalid state");
@@ -92,7 +151,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.INITIALIZING.toString());
@@ -124,7 +183,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.INITIALIZING.toString());
@@ -151,7 +210,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
@@ -185,7 +244,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
@@ -218,7 +277,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
@@ -247,7 +306,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.IN_PROGRESS.toString());
@@ -275,7 +334,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
@@ -307,7 +366,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
@@ -336,7 +395,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
@@ -365,7 +424,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.PAUSED.toString());
@@ -393,7 +452,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_GHOSTS_WIN.toString());
@@ -426,7 +485,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
@@ -458,7 +517,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
@@ -487,7 +546,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_PACMAN_WIN.toString());
@@ -516,7 +575,7 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 				gameStateRegistry.getCurrentState()
 		);
 
-		final String path = pathForPutGameState();
+		final String path = pathForChangeGameState();
 
 		StateRequest state = new StateRequest();
 		state.setState(GameState.FINISHED_GHOSTS_WIN.toString());
@@ -534,8 +593,11 @@ public class AdminGameStateControllerTest extends ControllerTestTemplate {
 
 	}
 
-	private String pathForPutGameState() {
+	*/
+
+	private String pathForChangeGameState() {
 		return BASE_MAPPING;
 	}
+
 
 }
