@@ -6,12 +6,14 @@ import com.pm.server.datatype.PlayerTagRecord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Repository
 public class TagRegistryImpl implements TagRegistry {
 
     private Player.Name winner;
