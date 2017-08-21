@@ -11,6 +11,9 @@ public interface TagRegistry {
      * <p>
      *     Has no effect if a player has already won.
      * </p>
+     * <p>
+     *     The tag will be removed after 15 seconds if not reciprocated.
+     * </p>
      *
      * @param tagger Player who is tagging
      * @param taggee Player who is being tagged
@@ -27,6 +30,9 @@ public interface TagRegistry {
      *
      * <p>
      *     Has no effect if a player has already won.
+     * </p>
+     * <p>
+     *     The tag will be removed after 15 seconds if not reciprocated.
      * </p>
      *
      * @param taggee Player who is being tagged

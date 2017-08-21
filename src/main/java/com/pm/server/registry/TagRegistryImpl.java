@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class TagRegistryImpl implements TagRegistry {
 
@@ -18,12 +20,15 @@ public class TagRegistryImpl implements TagRegistry {
 
     private List<PlayerTagRecord> tagsByTaggee;
 
+    private Timer timer;
+
     private final static Logger log =
             LogManager.getLogger(TagRegistryImpl.class.getName());
 
     TagRegistryImpl() {
         tagsByTagger = new LinkedList<>();
         tagsByTaggee = new LinkedList<>();
+        timer = new Timer();
     }
 
     @Override
@@ -42,6 +47,9 @@ public class TagRegistryImpl implements TagRegistry {
             if(tagsByTaggee.contains(tag)) {
                 winner = tagger;
                 return true;
+            }
+            else {
+                removeTagAfterTimeout(tagsByTagger, tag);
             }
         }
 
@@ -64,6 +72,9 @@ public class TagRegistryImpl implements TagRegistry {
             if(tagsByTagger.contains(tag)) {
                 winner = tagger;
                 return true;
+            }
+            else {
+                removeTagAfterTimeout(tagsByTaggee, tag);
             }
         }
 
@@ -88,6 +99,17 @@ public class TagRegistryImpl implements TagRegistry {
                     "The tagger and taggee were the same player."
             );
         }
+    }
+
+    private void removeTagAfterTimeout(List list, PlayerTagRecord tag) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if(winner == null) {
+                    list.remove(tag);
+                }
+            }
+        }, 15 * 1000);  // 15 seconds (expressed in milliseconds)
     }
 
     @Override
