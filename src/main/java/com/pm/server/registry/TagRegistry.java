@@ -27,7 +27,7 @@ public interface TagRegistry {
      * Registers a tag by one player to one player, sent by the taggee.
      *
      * <p>
-     *     The tag will be removed after 15 seconds if not reciprocated.
+     *     The tag will be removed after 20 seconds if not reciprocated.
      * </p>
      *
      * @param taggee Player who is being tagged (and registering this tag)

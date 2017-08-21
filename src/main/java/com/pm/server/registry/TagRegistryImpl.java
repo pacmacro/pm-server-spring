@@ -111,7 +111,7 @@ public class TagRegistryImpl implements TagRegistry {
             public void run() {
                 removeTagNow(list, tag);
             }
-        }, 15 * 1000);  // 15 seconds (expressed in milliseconds)
+        }, 20 * 1000);  // 20 seconds (expressed in milliseconds)
     }
 
     @Override

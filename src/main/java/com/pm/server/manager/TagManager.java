@@ -9,7 +9,7 @@ public interface TagManager {
      * Registers a tag by one player to another player.
      *
      * <p>
-     *     Will expire in 15 seconds if it is not reciprocated by the other
+     *     Will expire in 20 seconds if it is not reciprocated by the other
      *     player.
      * </p>
      * <p>
