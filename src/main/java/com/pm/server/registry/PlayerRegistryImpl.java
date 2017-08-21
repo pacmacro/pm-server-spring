@@ -97,6 +97,25 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
+	public Boolean allGhostsCaptured() {
+
+		Boolean atLeastOneCaptured = false;
+
+		for(Player p : playerRepository.getAllPlayers()) {
+			if(!p.getName().equals(Player.Name.Pacman)) {
+				if(p.getState().equals(Player.State.ACTIVE)) {
+					return false;
+				}
+				else if(p.getState().equals(Player.State.CAPTURED)) {
+					atLeastOneCaptured = true;
+				}
+			}
+		}
+
+		return atLeastOneCaptured;
+	}
+
+	@Override
 	public void reset() {
 
 		List<Player> playerList = playerRepository.getAllPlayers();
