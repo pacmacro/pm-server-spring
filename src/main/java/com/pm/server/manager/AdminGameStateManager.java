@@ -43,7 +43,7 @@ public class AdminGameStateManager {
                     gameStateRegistry.resetGame();
                     playerRegistry.reset();
                     pacdotRegistry.resetPacdots();
-                    tagRegistry.clearTagsAndWinner();
+                    tagRegistry.clearTags();
                     break;
 
                 case IN_PROGRESS:

@@ -15,9 +15,6 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TagRegistryTest extends TestTemplate {
@@ -40,10 +37,10 @@ public class TagRegistryTest extends TestTemplate {
 		Player.Name taggee = Player.Name.Pacman;
 
 		// When
-		Boolean gameEnds = tagRegistry.tagPlayer(tagger, taggee);
+		Boolean success = tagRegistry.tagPlayer(tagger, taggee);
 
 		// Then
-		assertFalse(gameEnds);
+		assertFalse(success);
 
 	}
 
@@ -55,10 +52,10 @@ public class TagRegistryTest extends TestTemplate {
 		Player.Name taggee = Player.Name.Inky;
 
 		// When
-		Boolean gameEnds = tagRegistry.tagPlayer(tagger, taggee);
+		Boolean success = tagRegistry.tagPlayer(tagger, taggee);
 
 		// Then
-		assertFalse(gameEnds);
+		assertFalse(success);
 
 	}
 
@@ -116,10 +113,10 @@ public class TagRegistryTest extends TestTemplate {
 		Player.Name tagger = Player.Name.Inky;
 
 		// When
-		Boolean gameEnds = tagRegistry.receiveTagFromPlayer(taggee, tagger);
+		Boolean success = tagRegistry.receiveTagFromPlayer(taggee, tagger);
 
 		// Then
-		assertFalse(gameEnds);
+		assertFalse(success);
 
 	}
 
@@ -132,10 +129,10 @@ public class TagRegistryTest extends TestTemplate {
 		Player.Name tagger = Player.Name.Pacman;
 
 		// When
-		Boolean gameEnds = tagRegistry.receiveTagFromPlayer(taggee, tagger);
+		Boolean success = tagRegistry.receiveTagFromPlayer(taggee, tagger);
 
 		// Then
-		assertFalse(gameEnds);
+		assertFalse(success);
 
 	}
 
@@ -193,10 +190,10 @@ public class TagRegistryTest extends TestTemplate {
 		tagRegistry.receiveTagFromPlayer(taggee, tagger);
 
 		// When
-		Boolean gameEnds = tagRegistry.tagPlayer(tagger, taggee);
+		Boolean success = tagRegistry.tagPlayer(tagger, taggee);
 
 		// Then
-		assertTrue(gameEnds);
+		assertTrue(success);
 
 	}
 
@@ -209,101 +206,38 @@ public class TagRegistryTest extends TestTemplate {
 		tagRegistry.tagPlayer(tagger, taggee);
 
 		// When
-		Boolean gameEnds = tagRegistry.receiveTagFromPlayer(taggee, tagger);
+		Boolean success = tagRegistry.receiveTagFromPlayer(taggee, tagger);
 
 		// Then
-		assertTrue(gameEnds);
+		assertTrue(success);
 
 	}
 
 	@Test
-	public void unitTest_getWinner_none() throws PmServerException {
+	public void unitTest_clearTags_start() throws PmServerException {
 
 		// When
-		Player.Name winner = tagRegistry.getWinner();
+		tagRegistry.clearTags();
 
 		// Then
-		assertNull(winner);
+		// No exception
 
 	}
 
 	@Test
-	public void unitTest_getWinner_Inky() throws PmServerException {
+	public void unitTest_clearTags_tagged() throws PmServerException {
 
 		// Given
 		Player.Name tagger = Player.Name.Inky;
 		Player.Name taggee = Player.Name.Pacman;
 		tagRegistry.receiveTagFromPlayer(taggee, tagger);
-		tagRegistry.tagPlayer(tagger, taggee);
 
 		// When
-		Player.Name winner = tagRegistry.getWinner();
+		tagRegistry.clearTags();
+		Boolean success = tagRegistry.tagPlayer(tagger, taggee);
 
 		// Then
-		assertEquals(winner, tagger);
-
-	}
-
-	@Test
-	public void unitTest_getWinner_Pacman() throws PmServerException {
-
-		// Given
-		Player.Name tagger = Player.Name.Pacman;
-		Player.Name taggee = Player.Name.Inky;
-		tagRegistry.receiveTagFromPlayer(taggee, tagger);
-		tagRegistry.tagPlayer(tagger, taggee);
-
-		// When
-		Player.Name winner = tagRegistry.getWinner();
-
-		// Then
-		assertEquals(winner, tagger);
-
-	}
-
-	@Test
-	public void unitTest_clearTagsAndWinner_start() throws PmServerException {
-
-		// When
-		tagRegistry.clearTagsAndWinner();
-
-		// Then
-		assertNull(tagRegistry.getWinner());
-
-	}
-
-	@Test
-	public void unitTest_clearTagsAndWinner_tagged() throws PmServerException {
-
-		// Given
-		Player.Name tagger = Player.Name.Pacman;
-		Player.Name taggee = Player.Name.Inky;
-		tagRegistry.tagPlayer(tagger, taggee);
-
-		// When
-		tagRegistry.clearTagsAndWinner();
-		tagRegistry.receiveTagFromPlayer(taggee, tagger);
-
-		// Then
-		assertNull(tagRegistry.getWinner());
-
-	}
-
-	@Test
-	public void unitTest_clearTagsAndWinner_winner() throws PmServerException {
-
-		// Given
-		Player.Name tagger = Player.Name.Pacman;
-		Player.Name taggee = Player.Name.Inky;
-		tagRegistry.tagPlayer(tagger, taggee);
-		tagRegistry.receiveTagFromPlayer(taggee, tagger);
-		assertNotNull(tagRegistry.getWinner());
-
-		// When
-		tagRegistry.clearTagsAndWinner();
-
-		// Then
-		assertNull(tagRegistry.getWinner());
+		assertFalse(success);
 
 	}
 

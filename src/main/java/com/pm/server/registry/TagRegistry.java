@@ -9,9 +9,6 @@ public interface TagRegistry {
      * Registers a tag by one player to one player, sent by the tagger.
      *
      * <p>
-     *     Has no effect if a player has already won.
-     * </p>
-     * <p>
      *     The tag will be removed after 15 seconds if not reciprocated.
      * </p>
      *
@@ -19,7 +16,7 @@ public interface TagRegistry {
      * @param taggee Player who is being tagged
      * @return Whether the tag reciprocates a previously registered tag
          from {@link #receiveTagFromPlayer(Player.Name, Player.Name)}
-         (triggering a gamestate change)
+         (capturing one of the players)
      * @throws PmServerException if the tagger and taggee are the same
      *
      */
@@ -30,9 +27,6 @@ public interface TagRegistry {
      * Registers a tag by one player to one player, sent by the taggee.
      *
      * <p>
-     *     Has no effect if a player has already won.
-     * </p>
-     * <p>
      *     The tag will be removed after 15 seconds if not reciprocated.
      * </p>
      *
@@ -40,7 +34,7 @@ public interface TagRegistry {
      * @param tagger Player who is tagging
      * @return Whether the tag reciprocates a previously registered tag
          from {@link #tagPlayer(Player.Name, Player.Name)}
-         (triggering a gamestate change)
+         (capturing one of the players)
      * @throws PmServerException if the tagger and taggee are the same
      *
      */
@@ -48,14 +42,8 @@ public interface TagRegistry {
             throws PmServerException;
 
     /**
-     * @return The player who has successfully tagged another player, or null
-         if the game has not ended yet
+     * Removes all tags.
      */
-    Player.Name getWinner();
-
-    /**
-     * Removes all tags and recorded winners.
-     */
-    void clearTagsAndWinner();
+    void clearTags();
 
 }

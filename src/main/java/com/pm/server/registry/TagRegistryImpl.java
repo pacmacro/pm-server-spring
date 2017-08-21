@@ -16,8 +16,6 @@ import java.util.TimerTask;
 @Repository
 public class TagRegistryImpl implements TagRegistry {
 
-    private Player.Name winner;
-
     private List<PlayerTagRecord> tagsByTagger;
 
     private List<PlayerTagRecord> tagsByTaggee;
@@ -43,11 +41,11 @@ public class TagRegistryImpl implements TagRegistry {
         );
 
         PlayerTagRecord tag = new PlayerTagRecord(tagger, taggee);
-        if(winner == null && !tagsByTagger.contains(tag)) {
+        if(!tagsByTagger.contains(tag)) {
             tagsByTagger.add(tag);
 
             if(tagsByTaggee.contains(tag)) {
-                winner = tagger;
+                removeTagNow(tagsByTagger, tag);
                 return true;
             }
             else {
@@ -68,11 +66,11 @@ public class TagRegistryImpl implements TagRegistry {
         );
 
         PlayerTagRecord tag = new PlayerTagRecord(tagger, taggee);
-        if(winner == null && !tagsByTaggee.contains(tag)) {
+        if(!tagsByTaggee.contains(tag)) {
             tagsByTaggee.add(tag);
 
             if(tagsByTagger.contains(tag)) {
-                winner = tagger;
+                removeTagNow(tagsByTaggee, tag);
                 return true;
             }
             else {
@@ -103,25 +101,21 @@ public class TagRegistryImpl implements TagRegistry {
         }
     }
 
+    private void removeTagNow(List list, PlayerTagRecord tag) {
+        list.remove(tag);
+    }
+
     private void removeTagAfterTimeout(List list, PlayerTagRecord tag) {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(winner == null) {
-                    list.remove(tag);
-                }
+                removeTagNow(list, tag);
             }
         }, 15 * 1000);  // 15 seconds (expressed in milliseconds)
     }
 
     @Override
-    public Player.Name getWinner() {
-        return winner;
-    }
-
-    @Override
-    public void clearTagsAndWinner() {
-        winner = null;
+    public void clearTags() {
         tagsByTagger.clear();
         tagsByTaggee.clear();
     }
