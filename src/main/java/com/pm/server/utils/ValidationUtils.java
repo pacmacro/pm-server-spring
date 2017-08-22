@@ -41,6 +41,34 @@ public class ValidationUtils {
 
 	}
 
+	/**
+	 * Parses the name of a player in a tag (source or destination).
+	 *
+	 * @param playerNameRequest String name of the player
+	 * @return The parsed name of the player, or null if the given name
+	 * 			was null
+	 * @throws PmServerException If the name was invalid
+	 */
+	public static Player.Name validateTagSourceDestination(
+			String playerNameRequest)
+			throws PmServerException {
+
+		if(playerNameRequest == null || playerNameRequest.isEmpty()) {
+			return null;
+		}
+
+		try {
+			return Player.Name.valueOf(playerNameRequest);
+		}
+		catch(IllegalArgumentException e) {
+			log.warn(e.getMessage());
+
+			String errorMessage = "Request body requires a valid name.";
+			log.warn(errorMessage);
+			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
+		}
+	}
+
 	public static Coordinate validateRequestBodyWithLocation(
 			LocationRequest locationRequest)
 			throws PmServerException {

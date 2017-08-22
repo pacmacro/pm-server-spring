@@ -21,6 +21,16 @@ public interface PlayerRegistry {
 	void changePlayerStates(Player.State fromState, Player.State toState)
 			throws NullPointerException;
 
+	/**
+	 * Returns whether all ghosts have been captured.
+	 *
+	 * <p>
+	 *     This is specifically defined as having at least one Ghost who
+	 *     has been captured, and no Ghosts who are active.
+	 * </p>
+	 */
+	Boolean allGhostsCaptured();
+
 	void reset();
 
 	void resetHard() throws NullPointerException, IllegalArgumentException;

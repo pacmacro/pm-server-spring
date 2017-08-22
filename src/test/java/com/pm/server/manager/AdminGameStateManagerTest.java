@@ -6,6 +6,7 @@ import com.pm.server.datatype.GameState;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.registry.PlayerRegistry;
+import com.pm.server.registry.TagRegistry;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -33,6 +34,9 @@ public class AdminGameStateManagerTest extends TestTemplate {
     @Mock
     private GameStateRegistry mockGameStateRegistry;
 
+    @Mock
+    private TagRegistry mockTagRegistry;
+
     private AdminGameStateManager adminGameStateManager;
 
     @Rule
@@ -42,7 +46,10 @@ public class AdminGameStateManagerTest extends TestTemplate {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         adminGameStateManager = new AdminGameStateManager(
-                mockPlayerRegistry, mockPacdotRegistry, mockGameStateRegistry
+                mockPlayerRegistry,
+                mockPacdotRegistry,
+                mockGameStateRegistry,
+                mockTagRegistry
         );
     }
 

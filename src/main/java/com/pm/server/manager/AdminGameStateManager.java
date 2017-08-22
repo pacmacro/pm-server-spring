@@ -6,6 +6,7 @@ import com.pm.server.datatype.Player;
 import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.registry.PlayerRegistry;
+import com.pm.server.registry.TagRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,14 +20,18 @@ public class AdminGameStateManager {
 
     private GameStateRegistry gameStateRegistry;
 
+    private TagRegistry tagRegistry;
+
     @Autowired
     public AdminGameStateManager(
             PlayerRegistry playerRegistry,
             PacdotRegistry pacdotRegistry,
-            GameStateRegistry gameStateRegistry) {
+            GameStateRegistry gameStateRegistry,
+            TagRegistry tagRegistry) {
         this.playerRegistry = playerRegistry;
         this.pacdotRegistry = pacdotRegistry;
         this.gameStateRegistry = gameStateRegistry;
+        this.tagRegistry = tagRegistry;
     }
 
     public void changeGameState(GameState newState) throws PmServerException {
@@ -38,6 +43,7 @@ public class AdminGameStateManager {
                     gameStateRegistry.resetGame();
                     playerRegistry.reset();
                     pacdotRegistry.resetPacdots();
+                    tagRegistry.clearTags();
                     break;
 
                 case IN_PROGRESS:
