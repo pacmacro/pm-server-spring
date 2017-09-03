@@ -185,7 +185,10 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			public void run()
 			{
 
-				activePowerups--;
+				if(activePowerups > 0) {
+					activePowerups--;
+				}
+				
 				if(	activePowerups == 0 &&
 						(gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS ||
 						gameStateRegistry.getCurrentState() == GameState.PAUSED)
