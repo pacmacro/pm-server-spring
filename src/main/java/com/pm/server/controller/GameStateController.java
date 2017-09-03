@@ -1,8 +1,6 @@
 package com.pm.server.controller;
 
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.registry.GameStateRegistry;
-import com.pm.server.registry.PacdotRegistry;
+import com.pm.server.manager.GameStateManager;
 import com.pm.server.response.GameStateResponse;
 import com.pm.server.response.ScoreResponse;
 import org.apache.logging.log4j.LogManager;
@@ -14,21 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
-
 @RestController
 @RequestMapping("/gamestate")
 public class GameStateController {
 
-	@Autowired
-	private GameStateRegistry gameStateRegistry;
-
-	@Autowired
-	private PacdotRegistry pacdotRegistry;
+	private GameStateManager gameStateManager;
 
 	private final static Logger log =
 			LogManager.getLogger(GameStateController.class.getName());
+
+	@Autowired
+	public GameStateController(GameStateManager gameStateManager) {
+		this.gameStateManager = gameStateManager;
+	}
 
 	@RequestMapping(
 			value="/score",
@@ -39,18 +35,7 @@ public class GameStateController {
 
 		log.info("Mapped GET /gamestate/score");
 
-		Integer score = 0;
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
-			if(pacdot.getEaten()) {
-				if(pacdot.getPowerdot()) {
-					score += 50;
-				}
-				else {
-					score += 10;
-				}
-			}
-		}
+		Integer score = gameStateManager.getScore();
 		log.info("Retrieved score {}", score);
 
 		ScoreResponse scoreResponse = new ScoreResponse();
@@ -65,11 +50,11 @@ public class GameStateController {
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public ResponseEntity<GameStateResponse> getGamestate(HttpServletResponse response) {
+	public ResponseEntity<GameStateResponse> getGamestate() {
 		log.info("Mapped GET /gamestate");
 
 		GameStateResponse stateResponse = new GameStateResponse();
-		stateResponse.setState(gameStateRegistry.getCurrentState());
+		stateResponse.setState(gameStateManager.getCurrentState());
 
 		return ResponseEntity.status(HttpStatus.OK).body(stateResponse);
 	}
