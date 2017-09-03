@@ -1,42 +1,47 @@
 package com.pm.server.registry;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.annotation.PostConstruct;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.repository.PlayerRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Repository
 public class PlayerRegistryImpl implements PlayerRegistry {
 
-	@Autowired
 	private PlayerRepository playerRepository;
 
-	@Autowired
 	private PacdotRegistry pacdotRegistry;
 
-	@Autowired
 	private GameStateRegistry gameStateRegistry;
+
+	private Integer powerupMillis;
 
 	private static Integer activePowerups = 0;
 
-	/**
-	 * Units: Milliseconds
-	 */
-	private static final Integer POWERUP_TIME = 30 * 1000;
-
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
+
+	@Autowired
+	public PlayerRegistryImpl(
+			PlayerRepository playerRepository,
+			PacdotRegistry pacdotRegistry,
+			GameStateRegistry gameStateRegistry,
+			@Value("${powerup.millis}") Integer powerupMillis) {
+		this.playerRepository = playerRepository;
+		this.pacdotRegistry = pacdotRegistry;
+		this.gameStateRegistry = gameStateRegistry;
+		this.powerupMillis = powerupMillis;
+	}
 
 	@PostConstruct
 	public void init() throws Exception {
@@ -160,7 +165,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 				}
 
 			}
-		}, POWERUP_TIME);
+		}, powerupMillis);
 
 	}
 
