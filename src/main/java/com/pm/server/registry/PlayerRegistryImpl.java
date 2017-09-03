@@ -1,31 +1,26 @@
 package com.pm.server.registry;
 
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.annotation.PostConstruct;
-
+import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.GameState;
+import com.pm.server.datatype.Player;
+import com.pm.server.repository.PlayerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.GameState;
-import com.pm.server.datatype.Player;
-import com.pm.server.repository.PlayerRepository;
+import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 @Repository
 public class PlayerRegistryImpl implements PlayerRegistry {
 
-	@Autowired
 	private PlayerRepository playerRepository;
 
-	@Autowired
 	private PacdotRegistry pacdotRegistry;
 
-	@Autowired
 	private GameStateRegistry gameStateRegistry;
 
 	private static Integer activePowerups = 0;
@@ -37,6 +32,16 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
+
+	@Autowired
+	public PlayerRegistryImpl(
+			PlayerRepository playerRepository,
+			PacdotRegistry pacdotRegistry,
+			GameStateRegistry gameStateRegistry) {
+		this.playerRepository = playerRepository;
+		this.pacdotRegistry = pacdotRegistry;
+		this.gameStateRegistry = gameStateRegistry;
+	}
 
 	@PostConstruct
 	public void init() throws Exception {
