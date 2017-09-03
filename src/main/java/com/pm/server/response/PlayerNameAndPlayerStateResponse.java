@@ -4,9 +4,9 @@ import com.pm.server.datatype.Player;
 
 public class PlayerNameAndPlayerStateResponse {
 
-	public Player.Name name;
+	private Player.Name name;
 
-	public Player.State state;
+	private Player.State state;
 
 	public PlayerNameAndPlayerStateResponse(
 			Player.Name name, Player.State state) {
@@ -14,4 +14,19 @@ public class PlayerNameAndPlayerStateResponse {
 		this.state = state;
 	}
 
+	public Player.Name getName() {
+		return name;
+	}
+
+	public void setName(Player.Name name) {
+		this.name = name;
+	}
+
+	public Player.State getState() {
+		return state;
+	}
+
+	public void setState(Player.State state) {
+		this.state = state;
+	}
 }
