@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,24 +51,22 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public Player getPlayerByName(Player.Name name) {
-		return playerRepository.getPlayerByName(name);
+	public Coordinate getPlayerLocation(Player.Name name) {
+		return Optional.ofNullable(playerRepository.getPlayerByName(name))
+				.map(Player::getLocation)
+				.orElse(null);
 	}
 
 	@Override
-	public List<Player> getAllPlayers() {
-		return playerRepository.getAllPlayers();
+	public Player.State getPlayerState(Player.Name name) {
+		return Optional.ofNullable(playerRepository.getPlayerByName(name))
+				.map(Player::getState)
+				.orElse(null);
 	}
 
 	@Override
-	public boolean allPlayersReady() {
-		List<Player> playerList = playerRepository.getAllPlayers();
-		for(Player player : playerList) {
-			if(player.getState() != Player.State.READY) {
-				return false;
-			}
-		}
-		return true;
+	public void resetLocationOf(Player.Name name) {
+		playerRepository.getPlayerByName(name).resetLocation();
 	}
 
 	@Override

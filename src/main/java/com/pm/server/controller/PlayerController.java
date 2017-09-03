@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,13 +54,7 @@ public class PlayerController {
 				location.getLongitude()
 		);
 
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage = name + " is not a valid Player name.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
-		}
-		else if(player.getState() != Player.State.UNINITIALIZED) {
+		if(playerRegistry.getPlayerState(name) != Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player "+
 					name +
@@ -82,24 +75,14 @@ public class PlayerController {
 	)
 	@SuppressWarnings("rawtypes")
 	public ResponseEntity deselectPlayer(
-			@PathVariable String playerName,
-			HttpServletResponse response)
+			@PathVariable String playerName)
 			throws PmServerException {
 
 		log.info("Mapped DELETE /player/{}", playerName);
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage =
-					"Player " +
-					name +
-					" was not found.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
-		}
-		else if(player.getState() == Player.State.UNINITIALIZED) {
+		if(playerRegistry.getPlayerState(name) == Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player "+
 					name +
@@ -117,7 +100,7 @@ public class PlayerController {
 			String errorMessage =
 					"Player " +
 					name +
-					" was found but could not be deselected.";
+					" could not be deselected.";
 			log.warn(errorMessage);
 			throw new PmServerException(
 					HttpStatus.INTERNAL_SERVER_ERROR, errorMessage
@@ -126,7 +109,7 @@ public class PlayerController {
 		log.info("Player {} was succesfully deselected", name);
 
 		log.debug("Setting Player {} to default location", name);
-		player.resetLocation();
+		playerRegistry.resetLocationOf(name);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
@@ -137,27 +120,17 @@ public class PlayerController {
 			produces={ "application/json" }
 	)
 	public ResponseEntity<LocationResponse> getPlayerLocation(
-			@PathVariable String playerName,
-			HttpServletResponse response)
+			@PathVariable String playerName)
 			throws PmServerException {
 
 		log.info("Mapped GET /player/{}/location", playerName);
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
-
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage =
-					"No Player named " +
-					name +
-					" was found in the registry.";
-			log.debug(errorMessage);
-			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
-		}
+		Coordinate location = playerRegistry.getPlayerLocation(name);
 
 		LocationResponse locationResponse = new LocationResponse();
-		locationResponse.setLatitude(player.getLocation().getLatitude());
-		locationResponse.setLongitude(player.getLocation().getLongitude());
+		locationResponse.setLatitude(location.getLatitude());
+		locationResponse.setLongitude(location.getLongitude());
 
 		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {
@@ -177,25 +150,14 @@ public class PlayerController {
 
 		log.info("Mapped GET /player/locations");
 
-		List<PlayerNameAndLocationResponse> playerResponseList = new ArrayList<PlayerNameAndLocationResponse>();
+		List<PlayerNameAndLocationResponse> playerResponseList =
+				new ArrayList<>();
 
-		List<Player> playerList = playerRegistry.getAllPlayers();
-
-		if(playerList != null) {
-			for(Player player : playerList) {
-
-				String objectString = JsonUtils.objectToJson(player);
-				if(objectString != null) {
-					log.trace("Processing Player: {}", objectString);
-				}
-
-				PlayerNameAndLocationResponse playerResponse =
-						new PlayerNameAndLocationResponse();
-				playerResponse.setName(player.getName());
-				playerResponse.setLocation(player.getLocation());
-
-				playerResponseList.add(playerResponse);
-			}
+		for(Player.Name name : Player.Name.values()) {
+			log.trace("Processing Player {}", name);
+			playerResponseList.add(new PlayerNameAndLocationResponse(
+					name, playerRegistry.getPlayerLocation(name)
+			));
 		}
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
@@ -212,26 +174,15 @@ public class PlayerController {
 			produces={ "application/json" }
 	)
 	public ResponseEntity<PlayerStateResponse> getPlayerState(
-			@PathVariable String playerName,
-			HttpServletResponse response)
+			@PathVariable String playerName)
 			throws PmServerException {
 
 		log.info("Mapped GET /player/{}/state", playerName);
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage =
-					"No Player named " +
-					name +
-					" was found in the registry.";
-			log.debug(errorMessage);
-			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
-		}
-
 		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
-		playerStateResponse.setState(player.getState());
+		playerStateResponse.setState(playerRegistry.getPlayerState(name));
 
 		String objectString = JsonUtils.objectToJson(playerStateResponse);
 		if(objectString != null) {
@@ -255,24 +206,13 @@ public class PlayerController {
 		log.info("Mapped GET /player/states");
 
 		List<PlayerNameAndPlayerStateResponse> playerResponseList =
-				new ArrayList<PlayerNameAndPlayerStateResponse>();
+				new ArrayList<>();
 
-		List<Player> players = playerRegistry.getAllPlayers();
-
-		if(players != null) {
-			for(Player player : players) {
-
-				String objectString = JsonUtils.objectToJson(player);
-				if(objectString != null) {
-					log.trace("Processing Player: {}", objectString);
-				}
-
-				PlayerNameAndPlayerStateResponse playerResponse = new PlayerNameAndPlayerStateResponse();
-				playerResponse.name = player.getName();
-				playerResponse.state = player.getState();
-
-				playerResponseList.add(playerResponse);
-			}
+		for(Player.Name name : Player.Name.values()) {
+			log.trace("Processing Player {}", name);
+			playerResponseList.add(new PlayerNameAndPlayerStateResponse(
+					name, playerRegistry.getPlayerState(name)
+			));
 		}
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
@@ -294,25 +234,15 @@ public class PlayerController {
 		log.info("Mapped GET /player/details");
 
 		List<PlayerDetailsResponse> playerResponseList =
-				new ArrayList<PlayerDetailsResponse>();
+				new ArrayList<>();
 
-		List<Player> players = playerRegistry.getAllPlayers();
-
-		if(players != null) {
-			for(Player player : players) {
-
-				String objectString = JsonUtils.objectToJson(player);
-				if(objectString != null) {
-					log.trace("Processing Player: {}", objectString);
-				}
-
-				PlayerDetailsResponse playerResponse = new PlayerDetailsResponse();
-				playerResponse.setName(player.getName());
-				playerResponse.setState(player.getState());
-				playerResponse.setLocation(player.getLocation());
-
-				playerResponseList.add(playerResponse);
-			}
+		for(Player.Name name : Player.Name.values()) {
+			log.trace("Processing Player {}", name);
+			playerResponseList.add(new PlayerDetailsResponse(
+					name,
+					playerRegistry.getPlayerState(name),
+					playerRegistry.getPlayerLocation(name)
+			));
 		}
 
 		String objectString = JsonUtils.objectToJson(playerResponseList);
@@ -337,20 +267,10 @@ public class PlayerController {
 		log.info("Request body: {}", JsonUtils.objectToJson(locationRequest));
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
-
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
 
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage =
-					"Player " +
-					name +
-					" was not found.";
-			log.debug(errorMessage);
-			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
-		}
-		else if(player.getState() == Player.State.UNINITIALIZED) {
+		if(playerRegistry.getPlayerState(name) == Player.State.UNINITIALIZED) {
 			String errorMessage =
 					"Player " +
 			        name +
@@ -383,22 +303,14 @@ public class PlayerController {
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
-		Player.State state =
+		Player.State newState =
 				ValidationUtils.validateRequestBodyWithState(stateRequest);
 
-		Player player = playerRegistry.getPlayerByName(name);
-		if(player == null) {
-			String errorMessage =
-					"Player " +
-					name +
-					" was not found.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.NOT_FOUND, errorMessage);
-		}
+		Player.State currentState = playerRegistry.getPlayerState(name);
 
 		// Illegal state changes
-		if(player.getState() == Player.State.UNINITIALIZED &&
-				player.getState() != state) {
+		if(currentState == Player.State.UNINITIALIZED &&
+				currentState != newState) {
 			String errorMessage =
 					"This operation cannot change the state of an unselected/" +
 					"uninitialized player; use POST /player/{playerName} " +
@@ -406,8 +318,8 @@ public class PlayerController {
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
 		}
-		else if(state == Player.State.UNINITIALIZED &&
-				state != player.getState()) {
+		else if(newState == Player.State.UNINITIALIZED &&
+				newState != currentState) {
 			String errorMessage =
 					"This operation cannot change the state of a selected/" +
 					"initialized player to uninitialized; use " +
@@ -417,8 +329,8 @@ public class PlayerController {
 		}
 
 		// Illegal player states
-		if(player.getName() != Player.Name.Pacman &&
-				state == Player.State.POWERUP) {
+		if(name != Player.Name.Pacman &&
+				newState == Player.State.POWERUP) {
 			String errorMessage = "The POWERUP state is not valid for a Ghost.";
 			log.warn(errorMessage);
 			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
@@ -426,9 +338,9 @@ public class PlayerController {
 
 		log.info(
 				"Changing Player {} from state {} to {}",
-				name, player.getState(), state
+				name, currentState, newState
 		);
-		playerRegistry.setPlayerStateByName(name, state);
+		playerRegistry.setPlayerStateByName(name, newState);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}

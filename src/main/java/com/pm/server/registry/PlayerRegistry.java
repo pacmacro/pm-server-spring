@@ -8,11 +8,12 @@ import com.pm.server.datatype.Player;
 public interface PlayerRegistry {
 
 	// Returns null if the player with the corresponding name is not found
-	Player getPlayerByName(Player.Name name);
+	Coordinate getPlayerLocation(Player.Name name);
 
-	List<Player> getAllPlayers();
+	// Returns null if the player with the corresponding name is not found
+	Player.State getPlayerState(Player.Name name);
 
-	boolean allPlayersReady();
+	void resetLocationOf(Player.Name name);
 
 	void setPlayerLocationByName(Player.Name name, Coordinate location);
 
