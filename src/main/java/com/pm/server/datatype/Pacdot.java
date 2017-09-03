@@ -30,20 +30,28 @@ public class Pacdot {
 		this.location = location;
 	}
 
-	public boolean getEaten() {
+	public boolean isEaten() {
 		return eaten;
 	}
 
-	public void setEaten(boolean eaten) {
-		this.eaten = eaten;
+	public void setEaten() {
+		this.eaten = true;
 	}
 
-	public boolean getPowerdot() {
+	public void setUneaten() {
+		this.eaten = false;
+	}
+
+	public boolean isPowerdot() {
 		return powerdot;
 	}
 
-	public void setPowerdot(boolean powerdot) {
-		this.powerdot = powerdot;
+	public void setAsPowerdot() {
+		this.powerdot = true;
+	}
+
+	public void setAsNormalPacDot() {
+		this.powerdot = false;
 	}
 
 }

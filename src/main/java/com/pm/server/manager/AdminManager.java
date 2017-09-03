@@ -20,7 +20,7 @@ public class AdminManager {
     public void resetPacdots() {
         List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
         for(Pacdot pacdot : pacdotList) {
-            pacdot.setEaten(false);
+            pacdot.setUneaten();
         }
     }
 

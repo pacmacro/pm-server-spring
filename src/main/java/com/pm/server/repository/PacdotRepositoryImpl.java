@@ -130,13 +130,18 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 				location, oldLocationString, newLocationString
 		);
 
-		pacdot.setEaten(eaten);
+		if(eaten) {
+			pacdot.setEaten();
+		}
+		else {
+			pacdot.setUneaten();
+		}
 	}
 
 	@Override
 	public void resetPacdots() {
 		for(Pacdot pacdot : pacdotList) {
-			pacdot.setEaten(false);
+			pacdot.setUneaten();
 		}
 	}
 

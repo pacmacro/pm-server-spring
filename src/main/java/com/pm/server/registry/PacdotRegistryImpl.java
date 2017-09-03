@@ -59,8 +59,8 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		for(Coordinate location : locationList) {
 			Pacdot pacdot = new Pacdot();
 			pacdot.setLocation(location);
-			pacdot.setEaten(false);
-			pacdot.setPowerdot(false);
+			pacdot.setUneaten();
+			pacdot.setAsNormalPacDot();
 			pacdotRepository.addPacdot(pacdot);
 		}
 
@@ -68,8 +68,8 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		for(Coordinate location : locationList) {
 			Pacdot pacdot = new Pacdot();
 			pacdot.setLocation(location);
-			pacdot.setEaten(false);
-			pacdot.setPowerdot(true);
+			pacdot.setUneaten();
+			pacdot.setAsPowerdot();
 			pacdotRepository.addPacdot(pacdot);
 		}
 
@@ -92,7 +92,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	public boolean allPacdotsEaten() {
 		List<Pacdot> pacdotList = pacdotRepository.getAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
-			if(!pacdot.getEaten()) {
+			if(!pacdot.isEaten()) {
 				return false;
 			}
 		}
@@ -120,10 +120,10 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 
 			if(withinDistance(
 					location, pacdot.getLocation(), pacdotCapturingDistance
-				) && !pacdot.getEaten() ) {
+				) && !pacdot.isEaten() ) {
 
-				pacdot.setEaten(true);
-				if(pacdot.getPowerdot() == true) {
+				pacdot.setEaten();
+				if(pacdot.isPowerdot()) {
 					eatenDotsReport.addEatenPowerdot();
 				}
 				else {

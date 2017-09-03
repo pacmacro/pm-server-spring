@@ -41,7 +41,7 @@ public class AdminManagerTest extends TestTemplate {
             pacdotList.add(new Pacdot());
         }
         for(Pacdot p : pacdotList) {
-            p.setEaten(true);
+            p.setEaten();
         }
 
         // When
@@ -49,7 +49,7 @@ public class AdminManagerTest extends TestTemplate {
 
         // Then
         for(Pacdot p : pacdotList) {
-            assertFalse(p.getEaten());
+            assertFalse(p.isEaten());
         }
 
     }

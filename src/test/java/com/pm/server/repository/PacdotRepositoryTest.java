@@ -36,20 +36,20 @@ public class PacdotRepositoryTest extends TestTemplate {
 
 		Pacdot pacdot1 = new Pacdot();
 		pacdot1.setLocation(new Coordinate(123.456, 321.654));
-		pacdot1.setEaten(false);
-		pacdot1.setPowerdot(false);
+		pacdot1.setUneaten();
+		pacdot1.setAsNormalPacDot();
 		pacdotList.add(pacdot1);
 
 		Pacdot pacdot2 = new Pacdot();
 		pacdot2.setLocation(new Coordinate(390.412, 491.212));
-		pacdot2.setEaten(true);
-		pacdot2.setPowerdot(false);
+		pacdot2.setEaten();
+		pacdot2.setAsNormalPacDot();
 		pacdotList.add(pacdot2);
 
 		Pacdot pacdot3 = new Pacdot();
 		pacdot3.setLocation(new Coordinate(221.156, 918.412));
-		pacdot3.setEaten(false);
-		pacdot3.setPowerdot(true);
+		pacdot3.setUneaten();
+		pacdot3.setAsPowerdot();
 		pacdotList.add(pacdot3);
 
 	}
@@ -269,14 +269,14 @@ public class PacdotRepositoryTest extends TestTemplate {
 		Pacdot pacdot = pacdotList.get(0);
 		addPacdot_failUponException(pacdot);
 		Coordinate location = pacdot.getLocation();
-		Boolean oldEatenStatus = pacdot.getEaten();
+		Boolean oldEatenStatus = pacdot.isEaten();
 
 		// When
 		pacdotRepository.setEatenStatusByLocation(location, !oldEatenStatus);
 
 		// Then
 		Pacdot result = pacdotRepository.getPacdotByLocation(location);
-		assertEquals(!oldEatenStatus, result.getEaten());
+		assertEquals(!oldEatenStatus, result.isEaten());
 
 	}
 
@@ -287,14 +287,14 @@ public class PacdotRepositoryTest extends TestTemplate {
 		Pacdot pacdot = pacdotList.get(0);
 		addPacdot_failUponException(pacdot);
 		Coordinate location = pacdot.getLocation();
-		Boolean oldEatenStatus = pacdot.getEaten();
+		Boolean oldEatenStatus = pacdot.isEaten();
 
 		// When
 		pacdotRepository.setEatenStatusByLocation(location, oldEatenStatus);
 
 		// Then
 		Pacdot result = pacdotRepository.getPacdotByLocation(location);
-		assertEquals(oldEatenStatus, result.getEaten());
+		assertEquals(oldEatenStatus, result.isEaten());
 
 	}
 
@@ -306,7 +306,7 @@ public class PacdotRepositoryTest extends TestTemplate {
 
 		// When
 		pacdotRepository.setEatenStatusByLocation(
-				pacdot.getLocation(), pacdot.getEaten()
+				pacdot.getLocation(), pacdot.isEaten()
 		);
 
 		// Then
@@ -320,7 +320,7 @@ public class PacdotRepositoryTest extends TestTemplate {
 		// Given
 		Pacdot pacdot = pacdotList.get(0);
 		addPacdot_failUponException(pacdot);
-		Boolean oldEatenStatus = pacdot.getEaten();
+		Boolean oldEatenStatus = pacdot.isEaten();
 
 		// When
 		pacdotRepository.setEatenStatusByLocation(null, !oldEatenStatus);

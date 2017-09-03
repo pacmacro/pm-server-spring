@@ -43,15 +43,15 @@ public class PacdotRegistryTest extends TestTemplate {
 		Pacdot pacdot1 = new Pacdot();
 		Coordinate location1 = new Coordinate(3919.12391013, 9488.49119489);
 		pacdot1.setLocation(location1);
-		pacdot1.setEaten(false);
-		pacdot1.setPowerdot(false);
+		pacdot1.setUneaten();
+		pacdot1.setAsPowerdot();
 		pacdotList.add(pacdot1);
 
 		Pacdot pacdot2 = new Pacdot();
 		Coordinate location2 = new Coordinate(3919.12391012, 9488.49119488);
 		pacdot2.setLocation(location2);
-		pacdot2.setEaten(false);
-		pacdot2.setPowerdot(true);
+		pacdot2.setUneaten();
+		pacdot2.setAsPowerdot();
 		pacdotList.add(pacdot2);
 
 	}
@@ -61,13 +61,13 @@ public class PacdotRegistryTest extends TestTemplate {
 
 		// Given
 		Pacdot pacdot = pacdotList.get(0);
-		assertFalse(pacdot.getEaten());
+		assertFalse(pacdot.isEaten());
 
 		// When
 		pacdotRegistry.eatPacdotsNearLocation(pacdot.getLocation());
 
 		// Then
-		assertTrue(pacdot.getEaten());
+		assertTrue(pacdot.isEaten());
 
 	}
 
@@ -76,7 +76,7 @@ public class PacdotRegistryTest extends TestTemplate {
 
 		// Given
 		Pacdot pacdot = pacdotList.get(0);
-		assertFalse(pacdot.getEaten());
+		assertFalse(pacdot.isEaten());
 
 		Coordinate location = new Coordinate();
 		location.setLatitude(pacdot.getLocation().getLatitude() + 0.0000001);
@@ -86,7 +86,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		pacdotRegistry.eatPacdotsNearLocation(location);
 
 		// Then
-		assertTrue(pacdot.getEaten());
+		assertTrue(pacdot.isEaten());
 
 	}
 
@@ -101,7 +101,7 @@ public class PacdotRegistryTest extends TestTemplate {
 
 		// Then
 		for(Pacdot pacdot : pacdotList) {
-			assertFalse(pacdot.getEaten());
+			assertFalse(pacdot.isEaten());
 		}
 
 	}
