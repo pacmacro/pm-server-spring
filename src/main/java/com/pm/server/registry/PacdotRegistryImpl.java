@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import com.pm.server.datatype.EatenDots;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,9 +106,9 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	}
 
 	@Override
-	public Boolean eatPacdotsNearLocation(Coordinate location) {
+	public EatenDots eatPacdotsNearLocation(Coordinate location) {
 
-		Boolean powerDotEaten = false;
+		EatenDots eatenDotsReport = new EatenDots();
 
 		/*
 		 * Incredibly inefficient but I have no time to implement a quicker
@@ -123,12 +124,16 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 
 				pacdot.setEaten(true);
 				if(pacdot.getPowerdot() == true) {
-					powerDotEaten = true;
+					eatenDotsReport.addEatenPowerdot();
+				}
+				else {
+					eatenDotsReport.addEatenPacdot();
 				}
 
 			}
 		}
-		return powerDotEaten;
+
+		return eatenDotsReport;
 	}
 
 	@Override

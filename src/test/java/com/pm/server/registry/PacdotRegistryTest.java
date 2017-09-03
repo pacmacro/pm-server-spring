@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pm.server.datatype.EatenDots;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -111,14 +112,14 @@ public class PacdotRegistryTest extends TestTemplate {
 		// Given
 		Coordinate location = new Coordinate(pacdotList.get(0).getLocation());
 
-		Boolean powerDotEaten = pacdotRegistry.eatPacdotsNearLocation(location);
-		assertTrue(powerDotEaten);
+		EatenDots eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
+		assertTrue(eatenDots.getEatenPowerdots() != 0);
 
 		// When
-		powerDotEaten = pacdotRegistry.eatPacdotsNearLocation(location);
+		eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
 
 		// Then
-		assertFalse(powerDotEaten);
+		assertTrue(eatenDots.getEatenPowerdots() == 0);
 
 	}
 

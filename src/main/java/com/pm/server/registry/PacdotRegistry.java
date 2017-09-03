@@ -3,6 +3,7 @@ package com.pm.server.registry;
 import java.util.List;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.EatenDots;
 import com.pm.server.datatype.Pacdot;
 
 public interface PacdotRegistry {
@@ -52,9 +53,9 @@ public interface PacdotRegistry {
 	 * Idempotent (e.g. eating an eaten dot is valid)
 	 * 
 	 * @param location Location of the Player eating the dots
-	 * @return Whether a Powerdot has been eaten
+	 * @return A report on the number of Pacdots and Powerdots eaten
 	 */
-	Boolean eatPacdotsNearLocation(Coordinate location);
+	EatenDots eatPacdotsNearLocation(Coordinate location);
 
 	/**
 	 * Resets all Pacdots to uneaten.
