@@ -118,19 +118,19 @@ public class TagManagerImpl implements TagManager {
         if(reporterIsTagger) {
             success = tagRegistry.tagPlayer(reporter, otherPlayer);
             if(success) {
-                completeTag(reporter, otherPlayer);
+                completeTag(otherPlayer);
             }
         }
         else {
             success = tagRegistry.receiveTagFromPlayer(reporter, otherPlayer);
             if(success) {
-                completeTag(otherPlayer, reporter);
+                completeTag(reporter);
             }
         }
 
     }
 
-    private void completeTag(Player.Name tagger, Player.Name taggee) {
+    private void completeTag(Player.Name taggee) {
         playerRegistry.setPlayerStateByName(taggee, Player.State.CAPTURED);
 
         if(taggee.equals(Pacman)) {
