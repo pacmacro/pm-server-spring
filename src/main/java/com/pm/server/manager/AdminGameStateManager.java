@@ -48,9 +48,7 @@ public class AdminGameStateManager {
 
                 case IN_PROGRESS:
                     gameStateRegistry.startGame();
-                    playerRegistry.changePlayerStates(
-                            Player.State.READY, Player.State.ACTIVE
-                    );
+                    playerRegistry.startFromReady();
                     break;
 
                 case PAUSED:

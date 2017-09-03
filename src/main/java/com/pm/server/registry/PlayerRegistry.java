@@ -19,8 +19,9 @@ public interface PlayerRegistry {
 
 	void setPlayerStateByName(Player.Name name, Player.State state);
 
-	void changePlayerStates(Player.State fromState, Player.State toState)
-			throws NullPointerException;
+	void startFromReady();
+
+	Integer getCapturedGhosts();
 
 	/**
 	 * Returns whether all ghosts have been captured.

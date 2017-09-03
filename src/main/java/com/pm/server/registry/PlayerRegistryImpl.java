@@ -28,6 +28,8 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	private Integer powerupMillis;
 
+	private static Integer capturedGhosts = 0;
+
 	private static Integer activePowerups = 0;
 
 	private final static Logger log =
@@ -93,13 +95,36 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@Override
 	public void setPlayerStateByName(Player.Name name, Player.State state) {
+
+		Player.State previousState = playerRepository
+				.getPlayerByName(name)
+				.getState();
 		playerRepository.setPlayerStateByName(name, state);
+
+		if(name != Player.Name.Pacman) {
+			if (previousState != Player.State.CAPTURED &&
+					state == Player.State.CAPTURED) {
+				capturedGhosts++;
+			}
+			else if (previousState == Player.State.CAPTURED &&
+					state != Player.State.CAPTURED) {
+				capturedGhosts--;
+			}
+		}
+
 	}
 
 	@Override
-	public void changePlayerStates(Player.State fromState, Player.State toState)
+	public void startFromReady()
 			throws NullPointerException {
-		playerRepository.changePlayerStates(fromState, toState);
+		playerRepository.changePlayerStates(
+				Player.State.READY, Player.State.ACTIVE
+		);
+	}
+
+	@Override
+	public Integer getCapturedGhosts() {
+		return capturedGhosts;
 	}
 
 	@Override
@@ -130,12 +155,15 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			player.resetLocation();
 		}
 
+		capturedGhosts = 0;
+
 	}
 
 	@Override
 	public void resetHard() throws NullPointerException, IllegalArgumentException {
 
 		playerRepository.clearPlayers();
+		capturedGhosts = 0;
 
 		log.debug("Attempting to recreate players");
 		Player player;
