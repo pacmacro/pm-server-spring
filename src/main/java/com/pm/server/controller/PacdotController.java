@@ -34,38 +34,6 @@ public class PacdotController {
 			LogManager.getLogger(PacdotController.class.getName());
 
 	@RequestMapping(
-			value="/score",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<ScoreResponse>
-			getGameScore(HttpServletResponse response) {
-
-		log.info("Mapped GET /pacdots/score");
-
-		Integer score = 0;
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
-			if(pacdot.getEaten()) {
-				if(pacdot.getPowerdot()) {
-					score += 50;
-				}
-				else {
-					score += 10;
-				}
-			}
-		}
-
-		log.info("Calculated score {}", score);
-
-		ScoreResponse scoreResponse = new ScoreResponse();
-		scoreResponse.setScore(score);
-		return ResponseEntity
-				.status(HttpStatus.OK)
-				.body(scoreResponse);
-	}
-
-	@RequestMapping(
 			value="/count",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
