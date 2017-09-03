@@ -1,15 +1,14 @@
 package com.pm.server.repository;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.Pacdot;
+import com.pm.server.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.utils.JsonUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class PacdotRepositoryImpl implements PacdotRepository {
@@ -20,7 +19,7 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 			LogManager.getLogger(PacdotRepositoryImpl.class.getName());
 
 	public PacdotRepositoryImpl() {
-		 this.pacdotList = new ArrayList<Pacdot>();
+		 this.pacdotList = new ArrayList<>();
 	}
 
 	@Override
@@ -147,7 +146,7 @@ public class PacdotRepositoryImpl implements PacdotRepository {
 
 	@Override
 	public void clear() {
-		pacdotList = new ArrayList<Pacdot>();
+		pacdotList = new ArrayList<>();
 	}
 
 }

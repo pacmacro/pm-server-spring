@@ -56,10 +56,10 @@ public class Coordinate {
 			return false;
 		}
 		final Coordinate coordinateCompare = (Coordinate) object;
-		if(this.latitude != coordinateCompare.latitude) {
+		if(!this.latitude.equals(coordinateCompare.latitude)) {
 			return false;
 		}
-		else if(this.longitude != coordinateCompare.longitude) {
+		else if(!this.longitude.equals(coordinateCompare.longitude)) {
 			return false;
 		}
 

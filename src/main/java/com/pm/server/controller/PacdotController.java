@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class PacdotController {
 			produces={ "application/json" }
 	)
 	public ResponseEntity<PacdotCountResponse>
-			getPacdotCount(HttpServletResponse response) {
+			getPacdotCount() {
 
 		log.info("Mapped GET /pacdots/count");
 
@@ -67,11 +66,11 @@ public class PacdotController {
 			produces={ "application/json" }
 	)
 	public ResponseEntity<List<PacdotUneatenResponse>>
-			getUneatenPacdots(HttpServletResponse response) {
+			getUneatenPacdots() {
 
 		log.info("Mapped GET /pacdots/uneaten");
 
-		List<PacdotUneatenResponse> responseList = new ArrayList<PacdotUneatenResponse>();
+		List<PacdotUneatenResponse> responseList = new ArrayList<>();
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
@@ -104,11 +103,11 @@ public class PacdotController {
 			produces={ "application/json" }
 	)
 	public ResponseEntity<List<PacdotResponse>>
-			getAllPacdots(HttpServletResponse response) {
+			getAllPacdots() {
 
 		log.info("Mapped GET /pacdots");
 
-		List<PacdotResponse> responseList = new ArrayList<PacdotResponse>();
+		List<PacdotResponse> responseList = new ArrayList<>();
 		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 			PacdotResponse pacdotResponse = new PacdotResponse();

@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletResponse;
-
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -28,7 +26,7 @@ public class AdminController {
 			produces={ "application/json" }
 	)
 	@SuppressWarnings("rawtypes")
-	public ResponseEntity resetPacdots(HttpServletResponse response) {
+	public ResponseEntity resetPacdots() {
 		log.info("Mapped POST /admin/pacdots/reset");
 
 		adminManager.resetPacdots();
