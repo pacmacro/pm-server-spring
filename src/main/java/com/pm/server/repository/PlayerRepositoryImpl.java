@@ -154,7 +154,7 @@ public class PlayerRepositoryImpl implements PlayerRepository {
 			throws NullPointerException {
 		if(fromState == null || toState == null) {
 			throw new NullPointerException(
-					"changePlayerStates() was given a null state."
+					"startFromReady() was given a null state."
 			);
 		}
 

@@ -1,7 +1,8 @@
 package com.pm.server.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
+import com.pm.server.manager.GameStateManager;
+import com.pm.server.response.GameStateResponse;
+import com.pm.server.response.ScoreResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,29 +12,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pm.server.registry.GameStateRegistry;
-import com.pm.server.response.GameStateResponse;
-
 @RestController
 @RequestMapping("/gamestate")
 public class GameStateController {
 
-	@Autowired
-	private GameStateRegistry gameStateRegistry;
+	private GameStateManager gameStateManager;
 
 	private final static Logger log =
 			LogManager.getLogger(GameStateController.class.getName());
+
+	@Autowired
+	public GameStateController(GameStateManager gameStateManager) {
+		this.gameStateManager = gameStateManager;
+	}
+
+	@RequestMapping(
+			value="/score",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<ScoreResponse> getGameScore() {
+
+		log.info("Mapped GET /gamestate/score");
+
+		Integer score = gameStateManager.getScore();
+		log.info("Retrieved score {}", score);
+
+		ScoreResponse scoreResponse = new ScoreResponse();
+		scoreResponse.setScore(score);
+		return ResponseEntity
+				.status(HttpStatus.OK)
+				.body(scoreResponse);
+	}
 
 	@RequestMapping(
 			value="",
 			method=RequestMethod.GET,
 			produces={ "application/json" }
 	)
-	public ResponseEntity<GameStateResponse> getGamestate(HttpServletResponse response) {
+	public ResponseEntity<GameStateResponse> getGamestate() {
 		log.info("Mapped GET /gamestate");
 
 		GameStateResponse stateResponse = new GameStateResponse();
-		stateResponse.setState(gameStateRegistry.getCurrentState());
+		stateResponse.setState(gameStateManager.getCurrentState());
 
 		return ResponseEntity.status(HttpStatus.OK).body(stateResponse);
 	}

@@ -16,6 +16,12 @@ public class PlayerNameAndLocationResponse {
 	private final static Logger log =
 			LogManager.getLogger(PlayerNameAndLocationResponse.class.getName());
 
+	public PlayerNameAndLocationResponse(
+			Player.Name name, Coordinate location) {
+		this.name = name;
+		this.location = location;
+	}
+
 	public void setName(Player.Name name) {
 
 		log.trace("Setting name to {}", name);

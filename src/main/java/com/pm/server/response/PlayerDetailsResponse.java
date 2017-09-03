@@ -15,6 +15,13 @@ public class PlayerDetailsResponse {
 
 	private Coordinate location;
 
+	public PlayerDetailsResponse(
+			Player.Name name, Player.State state, Coordinate location) {
+		this.name = name;
+		this.state = state;
+		this.location = location;
+	}
+
 	public Player.Name getName() {
 		return name;
 	}

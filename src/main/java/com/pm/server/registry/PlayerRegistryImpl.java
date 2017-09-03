@@ -1,6 +1,7 @@
 package com.pm.server.registry;
 
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.EatenDots;
 import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.repository.PlayerRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +27,8 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	private GameStateRegistry gameStateRegistry;
 
 	private Integer powerupMillis;
+
+	private static Integer capturedGhosts = 0;
 
 	private static Integer activePowerups = 0;
 
@@ -49,24 +53,22 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	}
 
 	@Override
-	public Player getPlayerByName(Player.Name name) {
-		return playerRepository.getPlayerByName(name);
+	public Coordinate getPlayerLocation(Player.Name name) {
+		return Optional.ofNullable(playerRepository.getPlayerByName(name))
+				.map(Player::getLocation)
+				.orElse(null);
 	}
 
 	@Override
-	public List<Player> getAllPlayers() {
-		return playerRepository.getAllPlayers();
+	public Player.State getPlayerState(Player.Name name) {
+		return Optional.ofNullable(playerRepository.getPlayerByName(name))
+				.map(Player::getState)
+				.orElse(null);
 	}
 
 	@Override
-	public boolean allPlayersReady() {
-		List<Player> playerList = playerRepository.getAllPlayers();
-		for(Player player : playerList) {
-			if(player.getState() != Player.State.READY) {
-				return false;
-			}
-		}
-		return true;
+	public void resetLocationOf(Player.Name name) {
+		playerRepository.getPlayerByName(name).resetLocation();
 	}
 
 	@Override
@@ -76,13 +78,14 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 		if(name == Player.Name.Pacman &&
 		   gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS) {
 
-			Boolean powerDotEaten =
+			EatenDots eatenDotsReport =
 					pacdotRegistry.eatPacdotsNearLocation(location);
-			if(powerDotEaten) {
+			if(eatenDotsReport.getEatenPowerdots() > 0) {
 				activatePowerup();
 			}
-
-			if(pacdotRegistry.allPacdotsEaten()) {
+			if(eatenDotsReport.getEatenPacdots() > 0 &&
+					eatenDotsReport.getEatenPowerdots() > 0 &&
+					pacdotRegistry.allPacdotsEaten()) {
 				gameStateRegistry.setWinnerPacman();
 			}
 
@@ -92,13 +95,36 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	@Override
 	public void setPlayerStateByName(Player.Name name, Player.State state) {
+
+		Player.State previousState = playerRepository
+				.getPlayerByName(name)
+				.getState();
 		playerRepository.setPlayerStateByName(name, state);
+
+		if(name != Player.Name.Pacman) {
+			if (previousState != Player.State.CAPTURED &&
+					state == Player.State.CAPTURED) {
+				capturedGhosts++;
+			}
+			else if (previousState == Player.State.CAPTURED &&
+					state != Player.State.CAPTURED) {
+				capturedGhosts--;
+			}
+		}
+
 	}
 
 	@Override
-	public void changePlayerStates(Player.State fromState, Player.State toState)
+	public void startFromReady()
 			throws NullPointerException {
-		playerRepository.changePlayerStates(fromState, toState);
+		playerRepository.changePlayerStates(
+				Player.State.READY, Player.State.ACTIVE
+		);
+	}
+
+	@Override
+	public Integer getCapturedGhosts() {
+		return capturedGhosts;
 	}
 
 	@Override
@@ -129,12 +155,15 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 			player.resetLocation();
 		}
 
+		capturedGhosts = 0;
+
 	}
 
 	@Override
 	public void resetHard() throws NullPointerException, IllegalArgumentException {
 
 		playerRepository.clearPlayers();
+		capturedGhosts = 0;
 
 		log.debug("Attempting to recreate players");
 		Player player;

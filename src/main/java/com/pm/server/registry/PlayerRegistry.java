@@ -8,18 +8,20 @@ import com.pm.server.datatype.Player;
 public interface PlayerRegistry {
 
 	// Returns null if the player with the corresponding name is not found
-	Player getPlayerByName(Player.Name name);
+	Coordinate getPlayerLocation(Player.Name name);
 
-	List<Player> getAllPlayers();
+	// Returns null if the player with the corresponding name is not found
+	Player.State getPlayerState(Player.Name name);
 
-	boolean allPlayersReady();
+	void resetLocationOf(Player.Name name);
 
 	void setPlayerLocationByName(Player.Name name, Coordinate location);
 
 	void setPlayerStateByName(Player.Name name, Player.State state);
 
-	void changePlayerStates(Player.State fromState, Player.State toState)
-			throws NullPointerException;
+	void startFromReady();
+
+	Integer getCapturedGhosts();
 
 	/**
 	 * Returns whether all ghosts have been captured.

@@ -48,9 +48,7 @@ public class AdminGameStateManager {
 
                 case IN_PROGRESS:
                     gameStateRegistry.startGame();
-                    playerRegistry.changePlayerStates(
-                            Player.State.READY, Player.State.ACTIVE
-                    );
+                    playerRegistry.startFromReady();
                     break;
 
                 case PAUSED:
@@ -63,9 +61,9 @@ public class AdminGameStateManager {
 
                 case FINISHED_GHOSTS_WIN:
                     gameStateRegistry.setWinnerGhosts();
-                    playerRegistry
-                            .getPlayerByName(Player.Name.Pacman)
-                            .setState(Player.State.CAPTURED);
+                    playerRegistry.setPlayerStateByName(
+                            Player.Name.Pacman, Player.State.CAPTURED
+                    );
                     break;
 
             }

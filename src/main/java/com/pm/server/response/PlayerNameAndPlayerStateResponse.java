@@ -8,4 +8,10 @@ public class PlayerNameAndPlayerStateResponse {
 
 	public Player.State state;
 
+	public PlayerNameAndPlayerStateResponse(
+			Player.Name name, Player.State state) {
+		this.name = name;
+		this.state = state;
+	}
+
 }

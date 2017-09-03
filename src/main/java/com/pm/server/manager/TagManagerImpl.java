@@ -82,9 +82,7 @@ public class TagManagerImpl implements TagManager {
             );
         }
 
-        Player.State reporterState = playerRegistry
-                .getPlayerByName(reporter)
-                .getState();
+        Player.State reporterState = playerRegistry.getPlayerState(reporter);
         if(!reporterState.equals(Player.State.ACTIVE) &&
                 !reporterState.equals(Player.State.POWERUP)) {
             throw new PmServerException(
@@ -94,9 +92,8 @@ public class TagManagerImpl implements TagManager {
             );
         }
 
-        Player.State otherPlayerState = playerRegistry
-                .getPlayerByName(otherPlayer)
-                .getState();
+        Player.State otherPlayerState =
+                playerRegistry.getPlayerState(otherPlayer);
         if(!otherPlayerState.equals(Player.State.ACTIVE) &&
                 !otherPlayerState.equals(Player.State.POWERUP)) {
 
@@ -134,9 +131,7 @@ public class TagManagerImpl implements TagManager {
     }
 
     private void completeTag(Player.Name tagger, Player.Name taggee) {
-        playerRegistry
-                .getPlayerByName(taggee)
-                .setState(Player.State.CAPTURED);
+        playerRegistry.setPlayerStateByName(taggee, Player.State.CAPTURED);
 
         if(taggee.equals(Pacman)) {
             gameStateRegistry.setWinnerGhosts();

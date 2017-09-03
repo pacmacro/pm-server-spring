@@ -17,9 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 
-import static com.pm.server.datatype.Player.Name.Blinky;
-import static com.pm.server.datatype.Player.Name.Inky;
-import static com.pm.server.datatype.Player.Name.Pacman;
+import static com.pm.server.datatype.Player.Name.*;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
@@ -63,13 +61,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         Player otherPlayer = new Player(source);
         otherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(source))
-                .thenReturn(otherPlayer);
+        when(mockPlayerRegistry.getPlayerState(source))
+                .thenReturn(otherPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -92,13 +90,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         Player otherPlayer = new Player(destination);
         otherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(destination))
-                .thenReturn(otherPlayer);
+        when(mockPlayerRegistry.getPlayerState(destination))
+                .thenReturn(otherPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -120,8 +118,8 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -148,18 +146,18 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         Player otherPlayer = new Player(source);
         otherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(source))
-                .thenReturn(otherPlayer);
+        when(mockPlayerRegistry.getPlayerState(source))
+                .thenReturn(otherPlayer.getState());
 
         Player otherOtherPlayer = new Player(destination);
         otherOtherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(destination))
-                .thenReturn(otherOtherPlayer);
+        when(mockPlayerRegistry.getPlayerState(destination))
+                .thenReturn(otherOtherPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -185,13 +183,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         Player otherPlayer = new Player(destination);
         otherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(destination))
-                .thenReturn(otherPlayer);
+        when(mockPlayerRegistry.getPlayerState(destination))
+                .thenReturn(otherPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.INITIALIZING);
@@ -216,8 +214,8 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -242,8 +240,8 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -269,13 +267,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player reporterPlayer = new Player(reporter);
         reporterPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(reporter))
-                .thenReturn(reporterPlayer);
+        when(mockPlayerRegistry.getPlayerState(reporter))
+                .thenReturn(reporterPlayer.getState());
 
         Player otherPlayer = new Player(source);
         otherPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(source))
-                .thenReturn(otherPlayer);
+        when(mockPlayerRegistry.getPlayerState(source))
+                .thenReturn(otherPlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -301,13 +299,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player taggerPlayer = new Player(tagger);
         taggerPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(tagger))
-                .thenReturn(taggerPlayer);
+        when(mockPlayerRegistry.getPlayerState(tagger))
+                .thenReturn(taggerPlayer.getState());
 
         Player taggeePlayer = new Player(taggee);
         taggeePlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(taggee))
-                .thenReturn(taggeePlayer);
+        when(mockPlayerRegistry.getPlayerState(taggee))
+                .thenReturn(taggeePlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -319,7 +317,9 @@ public class TagManagerTest extends TestTemplate {
         tagManager.registerTag(tagger, null, taggee);
 
         // Then
-        assertEquals(Player.State.CAPTURED, taggeePlayer.getState());
+        verify(mockPlayerRegistry).setPlayerStateByName(
+                taggee, Player.State.CAPTURED
+        );
         verify(mockGameStateRegistry).setWinnerGhosts();
 
     }
@@ -334,13 +334,13 @@ public class TagManagerTest extends TestTemplate {
 
         Player taggerPlayer = new Player(tagger);
         taggerPlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(tagger))
-                .thenReturn(taggerPlayer);
+        when(mockPlayerRegistry.getPlayerState(tagger))
+                .thenReturn(taggerPlayer.getState());
 
         Player taggeePlayer = new Player(taggee);
         taggeePlayer.setState(Player.State.ACTIVE);
-        when(mockPlayerRegistry.getPlayerByName(taggee))
-                .thenReturn(taggeePlayer);
+        when(mockPlayerRegistry.getPlayerState(taggee))
+                .thenReturn(taggeePlayer.getState());
 
         when(mockGameStateRegistry.getCurrentState())
                 .thenReturn(GameState.IN_PROGRESS);
@@ -353,7 +353,9 @@ public class TagManagerTest extends TestTemplate {
         tagManager.registerTag(taggee, tagger, null);
 
         // Then
-        assertEquals(Player.State.CAPTURED, taggeePlayer.getState());
+        verify(mockPlayerRegistry).setPlayerStateByName(
+                taggee, Player.State.CAPTURED
+        );
         verify(mockGameStateRegistry).setWinnerPacman();
 
     }
