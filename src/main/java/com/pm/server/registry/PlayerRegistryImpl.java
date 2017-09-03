@@ -7,6 +7,7 @@ import com.pm.server.repository.PlayerRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -23,12 +24,9 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 
 	private GameStateRegistry gameStateRegistry;
 
-	private static Integer activePowerups = 0;
+	private Integer powerupMillis;
 
-	/**
-	 * Units: Milliseconds
-	 */
-	private static final Integer POWERUP_TIME = 30 * 1000;
+	private static Integer activePowerups = 0;
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerRegistryImpl.class.getName());
@@ -37,10 +35,12 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 	public PlayerRegistryImpl(
 			PlayerRepository playerRepository,
 			PacdotRegistry pacdotRegistry,
-			GameStateRegistry gameStateRegistry) {
+			GameStateRegistry gameStateRegistry,
+			@Value("${powerup.millis}") Integer powerupMillis) {
 		this.playerRepository = playerRepository;
 		this.pacdotRegistry = pacdotRegistry;
 		this.gameStateRegistry = gameStateRegistry;
+		this.powerupMillis = powerupMillis;
 	}
 
 	@PostConstruct
@@ -165,7 +165,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 				}
 
 			}
-		}, POWERUP_TIME);
+		}, powerupMillis);
 
 	}
 
