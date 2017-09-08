@@ -10,6 +10,6 @@ watch \
     --silent \
     --request GET \
     -H "Content-Type: application/json" \
-    $base_url/pacdots/score \
+    $base_url/gamestate/score \
   | python -m json.tool
 "
