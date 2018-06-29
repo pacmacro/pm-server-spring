@@ -1,6 +1,7 @@
 package com.pm.server.controller;
 
 import com.pm.server.datatype.Pacdot;
+import com.pm.server.manager.PacdotManager;
 import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
@@ -24,7 +25,7 @@ import java.util.List;
 public class PacdotController {
 
 	@Autowired
-	private PacdotRegistry pacdotRegistry;
+	private PacdotManager pacdotManager;
 
 	private final static Logger log =
 			LogManager.getLogger(PacdotController.class.getName());
@@ -40,7 +41,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/count");
 
 		PacdotCountResponse countResponse = new PacdotCountResponse();
-		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
+		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			countResponse.incrementTotal();
@@ -71,7 +72,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/uneaten");
 
 		List<PacdotUneatenResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
+		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			if(!pacdot.isEaten()) {
@@ -108,7 +109,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots");
 
 		List<PacdotResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
+		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 			responseList.add(new PacdotResponse(pacdot));
 		}
