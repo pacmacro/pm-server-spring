@@ -40,7 +40,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/count");
 
 		PacdotCountResponse countResponse = new PacdotCountResponse();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			countResponse.incrementTotal();
@@ -71,7 +71,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/uneaten");
 
 		List<PacdotUneatenResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			if(!pacdot.isEaten()) {
@@ -108,7 +108,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots");
 
 		List<PacdotResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 			PacdotResponse pacdotResponse = new PacdotResponse();
 

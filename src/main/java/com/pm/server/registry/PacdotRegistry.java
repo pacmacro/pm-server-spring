@@ -21,11 +21,11 @@ public interface PacdotRegistry {
 			throws NullPointerException;
 
 	/**
-	 * Retrieves all pacdots in the registry.
+	 * Retrieves the information of all pacdots in the registry.
 	 * 
-	 * @return all pacdots
+	 * @return the information of all pacdots
 	 */
-	List<Pacdot> getAllPacdots();
+	List<Pacdot> getInformationOfAllPacdots();
 
 	/**
 	 * Returns whether all Pacdots have been eaten.

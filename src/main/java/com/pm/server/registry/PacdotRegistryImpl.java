@@ -1,6 +1,8 @@
 package com.pm.server.registry;
 
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -82,8 +84,8 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	}
 
 	@Override
-	public List<Pacdot> getAllPacdots() {
-		return pacdotRepository.getAllPacdots();
+	public List<Pacdot> getInformationOfAllPacdots() {
+		return Collections.unmodifiableList(pacdotRepository.getAllPacdots());
 	}
 
 	// TODO: Inefficient, but I am on an extremely tight schedule right now.
@@ -115,7 +117,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 		 * algorithm. If you feel like helping me improve this, please
 		 * check out issue 52 on GitHub.
 		 */
-		List<Pacdot> pacdotList = getAllPacdots();
+		List<Pacdot> pacdotList = getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			if(withinDistance(
