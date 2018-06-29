@@ -1,27 +1,21 @@
 package com.pm.server.controller;
 
 import com.pm.server.ControllerTestTemplate;
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.manager.AdminManager;
+import com.pm.server.manager.PacdotManager;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class AdminControllerTest extends ControllerTestTemplate {
 
 	@Autowired
-	private AdminManager adminManager;
+	private PacdotManager pacdotManager;
 
 	private static final String BASE_MAPPING = "/admin";
 

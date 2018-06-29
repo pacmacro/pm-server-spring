@@ -13,9 +13,16 @@ public class Pacdot {
 
 	private boolean eaten;
 
-	private boolean powerdot = false;
+	private boolean powerdot;
 
 	public Pacdot() {
+		powerdot = false;
+	}
+
+	public Pacdot(Coordinate location, boolean eaten, boolean powerdot) {
+		this.location = location;
+		this.eaten = eaten;
+		this.powerdot = powerdot;
 	}
 
 	public Pacdot(boolean powerdot) {

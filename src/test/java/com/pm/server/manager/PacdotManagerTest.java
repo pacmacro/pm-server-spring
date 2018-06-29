@@ -14,23 +14,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertFalse;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdminManagerTest extends TestTemplate {
+public class PacdotManagerTest extends TestTemplate {
 
     private List<Pacdot> pacdotList = new ArrayList<>();
 
     @Mock
     private PacdotRegistry mockPacdotRegistry;
 
-    private AdminManager adminManager;
+    private PacdotManager pacdotManager;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        adminManager = new AdminManager(mockPacdotRegistry);
-        when(mockPacdotRegistry.getAllPacdots()).thenReturn(pacdotList);
+        pacdotManager = new PacdotManagerImpl(mockPacdotRegistry);
+        when(mockPacdotRegistry.getInformationOfAllPacdots())
+                .thenReturn(pacdotList);
     }
 
     @Test
@@ -45,12 +48,10 @@ public class AdminManagerTest extends TestTemplate {
         }
 
         // When
-        adminManager.resetPacdots();
+        pacdotManager.resetPacdots();
 
         // Then
-        for(Pacdot p : pacdotList) {
-            assertFalse(p.isEaten());
-        }
+        verify(mockPacdotRegistry).resetPacdots();
 
     }
 
@@ -61,7 +62,7 @@ public class AdminManagerTest extends TestTemplate {
         pacdotList.clear();
 
         // When
-        adminManager.resetPacdots();
+        pacdotManager.resetPacdots();
 
         // Then
         // No exception

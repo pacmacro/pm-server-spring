@@ -1,7 +1,7 @@
 package com.pm.server.registry;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.EatenDots;
+import com.pm.server.datatype.EatenDotsReport;
 import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.repository.PlayerRepository;
@@ -78,7 +78,7 @@ public class PlayerRegistryImpl implements PlayerRegistry {
 		if(name == Player.Name.Pacman &&
 		   gameStateRegistry.getCurrentState() == GameState.IN_PROGRESS) {
 
-			EatenDots eatenDotsReport =
+			EatenDotsReport eatenDotsReport =
 					pacdotRegistry.eatPacdotsNearLocation(location);
 			if(eatenDotsReport.getEatenPowerdots() > 0) {
 				activatePowerup();

@@ -1,12 +1,12 @@
 package com.pm.server.datatype;
 
-public class EatenDots {
+public class EatenDotsReport {
 
     private Integer eatenPacdots;
 
     private Integer eatenPowerdots;
 
-    public EatenDots() {
+    public EatenDotsReport() {
         eatenPacdots = 0;
         eatenPowerdots = 0;
     }

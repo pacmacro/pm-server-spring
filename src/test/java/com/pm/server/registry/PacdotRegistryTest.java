@@ -1,13 +1,10 @@
 package com.pm.server.registry;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.pm.server.datatype.EatenDots;
+import com.pm.server.TestTemplate;
+import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.EatenDotsReport;
+import com.pm.server.datatype.Pacdot;
+import com.pm.server.repository.PacdotRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,10 +12,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import com.pm.server.TestTemplate;
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.repository.PacdotRepository;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PacdotRegistryTest extends TestTemplate {
@@ -31,7 +30,7 @@ public class PacdotRegistryTest extends TestTemplate {
 	private List<Pacdot> pacdotList = new ArrayList<>();
 
 	@Before
-	public void setUp() {
+	public void setUp() throws Exception {
 
 		MockitoAnnotations.initMocks(this);
 		when(pacdotRepositoryMock.getAllPacdots()).thenReturn(pacdotList);
@@ -39,6 +38,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		pacdotRegistry = new PacdotRegistryImpl(
 				pacdotRepositoryMock, "pacdots_test.json", "powerdots_test.json", 0.0005
 		);
+		pacdotRegistry.postConstruct();
 
 		Pacdot pacdot1 = new Pacdot();
 		Coordinate location1 = new Coordinate(3919.12391013, 9488.49119489);
@@ -112,7 +112,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		// Given
 		Coordinate location = new Coordinate(pacdotList.get(0).getLocation());
 
-		EatenDots eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
+		EatenDotsReport eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
 		assertTrue(eatenDots.getEatenPowerdots() != 0);
 
 		// When

@@ -1,30 +1,33 @@
 package com.pm.server.registry;
 
-import java.io.InputStream;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
-import com.pm.server.datatype.EatenDots;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.EatenDotsReport;
+import com.pm.server.datatype.Pacdot;
+import com.pm.server.repository.PacdotRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.repository.PacdotRepository;
+import javax.annotation.PostConstruct;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 public class PacdotRegistryImpl implements PacdotRegistry {
 
 	private PacdotRepository pacdotRepository;
 
-	private String pacdotsFilename;
+	private Integer count_total;
+	private Integer count_total_uneaten;
+	private Integer count_total_powerdots;
+	private Integer count_total_powerdots_uneaten;
 
+	private String pacdotsFilename;
 	private String powerdotsFilename;
 
 	private Double pacdotCapturingDistance;
@@ -55,67 +58,61 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 
 		List<Coordinate> locationList;
 
+		count_total = 0;
+		count_total_powerdots = 0;
+
 		locationList = readPacdotListFromFile(pacdotsFilename);
 		for(Coordinate location : locationList) {
-			Pacdot pacdot = new Pacdot();
-			pacdot.setLocation(location);
-			pacdot.setUneaten();
-			pacdot.setAsNormalPacDot();
-			pacdotRepository.addPacdot(pacdot);
+			pacdotRepository.addPacdot(new Pacdot(location, false, false));
+			count_total++;
 		}
 
 		locationList = readPacdotListFromFile(powerdotsFilename);
 		for(Coordinate location : locationList) {
-			Pacdot pacdot = new Pacdot();
-			pacdot.setLocation(location);
-			pacdot.setUneaten();
-			pacdot.setAsPowerdot();
-			pacdotRepository.addPacdot(pacdot);
+			pacdotRepository.addPacdot(new Pacdot(location, false, true));
+			count_total++;
+			count_total_powerdots++;
 		}
 
+		resetPacdotCounts();
 	}
 
 	@Override
-	public Pacdot getPacdotByLocation(Coordinate location)
-			throws NullPointerException {
-		return pacdotRepository.getPacdotByLocation(location);
+	public List<Pacdot> getInformationOfAllPacdots() {
+		return Collections.unmodifiableList(pacdotRepository.getAllPacdots());
 	}
 
 	@Override
-	public List<Pacdot> getAllPacdots() {
-		return pacdotRepository.getAllPacdots();
+	public Integer getTotalCount() {
+		return count_total;
 	}
 
-	// TODO: Inefficient, but I am on an extremely tight schedule right now.
-	// Even a counter variable would be better.
+	@Override
+	public Integer getUneatenCount() {
+		return count_total_uneaten;
+	}
+
+	@Override
+	public Integer getUneatenPowerdotCount() {
+		return count_total_powerdots_uneaten;
+	}
+
 	@Override
 	public boolean allPacdotsEaten() {
-		List<Pacdot> pacdotList = pacdotRepository.getAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
-			if(!pacdot.isEaten()) {
-				return false;
-			}
-		}
-		return true;
+		return count_total_uneaten == 0;
 	}
 
 	@Override
-	public void setEatenStatusByLocation(Coordinate location, boolean eaten)
-			throws NullPointerException {
-		pacdotRepository.setEatenStatusByLocation(location, eaten);
-	}
+	public EatenDotsReport eatPacdotsNearLocation(Coordinate location) {
 
-	@Override
-	public EatenDots eatPacdotsNearLocation(Coordinate location) {
-
-		EatenDots eatenDotsReport = new EatenDots();
+		EatenDotsReport eatenDotsReport = new EatenDotsReport();
 
 		/*
 		 * Incredibly inefficient but I have no time to implement a quicker
 		 * algorithm. If you feel like helping me improve this, please
 		 * check out issue 52 on GitHub.
 		 */
-		List<Pacdot> pacdotList = getAllPacdots();
+		List<Pacdot> pacdotList = getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			if(withinDistance(
@@ -123,8 +120,10 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 				) && !pacdot.isEaten() ) {
 
 				pacdot.setEaten();
+				count_total_uneaten--;
 				if(pacdot.isPowerdot()) {
 					eatenDotsReport.addEatenPowerdot();
+					count_total_powerdots_uneaten--;
 				}
 				else {
 					eatenDotsReport.addEatenPacdot();
@@ -139,12 +138,16 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	@Override
 	public void resetPacdots() {
 		pacdotRepository.resetPacdots();
+		resetPacdotCounts();
 	}
 
 	private List<Coordinate> readPacdotListFromFile(String filename)
 			throws Exception {
 
-		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(filename);
+		InputStream inputStream = this
+				.getClass()
+				.getClassLoader()
+				.getResourceAsStream(filename);
 		if(inputStream == null) {
 			throw new IllegalArgumentException(
 					"InputStream could not be opened for reading " +
@@ -164,7 +167,12 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 
 	}
 
-	private Boolean withinDistance(
+	private void resetPacdotCounts() {
+		count_total_uneaten = count_total;
+		count_total_powerdots_uneaten = count_total_powerdots;
+	}
+
+	private static Boolean withinDistance(
 			Coordinate location1, Coordinate location2,
 			Double distance) {
 		Double latitudeDistance =
@@ -176,7 +184,7 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 				< square(distance);
 	}
 
-	private Double square(Double val) {
+	private static Double square(Double val) {
 		return Math.pow(val, 2);
 	}
 

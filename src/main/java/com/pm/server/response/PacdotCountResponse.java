@@ -42,20 +42,4 @@ public class PacdotCountResponse {
 		this.uneatenPowerdots = uneatenPowerdots;
 	}
 
-	public void incrementTotal() {
-		total++;
-	}
-
-	public void incrementEaten() {
-		eaten++;
-	}
-
-	public void incrementUneaten() {
-		uneaten++;
-	}
-
-	public void incrementUneatenPowerdots() {
-		uneatenPowerdots++;
-	}
-
 }

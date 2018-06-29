@@ -31,7 +31,7 @@ public class GameStateManagerImpl implements GameStateManager {
     public Integer getScore() {
         Integer score = 0;
 
-        List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+        List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
         for(Pacdot pacdot : pacdotList) {
             if(pacdot.isEaten()) {
                 if(pacdot.isPowerdot()) {

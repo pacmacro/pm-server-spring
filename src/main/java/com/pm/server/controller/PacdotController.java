@@ -1,7 +1,7 @@
 package com.pm.server.controller;
 
 import com.pm.server.datatype.Pacdot;
-import com.pm.server.registry.PacdotRegistry;
+import com.pm.server.manager.PacdotManager;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
 import com.pm.server.response.PacdotResponse;
@@ -24,7 +24,7 @@ import java.util.List;
 public class PacdotController {
 
 	@Autowired
-	private PacdotRegistry pacdotRegistry;
+	private PacdotManager pacdotManager;
 
 	private final static Logger log =
 			LogManager.getLogger(PacdotController.class.getName());
@@ -40,21 +40,14 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/count");
 
 		PacdotCountResponse countResponse = new PacdotCountResponse();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
+		countResponse.setTotal(pacdotManager.getTotalCount());
+		countResponse.setEaten(pacdotManager.getTotalCount() -
+				pacdotManager.getUneatenCount());
+		countResponse.setUneaten(pacdotManager.getUneatenCount());
+		countResponse.setUneatenPowerdots(
+				pacdotManager.getUneatenPowerdotCount()
+		);
 
-			countResponse.incrementTotal();
-			if(pacdot.isEaten()) {
-				countResponse.incrementEaten();
-			}
-			else {
-				countResponse.incrementUneaten();
-				if(pacdot.isPowerdot()) {
-					countResponse.incrementUneatenPowerdots();
-				}
-			}
-
-		}
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(countResponse);
@@ -71,7 +64,7 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/uneaten");
 
 		List<PacdotUneatenResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
 
 			if(!pacdot.isEaten()) {
@@ -108,19 +101,9 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots");
 
 		List<PacdotResponse> responseList = new ArrayList<>();
-		List<Pacdot> pacdotList = pacdotRegistry.getAllPacdots();
+		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
-			PacdotResponse pacdotResponse = new PacdotResponse();
-
-			LocationResponse locationResponse = new LocationResponse();
-			locationResponse.setLatitude(pacdot.getLocation().getLatitude());
-			locationResponse.setLongitude(pacdot.getLocation().getLongitude());
-			pacdotResponse.setLocation(locationResponse);
-
-			pacdotResponse.setEaten(pacdot.isEaten());
-			pacdotResponse.setPowerdot(pacdot.isPowerdot());
-
-			responseList.add(pacdotResponse);
+			responseList.add(new PacdotResponse(pacdot));
 		}
 
 		String objectString = JsonUtils.objectToJson(responseList);
