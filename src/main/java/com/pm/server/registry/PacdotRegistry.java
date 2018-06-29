@@ -1,7 +1,7 @@
 package com.pm.server.registry;
 
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.EatenDots;
+import com.pm.server.datatype.EatenDotsReport;
 import com.pm.server.datatype.Pacdot;
 
 import java.util.List;
@@ -52,7 +52,7 @@ public interface PacdotRegistry {
 	 * @param location Location of the Player eating the dots
 	 * @return A report on the number of Pacdots and Powerdots eaten
 	 */
-	EatenDots eatPacdotsNearLocation(Coordinate location);
+	EatenDotsReport eatPacdotsNearLocation(Coordinate location);
 
 	/**
 	 * Resets all Pacdots to uneaten.

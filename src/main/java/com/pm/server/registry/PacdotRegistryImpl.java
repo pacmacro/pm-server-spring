@@ -3,7 +3,7 @@ package com.pm.server.registry;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.EatenDots;
+import com.pm.server.datatype.EatenDotsReport;
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.repository.PacdotRepository;
 import org.apache.logging.log4j.LogManager;
@@ -103,9 +103,9 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	}
 
 	@Override
-	public EatenDots eatPacdotsNearLocation(Coordinate location) {
+	public EatenDotsReport eatPacdotsNearLocation(Coordinate location) {
 
-		EatenDots eatenDotsReport = new EatenDots();
+		EatenDotsReport eatenDotsReport = new EatenDotsReport();
 
 		/*
 		 * Incredibly inefficient but I have no time to implement a quicker

@@ -2,7 +2,7 @@ package com.pm.server.registry;
 
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.EatenDots;
+import com.pm.server.datatype.EatenDotsReport;
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.repository.PacdotRepository;
 import org.junit.Before;
@@ -112,7 +112,7 @@ public class PacdotRegistryTest extends TestTemplate {
 		// Given
 		Coordinate location = new Coordinate(pacdotList.get(0).getLocation());
 
-		EatenDots eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
+		EatenDotsReport eatenDots = pacdotRegistry.eatPacdotsNearLocation(location);
 		assertTrue(eatenDots.getEatenPowerdots() != 0);
 
 		// When
