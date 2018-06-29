@@ -110,17 +110,7 @@ public class PacdotController {
 		List<PacdotResponse> responseList = new ArrayList<>();
 		List<Pacdot> pacdotList = pacdotRegistry.getInformationOfAllPacdots();
 		for(Pacdot pacdot : pacdotList) {
-			PacdotResponse pacdotResponse = new PacdotResponse();
-
-			LocationResponse locationResponse = new LocationResponse();
-			locationResponse.setLatitude(pacdot.getLocation().getLatitude());
-			locationResponse.setLongitude(pacdot.getLocation().getLongitude());
-			pacdotResponse.setLocation(locationResponse);
-
-			pacdotResponse.setEaten(pacdot.isEaten());
-			pacdotResponse.setPowerdot(pacdot.isPowerdot());
-
-			responseList.add(pacdotResponse);
+			responseList.add(new PacdotResponse(pacdot));
 		}
 
 		String objectString = JsonUtils.objectToJson(responseList);
