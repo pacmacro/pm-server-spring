@@ -27,4 +27,19 @@ public class PacdotManagerImpl implements PacdotManager {
         return pacdotRegistry.getInformationOfAllPacdots();
     }
 
+    @Override
+    public Integer getTotalCount() {
+        return pacdotRegistry.getTotalCount();
+    }
+
+    @Override
+    public Integer getUneatenCount() {
+        return pacdotRegistry.getUneatenCount();
+    }
+
+    @Override
+    public Integer getUneatenPowerdotCount() {
+        return pacdotRegistry.getUneatenPowerdotCount();
+    }
+
 }

@@ -1,10 +1,10 @@
 package com.pm.server.registry;
 
-import java.util.List;
-
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.EatenDots;
 import com.pm.server.datatype.Pacdot;
+
+import java.util.List;
 
 public interface PacdotRegistry {
 
@@ -14,6 +14,27 @@ public interface PacdotRegistry {
 	 * @return the information of all pacdots
 	 */
 	List<Pacdot> getInformationOfAllPacdots();
+
+	/**
+	 * Retrieves the total number of Pacdots, eaten or uneaten.
+	 *
+	 * @return the total number of Pacdots, eaten or uneaten
+	 */
+	Integer getTotalCount();
+
+	/**
+	 * Retrieves the number of uneaten Pacdots.
+	 *
+	 * @return the number of uneaten Pacdots
+	 */
+	Integer getUneatenCount();
+
+	/**
+	 * Retrieves the number of uneaten Powerdots.
+	 *
+	 * @return the number of uneaten Powerdots
+	 */
+	Integer getUneatenPowerdotCount();
 
 	/**
 	 * Returns whether all Pacdots have been eaten.

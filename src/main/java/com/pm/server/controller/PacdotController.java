@@ -2,7 +2,6 @@ package com.pm.server.controller;
 
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.manager.PacdotManager;
-import com.pm.server.registry.PacdotRegistry;
 import com.pm.server.response.LocationResponse;
 import com.pm.server.response.PacdotCountResponse;
 import com.pm.server.response.PacdotResponse;
@@ -41,21 +40,14 @@ public class PacdotController {
 		log.info("Mapped GET /pacdots/count");
 
 		PacdotCountResponse countResponse = new PacdotCountResponse();
-		List<Pacdot> pacdotList = pacdotManager.getInformationOfAllPacdots();
-		for(Pacdot pacdot : pacdotList) {
+		countResponse.setTotal(pacdotManager.getTotalCount());
+		countResponse.setEaten(pacdotManager.getTotalCount() -
+				pacdotManager.getUneatenCount());
+		countResponse.setUneaten(pacdotManager.getUneatenCount());
+		countResponse.setUneatenPowerdots(
+				pacdotManager.getUneatenPowerdotCount()
+		);
 
-			countResponse.incrementTotal();
-			if(pacdot.isEaten()) {
-				countResponse.incrementEaten();
-			}
-			else {
-				countResponse.incrementUneaten();
-				if(pacdot.isPowerdot()) {
-					countResponse.incrementUneatenPowerdots();
-				}
-			}
-
-		}
 		return ResponseEntity
 				.status(HttpStatus.OK)
 				.body(countResponse);
