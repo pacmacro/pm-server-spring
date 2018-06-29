@@ -56,20 +56,12 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 
 		locationList = readPacdotListFromFile(pacdotsFilename);
 		for(Coordinate location : locationList) {
-			Pacdot pacdot = new Pacdot();
-			pacdot.setLocation(location);
-			pacdot.setUneaten();
-			pacdot.setAsNormalPacDot();
-			pacdotRepository.addPacdot(pacdot);
+			pacdotRepository.addPacdot(new Pacdot(location, false, false));
 		}
 
 		locationList = readPacdotListFromFile(powerdotsFilename);
 		for(Coordinate location : locationList) {
-			Pacdot pacdot = new Pacdot();
-			pacdot.setLocation(location);
-			pacdot.setUneaten();
-			pacdot.setAsPowerdot();
-			pacdotRepository.addPacdot(pacdot);
+			pacdotRepository.addPacdot(new Pacdot(location, false, true));
 		}
 
 	}
