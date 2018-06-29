@@ -1,24 +1,21 @@
 package com.pm.server.registry;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.PostConstruct;
-
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.EatenDots;
+import com.pm.server.datatype.Pacdot;
+import com.pm.server.repository.PacdotRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.Pacdot;
-import com.pm.server.repository.PacdotRepository;
+import javax.annotation.PostConstruct;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 public class PacdotRegistryImpl implements PacdotRegistry {
@@ -78,12 +75,6 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 	}
 
 	@Override
-	public Pacdot getPacdotByLocation(Coordinate location)
-			throws NullPointerException {
-		return pacdotRepository.getPacdotByLocation(location);
-	}
-
-	@Override
 	public List<Pacdot> getInformationOfAllPacdots() {
 		return Collections.unmodifiableList(pacdotRepository.getAllPacdots());
 	}
@@ -99,12 +90,6 @@ public class PacdotRegistryImpl implements PacdotRegistry {
 			}
 		}
 		return true;
-	}
-
-	@Override
-	public void setEatenStatusByLocation(Coordinate location, boolean eaten)
-			throws NullPointerException {
-		pacdotRepository.setEatenStatusByLocation(location, eaten);
 	}
 
 	@Override
