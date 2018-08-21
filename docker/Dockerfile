@@ -2,7 +2,7 @@
 # This Dockerfile contains the configuration for running the Pac Macro server locally.
 #
 
-FROM ubuntu
+FROM ubuntu:18.04
 MAINTAINER Jeffrey Leung
 
 RUN apt-get update -y
