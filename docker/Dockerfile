@@ -9,7 +9,8 @@ RUN apt-get upgrade -y
 
 RUN apt-get install -y git openjdk-8-jdk maven
 
-RUN git clone https://github.com/pacmacro/pm-server.git
+RUN mkdir pm-server
+COPY . ./pm-server/
 WORKDIR pm-server
 
 EXPOSE 8080
