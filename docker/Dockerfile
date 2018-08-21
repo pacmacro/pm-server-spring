@@ -3,7 +3,6 @@
 #
 
 FROM ubuntu:18.04
-MAINTAINER Jeffrey Leung
 
 RUN apt-get update -y
 RUN apt-get upgrade -y
