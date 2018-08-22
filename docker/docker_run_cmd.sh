@@ -13,7 +13,7 @@ echo "__________________"
 echo ""
 echo "  The Dockerfile is as follows:"
 echo ""
-cat Dockerfile
+cat docker/Dockerfile
 echo ""
 echo "___________________________________________________________"
 echo ""
