@@ -38,10 +38,9 @@ mvn spring-boot:run
 
 Which compiles, packages, and runs the application in an instance of Apache Tomcat. The console output will tell you how to contact the server (e.g. port `8080` means `http://localhost:8080/`), and you can close the server by pressing `Ctrl + c`.
 
-If you have any problems whatsoever, [too bad, deal with them yourselves like adults](https://www.youtube.com/watch?v=YUrpjEuBUtk).  
-Nah, I'm just kidding, open an issue! I (or someone else working on the project) would be more than happy to help.
+If you have any problems whatsoever, contact us or open an issue, and someone else working on the project will be more than happy to help!
 
-### Docker Setup
+### Docker Setup (Alternative)
 
 A Docker image is available for a quick and minimal way to run the server on your local machine.
 
@@ -77,7 +76,7 @@ When a request is received by the server, it is initially sent through a Control
 
 ## Deployment Pipeline
 
-When a change is pushed to GitHub, two processes are triggered and run concurrently. A [Docker image](https://hub.docker.com/r/pacmacro/pm-server) is built and a [Travis CI](travis-ci.org/pacmacro/pm-server) build is run. If the Travis CI build passes all tests, then Heroku will build the WAR file, deploy it to a Heroku dyno, and spin up the server at [this URL](http://pacmacro.herokuapp.com/).
+When a change is pushed to GitHub, two processes are triggered and run concurrently. A [Docker image](https://hub.docker.com/r/pacmacro/pm-server) is built and a [Travis CI](https://www.travis-ci.org/pacmacro/pm-server) build is run. If the Travis CI build passes all tests, then Heroku will build the WAR file, deploy it to a Heroku dyno, and spin up the server at [this URL](http://pacmacro.herokuapp.com/).
 
 ## Design Decisions
 
