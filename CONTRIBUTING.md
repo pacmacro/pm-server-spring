@@ -12,27 +12,27 @@ To run the server on your local machine, you'll need [Java 1.8](http://www.oracl
 
 My personal preference for setup is to run the following:
 
-```
+```shell
 sudo apt-get install -y git openjdk-8-jdk maven
 ```
 
 Got an error? Your dependencies may not be up to date. Try executing the following then re-running the installs:
 
-```
+```shell
 sudo apt-get update
 sudo apt-get upgrade
 ```
 
 Now, clone the repository into your current directory:
 
-```
+```shell
 git clone https://github.com/pacmacro/pm-server.git
 cd pm-server
 ```
 
 Finally, run the Spring Boot application using Maven:
 
-```
+```shell
 mvn spring-boot:run
 ```
 
@@ -60,13 +60,13 @@ If all goes well, your server should be up and running in the terminal (after a 
 
 You can exit the process while leaving it running in the background by pressing `Ctrl + c`. To check the running process, execute:
 
-```
+```shell
 docker ps
 ```
 
 which will display the ID of the container currently running, and you can use this to kill the process:
 
-```
+```shell
 docker kill CONTAINER_ID
 ```
 
