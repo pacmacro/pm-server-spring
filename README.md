@@ -6,6 +6,8 @@
 Java & Spring Boot RESTful server for relaying information between devices for the game Pac Macro.  
 The official specification for the game can be found [here](https://github.com/pacmacro/pm-specification).
 
+[![System Architecture diagram](readme-img/system-architecture.png)](https://cloudcraft.co/view/e364e7e3-cdc5-48e8-9b5f-82d7ba0d95a6?key=BhmvffJBoBU73zAUh8X22A&embed=true)
+
 The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).  
 The Travis CI service (continuous integration for tests) is located at [pacmacro/pm-server](https://travis-ci.org/pacmacro/pm-server).  
 The Docker image is located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/).
