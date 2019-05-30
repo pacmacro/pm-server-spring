@@ -11,7 +11,7 @@ if [ $# -ge 2 ] ; then
       --request PUT  \
       --header "Content-Type: application/json" \
       --data '{"state":"'$2'"}' \
-      $base_url/player/"$1"/state
+      $base_url/admin/player/"$1"/state
 else
     echo "Usage: ./put_player_state.sh name state"
     echo ""
