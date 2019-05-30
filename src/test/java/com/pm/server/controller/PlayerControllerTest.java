@@ -1,18 +1,11 @@
 package com.pm.server.controller;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
-import java.util.List;
-
+import com.jayway.jsonpath.JsonPath;
+import com.pm.server.ControllerTestTemplate;
+import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.Player;
+import com.pm.server.registry.PlayerRegistry;
+import com.pm.server.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -25,13 +18,14 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import com.jayway.jsonpath.JsonPath;
-import com.pm.server.ControllerTestTemplate;
-import com.pm.server.datatype.Coordinate;
-import com.pm.server.datatype.Player;
-import com.pm.server.registry.PlayerRegistry;
-import com.pm.server.request.StateRequest;
-import com.pm.server.utils.JsonUtils;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.Assert.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 public class PlayerControllerTest extends ControllerTestTemplate {
 
 	@Autowired
@@ -645,242 +639,6 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	}
 
-	@Test
-	public void unitTest_setPlayerState() throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.ACTIVE;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isOk());
-
-		// Then
-		Player.State resultState = getPlayerState_failUponException(player);
-		assertEquals(updatedState, resultState);
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_sameStateUninitialized()
-			throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.UNINITIALIZED;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isOk());
-
-		// Then
-		Player.State resultState = getPlayerState_failUponException(player);
-		assertEquals(updatedState, resultState);
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_sameStateReady()
-			throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.READY;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isOk());
-
-		// Then
-		Player.State resultState = getPlayerState_failUponException(player);
-		assertEquals(updatedState, resultState);
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_wrongName() throws Exception {
-
-		// Given
-		String path = BASE_MAPPING + "/PLAYER_NAME/state";
-
-		Player.State updatedState = Player.State.UNINITIALIZED;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isNotFound());
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_noStateGiven()
-			throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		String path = pathForSetPlayerState(player);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isBadRequest());
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_invalidStateValue() throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		String path = pathForSetPlayerState(player);
-
-		String body = "{\"state\":\"invalidValue\"}";
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isBadRequest());
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_initialize()
-			throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.READY;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isConflict());
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_uninitialize()
-			throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.UNINITIALIZED;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isConflict());
-
-	}
-
-	@Test
-	public void unitTest_setPlayerState_ghostPowerupState() throws Exception {
-
-		// Given
-		Player.Name player = Player.Name.Inky;
-		Coordinate location = randomCoordinateList.get(0);
-		selectPlayer_failUponException(player, location);
-
-		String path = pathForSetPlayerState(player);
-
-		Player.State updatedState = Player.State.POWERUP;
-		StateRequest updatedStateContainer =
-				new StateRequest();
-		updatedStateContainer.setState(updatedState.toString());
-		String body = JsonUtils.objectToJson(updatedStateContainer);
-
-		// When
-		mockMvc
-				.perform(put(path)
-						.content(body)
-						.contentType(MediaType.APPLICATION_JSON)
-				)
-
-		// Then
-				.andExpect(status().isConflict());
-
-	}
-
 	private String pathForSelectPlayer(Player.Name player) {
 		return BASE_MAPPING + "/" + player;
 	}
@@ -911,10 +669,6 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	private String pathForSetPlayerLocation(Player.Name player) {
 		return BASE_MAPPING + "/" + player + "/" + "location";
-	}
-
-	private String pathForSetPlayerState(Player.Name player) {
-		return BASE_MAPPING + "/" + player + "/" + "state";
 	}
 
 	private void selectPlayer_failUponException(
@@ -980,40 +734,6 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 		assertNotNull(longitude);
 
 		return new Coordinate(latitude, longitude);
-
-	}
-
-	private Player.State getPlayerState_failUponException(Player.Name player) {
-
-		String path = pathForGetPlayerState(player);
-		String jsonContent = null;
-
-		try {
-			MvcResult result = mockMvc
-					.perform(get(path))
-					.andExpect(status().isOk())
-					.andReturn();
-			jsonContent = result.getResponse().getContentAsString();
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
-
-		assertNotNull(jsonContent);
-		String stateString = JsonPath.read(jsonContent, "$.state");
-
-		Player.State state = null;
-		try {
-			state = Player.State.valueOf(stateString);
-		}
-		catch(IllegalArgumentException e) {
-			log.error(e.getMessage());
-			fail();
-		}
-
-		assertNotNull(state);
-		return state;
 
 	}
 
