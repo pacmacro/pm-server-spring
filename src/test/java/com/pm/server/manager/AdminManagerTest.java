@@ -3,6 +3,7 @@ package com.pm.server.manager;
 import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Pacdot;
 import com.pm.server.registry.PacdotRegistry;
+import com.pm.server.registry.PlayerRegistry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,27 +14,32 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PacdotManagerTest extends TestTemplate {
+public class AdminManagerTest extends TestTemplate {
 
     private List<Pacdot> pacdotList = new ArrayList<>();
 
     @Mock
     private PacdotRegistry mockPacdotRegistry;
 
-    private PacdotManager pacdotManager;
+    @Mock
+    private PlayerRegistry mockPlayerRegistry;
+
+    private AdminManager adminManager;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        pacdotManager = new PacdotManagerImpl(mockPacdotRegistry);
+
         when(mockPacdotRegistry.getInformationOfAllPacdots())
                 .thenReturn(pacdotList);
+
+        adminManager = new AdminManagerImpl(
+                mockPacdotRegistry, mockPlayerRegistry
+        );
     }
 
     @Test
@@ -48,7 +54,7 @@ public class PacdotManagerTest extends TestTemplate {
         }
 
         // When
-        pacdotManager.resetPacdots();
+        adminManager.resetPacdots();
 
         // Then
         verify(mockPacdotRegistry).resetPacdots();
@@ -62,7 +68,7 @@ public class PacdotManagerTest extends TestTemplate {
         pacdotList.clear();
 
         // When
-        pacdotManager.resetPacdots();
+        adminManager.resetPacdots();
 
         // Then
         // No exception

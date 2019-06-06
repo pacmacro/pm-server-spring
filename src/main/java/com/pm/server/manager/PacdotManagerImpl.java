@@ -18,11 +18,6 @@ public class PacdotManagerImpl implements PacdotManager {
     }
 
     @Override
-    public void resetPacdots() {
-        pacdotRegistry.resetPacdots();
-    }
-
-    @Override
     public List<Pacdot> getInformationOfAllPacdots() {
         return pacdotRegistry.getInformationOfAllPacdots();
     }

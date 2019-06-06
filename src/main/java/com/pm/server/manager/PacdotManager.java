@@ -7,12 +7,6 @@ import java.util.List;
 public interface PacdotManager {
 
     /**
-     * Resets the statuses of all pacdots to uneaten.
-     *
-     */
-    void resetPacdots();
-
-    /**
      * Retrieves the information of all pacdots in the registry.
      *
      * @return the information of all pacdots
