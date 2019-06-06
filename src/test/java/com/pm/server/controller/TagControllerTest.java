@@ -1,7 +1,7 @@
 package com.pm.server.controller;
 
+import com.pm.server.ControllerTestTemplate;
 import com.pm.server.PmServerException;
-import com.pm.server.TestTemplate;
 import com.pm.server.datatype.Player;
 import com.pm.server.manager.TagManager;
 import com.pm.server.request.TagRequest;
@@ -19,20 +19,19 @@ import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.verify;
 
-public class TagControllerTest extends TestTemplate {
-
-	@Mock
-	private TagManager tagManager;
+public class TagControllerTest extends ControllerTestTemplate {
 
 	private TagController tagController;
 
+	@Mock
+	private TagManager mockTagManager;
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		tagController = new TagController(tagManager);
+		tagController = new TagController(mockTagManager);
 	}
 
 	@Test
@@ -49,7 +48,7 @@ public class TagControllerTest extends TestTemplate {
 		tagController.registerTag(reporter.name(), tagRequest);
 
 		// Then
-		verify(tagManager).registerTag(reporter, other, null);
+		verify(mockTagManager).registerTag(reporter, other, null);
 
 	}
 

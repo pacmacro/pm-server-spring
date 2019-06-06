@@ -1,6 +1,7 @@
 package com.pm.server.controller;
 
 import com.pm.server.PmServerException;
+import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
 import com.pm.server.manager.AdminManager;
 import com.pm.server.request.StateRequest;
@@ -26,6 +27,32 @@ public class AdminController {
 	@Autowired
 	public AdminController(AdminManager adminManager) {
 		this.adminManager = adminManager;
+	}
+
+	@RequestMapping(
+			value = "/gamestate",
+			method = RequestMethod.PUT,
+			produces = { "application/json" }
+	)
+	@SuppressWarnings("rawtypes")
+	public ResponseEntity changeGameState(@RequestBody StateRequest requestBody)
+			throws PmServerException {
+
+		log.info("Mapped PUT /admin/gamestate");
+		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
+
+		GameState newState =
+				ValidationUtils.validateRequestBodyWithGameState(requestBody);
+
+		try {
+			adminManager.changeGameState(newState);
+		}
+		catch(IllegalStateException e) {
+			throw new PmServerException(HttpStatus.CONFLICT, e.getMessage());
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(null);
+
 	}
 
 	@RequestMapping(

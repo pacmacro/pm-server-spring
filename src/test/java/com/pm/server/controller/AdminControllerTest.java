@@ -6,18 +6,22 @@ import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
-import com.pm.server.manager.AdminGameStateManager;
-import com.pm.server.manager.PacdotManager;
+import com.pm.server.manager.AdminManager;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.StateRequest;
 import com.pm.server.utils.JsonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -32,8 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AdminControllerTest extends ControllerTestTemplate {
 
-	@Autowired
-	private PacdotManager pacdotManager;
+	@Mock
+	private AdminManager mockAdminManager;
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
+	private AdminController adminController;
 
 	@Autowired
 	private PlayerRegistry playerRegistry;
@@ -55,32 +63,73 @@ public class AdminControllerTest extends ControllerTestTemplate {
 
 	@Before
 	public void setUp() {
+
 		mockMvc = MockMvcBuilders
 				.webAppContextSetup(this.webApplicationContext)
 				.build();
+		MockitoAnnotations.initMocks(this);
+
+		adminController = new AdminController(mockAdminManager);
+
+		playerRegistry.resetHard();
 	}
 
-	@After
-	public void tearDown() throws PmServerException {
-		playerRegistry.reset();
+	@Test
+	public void unitTest_changeGameState_validState() throws Exception {
+
+		// Given
+		StateRequest state = new StateRequest();
+		state.setState(GameState.IN_PROGRESS.toString());
+
+		// When
+		ResponseEntity result = adminController.changeGameState(state);
+
+		// Then
+		assertEquals(HttpStatus.OK, result.getStatusCode());
+
+	}
+
+	@Test(expected = PmServerException.class)
+	public void unitTest_changeGameState_noBody() throws Exception {
+
+		// Given
+
+		// When
+		ResponseEntity result = adminController.changeGameState(null);
+
+		// Then
+		// Exception thrown above
+
+	}
+
+	@Test(expected = PmServerException.class)
+	public void unitTest_changeGameState_invalidState() throws Exception {
+
+		// Given
+		StateRequest state = new StateRequest();
+		state.setState("Invalid state");
+
+		// When
+		ResponseEntity result = adminController.changeGameState(state);
+
+		// Then
+		// Exception thrown above
+
 	}
 
 	@Test
 	public void unitTest_resetPacdots() throws Exception {
 
-		// Given
-		final String path = pathForResetPacdots();
-
 		// When
-		mockMvc
-				.perform(post(path))
+		ResponseEntity result = adminController.resetPacdots();
 
 		// Then
-				.andExpect(status().isCreated());
+		assertEquals(HttpStatus.CREATED, result.getStatusCode());
 	}
 
 	@Test
 	public void unitTest_setPlayerState() throws Exception {
+
 		// Given
 		Player.Name player = Player.Name.Inky;
 		Coordinate location = randomCoordinateList.get(0);

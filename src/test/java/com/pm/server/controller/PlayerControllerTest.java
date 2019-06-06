@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -48,24 +49,15 @@ public class PlayerControllerTest extends ControllerTestTemplate {
 
 	@Before
 	public void setUp() {
-
+		playerRegistry.resetHard();
 		mockMvc = MockMvcBuilders
 				.webAppContextSetup(this.webApplicationContext)
 				.build();
-
 	}
 
 	@After
 	public void cleanUp() {
-
-		try {
-			playerRegistry.resetHard();
-		}
-		catch(Exception e) {
-			log.error(e.getMessage());
-			fail();
-		}
-
+		playerRegistry.resetHard();
 	}
 
 	@Test
