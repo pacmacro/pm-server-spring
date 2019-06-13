@@ -3,6 +3,7 @@ package com.pm.server.controller;
 import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
 import com.pm.server.datatype.Player;
+import com.pm.server.manager.PlayerManager;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.request.LocationRequest;
 import com.pm.server.response.*;
@@ -22,8 +23,14 @@ import java.util.List;
 @RequestMapping("/player")
 public class PlayerController {
 
-	@Autowired
 	private PlayerRegistry playerRegistry;
+	private PlayerManager playerManager;
+
+	@Autowired
+	public PlayerController(PlayerRegistry playerRegistry, PlayerManager playerManager) {
+		this.playerRegistry = playerRegistry;
+		this.playerManager = playerManager;
+	}
 
 	private final static Logger log =
 			LogManager.getLogger(PlayerController.class.getName());
@@ -43,7 +50,6 @@ public class PlayerController {
 		log.info("Request body: {}", JsonUtils.objectToJson(requestBody));
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
-
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(requestBody);
 
@@ -53,17 +59,7 @@ public class PlayerController {
 				location.getLongitude()
 		);
 
-		if(playerRegistry.getPlayerState(name) != Player.State.UNINITIALIZED) {
-			String errorMessage =
-					"Player "+
-					name +
-					" has already been selected.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
-		}
-
-		playerRegistry.setPlayerLocationByName(name, location);
-		playerRegistry.setPlayerStateByName(name, Player.State.READY);
+		playerManager.selectPlayer(name, location);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
