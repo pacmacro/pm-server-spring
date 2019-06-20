@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/metrics")
+@SuppressWarnings("unused")
 public class MetricsController {
 
 	private final static Logger log =

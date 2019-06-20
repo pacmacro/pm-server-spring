@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/tag")
+@SuppressWarnings("unused")
 public class TagController {
 
 	private TagManager tagManager;

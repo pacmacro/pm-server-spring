@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/")
+@SuppressWarnings("unused")
 public class HomeController {
 
 	private final static Logger log =

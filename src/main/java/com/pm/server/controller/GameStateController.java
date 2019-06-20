@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/gamestate")
+@SuppressWarnings("unused")
 public class GameStateController {
 
 	private GameStateManager gameStateManager;

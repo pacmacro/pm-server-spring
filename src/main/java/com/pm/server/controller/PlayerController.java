@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/player")
+@SuppressWarnings("unused")
 public class PlayerController {
 
 	private PlayerRegistry playerRegistry;

@@ -21,6 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/pacdots")
+@SuppressWarnings("unused")
 public class PacdotController {
 
 	@Autowired
