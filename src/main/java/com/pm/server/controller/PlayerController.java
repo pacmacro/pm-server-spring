@@ -78,34 +78,7 @@ public class PlayerController {
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
 
-		if(playerRegistry.getPlayerState(name) == Player.State.UNINITIALIZED) {
-			String errorMessage =
-					"Player "+
-					name +
-					" has not yet been selected.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.BAD_REQUEST, errorMessage);
-		}
-
-		try {
-			playerRegistry.setPlayerStateByName(
-					name, Player.State.UNINITIALIZED
-			);
-		}
-		catch(Exception e) {
-			String errorMessage =
-					"Player " +
-					name +
-					" could not be deselected.";
-			log.warn(errorMessage);
-			throw new PmServerException(
-					HttpStatus.INTERNAL_SERVER_ERROR, errorMessage
-			);
-		}
-		log.info("Player {} was succesfully deselected", name);
-
-		log.debug("Setting Player {} to default location", name);
-		playerRegistry.resetLocationOf(name);
+		playerManager.setPlayerState(name, Player.State.UNINITIALIZED);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
 	}
