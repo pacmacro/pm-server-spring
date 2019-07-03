@@ -95,17 +95,15 @@ public class PlayerController {
 		log.info("Mapped GET /player/{}/location", playerName);
 
 		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
+
 		Coordinate location = playerRegistry.getPlayerLocation(name);
 
-		LocationResponse locationResponse = new LocationResponse();
-		locationResponse.setLatitude(location.getLatitude());
-		locationResponse.setLongitude(location.getLongitude());
+		LocationResponse locationResponse = new LocationResponse(location);
 
 		String objectString = JsonUtils.objectToJson(locationResponse);
 		if(objectString != null) {
 			log.debug("Returning locationResponse: {}", objectString);
 		}
-
 		return ResponseEntity.status(HttpStatus.OK).body(locationResponse);
 	}
 
