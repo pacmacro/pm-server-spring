@@ -24,12 +24,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class PlayerController {
 
-	private PlayerRegistry playerRegistry;
 	private PlayerManager playerManager;
 
 	@Autowired
-	public PlayerController(PlayerRegistry playerRegistry, PlayerManager playerManager) {
-		this.playerRegistry = playerRegistry;
+	public PlayerController(PlayerManager playerManager) {
 		this.playerManager = playerManager;
 	}
 
@@ -85,143 +83,6 @@ public class PlayerController {
 
 	@RequestMapping(
 			value="/{playerName}/location",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<LocationResponse> getPlayerLocation(
-			@PathVariable String playerName)
-			throws PmServerException {
-
-		log.info("Mapped GET /player/{}/location", playerName);
-
-		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
-
-		Coordinate location = playerRegistry.getPlayerLocation(name);
-
-		LocationResponse locationResponse = new LocationResponse(location);
-
-		String objectString = JsonUtils.objectToJson(locationResponse);
-		if(objectString != null) {
-			log.debug("Returning locationResponse: {}", objectString);
-		}
-		return ResponseEntity.status(HttpStatus.OK).body(locationResponse);
-	}
-
-	@RequestMapping(
-			value="/locations",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<List<PlayerNameAndLocationResponse>>
-			getAllPlayerLocations() {
-
-		log.info("Mapped GET /player/locations");
-
-		List<PlayerNameAndLocationResponse> playerResponseList =
-				new ArrayList<>();
-
-		for(Player.Name name : Player.Name.values()) {
-			log.trace("Processing Player {}", name);
-			playerResponseList.add(new PlayerNameAndLocationResponse(
-					name, playerRegistry.getPlayerLocation(name)
-			));
-		}
-
-		String objectString = JsonUtils.objectToJson(playerResponseList);
-		if(objectString != null) {
-			log.debug("Returning Player response list: {}", objectString);
-		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
-	}
-
-	@RequestMapping(
-			value="/{playerName}/state",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<PlayerStateResponse> getPlayerState(
-			@PathVariable String playerName)
-			throws PmServerException {
-
-		log.info("Mapped GET /player/{}/state", playerName);
-
-		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
-
-		PlayerStateResponse playerStateResponse = new PlayerStateResponse();
-		playerStateResponse.setState(playerRegistry.getPlayerState(name));
-
-		String objectString = JsonUtils.objectToJson(playerStateResponse);
-		if(objectString != null) {
-			log.info(
-					"Returning Player " + playerName +
-					" with state {}", objectString
-			);
-		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(playerStateResponse);
-	}
-
-	@RequestMapping(
-			value="/states",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<List<PlayerNameAndPlayerStateResponse>>
-			getAllPlayerStates() {
-
-		log.info("Mapped GET /player/states");
-
-		List<PlayerNameAndPlayerStateResponse> playerResponseList =
-				new ArrayList<>();
-
-		for(Player.Name name : Player.Name.values()) {
-			log.trace("Processing Player {}", name);
-			playerResponseList.add(new PlayerNameAndPlayerStateResponse(
-					name, playerRegistry.getPlayerState(name)
-			));
-		}
-
-		String objectString = JsonUtils.objectToJson(playerResponseList);
-		if(objectString != null) {
-			log.debug("Returning Player states: {}", objectString);
-		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
-	}
-
-	@RequestMapping(
-			value="/details",
-			method=RequestMethod.GET,
-			produces={ "application/json" }
-	)
-	public ResponseEntity<List<PlayerDetailsResponse>>
-			getAllPlayerDetails() {
-
-		log.info("Mapped GET /player/details");
-
-		List<PlayerDetailsResponse> playerResponseList =
-				new ArrayList<>();
-
-		for(Player.Name name : Player.Name.values()) {
-			log.trace("Processing Player {}", name);
-			playerResponseList.add(new PlayerDetailsResponse(
-					name,
-					playerRegistry.getPlayerState(name),
-					playerRegistry.getPlayerLocation(name)
-			));
-		}
-
-		String objectString = JsonUtils.objectToJson(playerResponseList);
-		if(objectString != null) {
-			log.debug("Returning player details: {}", objectString);
-		}
-
-		return ResponseEntity.status(HttpStatus.OK).body(playerResponseList);
-	}
-
-	@RequestMapping(
-			value="/{playerName}/location",
 			method=RequestMethod.PUT
 	)
 	@SuppressWarnings("rawtypes")
@@ -237,22 +98,128 @@ public class PlayerController {
 		Coordinate location = ValidationUtils
 				.validateRequestBodyWithLocation(locationRequest);
 
-		if(playerRegistry.getPlayerState(name) == Player.State.UNINITIALIZED) {
-			String errorMessage =
-					"Player " +
-			        name +
-			        " has not been selected yet, so a location cannot be set.";
-			log.warn(errorMessage);
-			throw new PmServerException(HttpStatus.CONFLICT, errorMessage);
-		}
-
 		log.info(
 				"Setting Player {} to ({}, {})",
 				name, location.getLatitude(), location.getLongitude()
 		);
-		playerRegistry.setPlayerLocationByName(name, location);
+		playerManager.setPlayerLocation(name, location);
 
 		return ResponseEntity.status(HttpStatus.OK).body(null);
+	}
+
+	@RequestMapping(
+			value="/{playerName}/location",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<LocationResponse> getPlayerLocation(
+			@PathVariable String playerName)
+			throws PmServerException {
+
+		log.info("Mapped GET /player/{}/location", playerName);
+
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
+
+		LocationResponse response = new LocationResponse(
+				playerManager.getPlayerLocation(name)
+		);
+
+		String objectString = JsonUtils.objectToJson(response);
+		if(objectString != null) {
+			log.debug("Returning locationResponse: {}", objectString);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@RequestMapping(
+			value="/locations",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<List<PlayerNameAndLocationResponse>>
+			getAllPlayerLocations() {
+
+		log.info("Mapped GET /player/locations");
+
+		List<PlayerNameAndLocationResponse> response =
+				playerManager.getAllPlayerLocations();
+
+		String objectString = JsonUtils.objectToJson(response);
+		if(objectString != null) {
+			log.debug("Returning Player response list: {}", objectString);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@RequestMapping(
+			value="/{playerName}/state",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<PlayerStateResponse> getPlayerState(
+			@PathVariable String playerName)
+			throws PmServerException {
+
+		log.info("Mapped GET /player/{}/state", playerName);
+
+		Player.Name name = ValidationUtils.validateRequestWithName(playerName);
+
+		PlayerStateResponse response = new PlayerStateResponse(
+				playerManager.getPlayerState(name)
+		);
+
+		String objectString = JsonUtils.objectToJson(response);
+		if(objectString != null) {
+			log.info(
+					"Returning Player " + playerName +
+					" with state {}", objectString
+			);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@RequestMapping(
+			value="/states",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<List<PlayerNameAndPlayerStateResponse>>
+			getAllPlayerStates() {
+
+		log.info("Mapped GET /player/states");
+
+		List<PlayerNameAndPlayerStateResponse> response =
+				playerManager.getAllPlayerStates();
+
+		String objectString = JsonUtils.objectToJson(response);
+		if(objectString != null) {
+			log.debug("Returning Player states: {}", objectString);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
+	}
+
+	@RequestMapping(
+			value="/details",
+			method=RequestMethod.GET,
+			produces={ "application/json" }
+	)
+	public ResponseEntity<List<PlayerDetailsResponse>>
+			getAllPlayerDetails() {
+
+		log.info("Mapped GET /player/details");
+
+		List<PlayerDetailsResponse> response =
+				playerManager.getAllPlayerDetails();
+
+		String objectString = JsonUtils.objectToJson(response);
+		if(objectString != null) {
+			log.debug("Returning player details: {}", objectString);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 
 }

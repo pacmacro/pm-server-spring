@@ -6,6 +6,10 @@ public class PlayerStateResponse {
 
 	private Player.State state;
 
+	public PlayerStateResponse(Player.State state) {
+		this.state = state;
+	};
+
 	public void setState(Player.State state) {
 		this.state = state;
 	}
