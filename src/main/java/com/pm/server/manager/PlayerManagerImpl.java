@@ -2,7 +2,9 @@ package com.pm.server.manager;
 
 import com.pm.server.PmServerException;
 import com.pm.server.datatype.Coordinate;
+import com.pm.server.datatype.GameState;
 import com.pm.server.datatype.Player;
+import com.pm.server.registry.GameStateRegistry;
 import com.pm.server.registry.PlayerRegistry;
 import com.pm.server.response.PlayerDetailsResponse;
 import com.pm.server.response.PlayerNameAndLocationResponse;
@@ -22,6 +24,8 @@ import static com.pm.server.datatype.Player.State.UNINITIALIZED;
 public class PlayerManagerImpl implements PlayerManager {
 
     private PlayerRegistry playerRegistry;
+
+    private GameStateRegistry gameStateRegistry;
 
     @Autowired
     public PlayerManagerImpl(PlayerRegistry playerRegistry) {
@@ -43,7 +47,13 @@ public class PlayerManagerImpl implements PlayerManager {
         }
 
         playerRegistry.setPlayerLocationByName(name, location);
-        playerRegistry.setPlayerStateByName(name, Player.State.READY);
+
+        if (gameStateRegistry.getCurrentState() != GameState.IN_PROGRESS) {
+            playerRegistry.setPlayerStateByName(name, Player.State.READY);
+        }
+        else {
+            playerRegistry.setPlayerStateByName(name, Player.State.ACTIVE);
+        }
     }
 
     @Override
