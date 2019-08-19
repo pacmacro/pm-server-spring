@@ -28,8 +28,9 @@ public class PlayerManagerImpl implements PlayerManager {
     private GameStateRegistry gameStateRegistry;
 
     @Autowired
-    public PlayerManagerImpl(PlayerRegistry playerRegistry) {
+    public PlayerManagerImpl(PlayerRegistry playerRegistry, GameStateRegistry gameStateRegistry) {
         this.playerRegistry = playerRegistry;
+        this.gameStateRegistry = gameStateRegistry;
     }
 
     private final static Logger log =
