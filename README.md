@@ -8,8 +8,8 @@ The official specification for the game can be found [here](https://github.com/p
 
 [![System Architecture diagram](readme-img/system-architecture.png)](https://cloudcraft.co/view/e364e7e3-cdc5-48e8-9b5f-82d7ba0d95a6?key=BhmvffJBoBU73zAUh8X22A&embed=true)
 
-The newest stable version of the server is running at [Heroku](http://pacmacro.herokuapp.com/).  
-The Travis CI service (continuous integration for tests) is located at [pacmacro/pm-server](https://travis-ci.org/pacmacro/pm-server).  
+The newest stable version of the server is running at [Heroku](http://pacmacro-spring.herokuapp.com/).  
+The Travis CI service (continuous integration for tests) is located at [pacmacro/pm-server-spring](https://travis-ci.org/pacmacro/pm-server-spring).  
 The Docker image is located at [pacmacro/pm-server](https://hub.docker.com/r/pacmacro/pm-server/).
 
 To set up the server on your local machine (for development or for prototyping other projects), see [CONTRIBUTING.md](https://github.com/pacmacro/pm-server/blob/master/CONTRIBUTING.md).
