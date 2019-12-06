@@ -1,7 +1,7 @@
 # Pac Macro Server
 
-[![Build Status](https://travis-ci.org/pacmacro/pm-server.svg?branch=master)](https://travis-ci.org/pacmacro/pm-server)
-[![License](https://img.shields.io/github/license/mashape/apistatus.svg?maxAge=2592000)](https://github.com/pacmacro/pm-server/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/pacmacro/pm-server-spring.svg?branch=master)](https://travis-ci.org/pacmacro/pm-server-spring)
+[![License](https://img.shields.io/github/license/pacmacro/pm-server-spring)](https://github.com/pacmacro/pm-server-spring/blob/master/LICENSE)
 
 Java & Spring Boot RESTful server for relaying information between devices for the game Pac Macro.  
 The official specification for the game can be found [here](https://github.com/pacmacro/pm-specification).
